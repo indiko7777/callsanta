@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Successful - CallSanta.us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        santa: {
+                            red: '#D42426',
+                            gold: '#C5A059',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-6">
+    <div class="max-w-2xl mx-auto text-center space-y-6">
+        <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto animate-pulse">
+            <i data-lucide="check" class="w-12 h-12 text-white"></i>
+        </div>
+
+        <h1 class="text-5xl font-bold text-white">Payment Successful!</h1>
+
+        <p class="text-xl text-gray-300">
+            Thank you for your purchase! Santa is preparing your personalized experience.
+        </p>
+
+        <div class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl">
+            <h2 class="text-2xl font-semibold mb-4 text-santa-gold">What Happens Next?</h2>
+            <ol class="text-left space-y-3 text-gray-300 text-lg">
+                <li class="flex items-start gap-3">
+                    <span class="text-santa-red font-bold">1.</span>
+                    <span>Check your email for your unique 4-digit access code</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-santa-red font-bold">2.</span>
+                    <span>Call the Santa hotline number provided in the email</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-santa-red font-bold">3.</span>
+                    <span>Enter your access code when prompted</span>
+                </li>
+                <li class="flex items-start gap-3">
+                    <span class="text-santa-red font-bold">4.</span>
+                    <span>Experience the magic!</span>
+                </li>
+            </ol>
+        </div>
+
+        <div class="bg-santa-red/10 border border-santa-red/30 rounded-xl p-4 mt-6">
+            <p class="text-sm text-gray-300">
+                <i data-lucide="mail" class="w-4 h-4 inline mr-2"></i>
+                Your confirmation email will arrive within 5 minutes. Check your spam folder if you don't see it.
+            </p>
+        </div>
+
+        <a href="/"
+            class="inline-block mt-8 px-8 py-4 bg-santa-red hover:bg-red-700 rounded-xl font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl">
+            Return to Home
+        </a>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Extract payment_intent from URL if present
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentIntent = urlParams.get('payment_intent');
+        if (paymentIntent) {
+            console.log('Payment Intent ID:', paymentIntent);
+        }
+    </script>
+</body>
+
+</html>
