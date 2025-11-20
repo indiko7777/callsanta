@@ -109,14 +109,12 @@
         body {
             background-color: #0f172a;
         }
-/* Custom class for the new festive cards - combines the background image with styling */
-/* Removed .bundle-neon-border as it's no longer needed for a distinct border color/glow */
-        /* Custom class for the new festive cards - blends with original background */
+
         .product-card-styled {
             /* Fallback colors for safety if image fails */
-            background-color: #f7f7f7; 
+            background-color: #f7f7f7;
             /* Corrected path for image in /images folder */
-            background-image: url('images/Gemini_Generated_Image_3kk6l63kk6l63kk6.png'); 
+            background-image: url('images/Gemini_Generated_Image_3kk6l63kk6l63kk6.png');
             background-size: cover;
             background-position: center;
         }
@@ -124,7 +122,7 @@
         /* Override for text inside the cards to ensure readability against the stripes */
         .product-card-styled h3 {
             /* Apply a stronger shadow for readability */
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); 
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
         }
 
         /* Ensure feature list text is visible on the busy background */
@@ -135,28 +133,40 @@
         /* NEW: Chic, exclusive Christmas-themed "Best Value" Badge */
         .best-value-badge {
             position: absolute;
-            top: 0; /* Positioned at the very top */
-            right: 15px; /* Slightly in from the right edge */
-            z-index: 20; /* Ensure it's always on top */
-            background-color: #C5A059; /* Santa Gold */
-            color: #15432E; /* Christmas Green text for contrast */
-            font-family: 'serif', sans-serif; /* Use a festive font if loaded, or fallback */
+            top: 0;
+            /* Positioned at the very top */
+            right: 15px;
+            /* Slightly in from the right edge */
+            z-index: 20;
+            /* Ensure it's always on top */
+            background-color: #C5A059;
+            /* Santa Gold */
+            color: #15432E;
+            /* Christmas Green text for contrast */
+            font-family: 'serif', sans-serif;
+            /* Use a festive font if loaded, or fallback */
             font-size: 0.8rem;
             font-weight: bold;
             text-transform: uppercase;
             padding: 0.25rem 0.75rem;
-            border-bottom-left-radius: 10px; /* Rounded bottom-left corner */
-            border-bottom-right-radius: 10px; /* Rounded bottom-right corner */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Stronger shadow to make it pop */
-            transform: translateY(-100%) rotateZ(0deg); /* Start off-screen */
-            animation: slideInBadge 0.8s forwards ease-out 0.5s; /* Animation for a chic entrance */
+            border-bottom-left-radius: 10px;
+            /* Rounded bottom-left corner */
+            border-bottom-right-radius: 10px;
+            /* Rounded bottom-right corner */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            /* Stronger shadow to make it pop */
+            transform: translateY(-100%) rotateZ(0deg);
+            /* Start off-screen */
+            animation: slideInBadge 0.8s forwards ease-out 0.5s;
+            /* Animation for a chic entrance */
         }
 
         /* Optional: Add a small decorative element to the badge */
         .best-value-badge::before {
             content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2315432E" stroke="%2315432E" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>');
             display: inline-block;
-            width: 12px; /* Adjust size of the star */
+            width: 12px;
+            /* Adjust size of the star */
             height: 12px;
             margin-right: 5px;
             vertical-align: middle;
@@ -168,10 +178,13 @@
                 transform: translateY(-100%) rotateZ(0deg);
                 opacity: 0;
             }
+
             70% {
-                transform: translateY(10%) rotateZ(-5deg); /* Slight overshoot */
+                transform: translateY(10%) rotateZ(-5deg);
+                /* Slight overshoot */
                 opacity: 1;
             }
+
             100% {
                 transform: translateY(0%) rotateZ(0deg);
                 opacity: 1;
@@ -451,6 +464,18 @@
 
         .modal-content::-webkit-scrollbar-thumb:hover {
             background: rgba(197, 160, 89, 0.7);
+        }
+
+        /* FAQ Transitions */
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            opacity: 0;
+        }
+        
+        .faq-item button i {
+            transition: transform 0.3s ease;
         }
 
         /* Mobile Adjustments for Hero */
@@ -771,457 +796,211 @@
         <div class="space-y-3 relative z-10">
             <div class="marquee-container">
                 <div class="marquee-content">
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=32"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=32" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Rebecca S.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone
-                            after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=12"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=12" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Mark D.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be
-                            there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=5"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=5" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Sarah L.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa
-                            knew about his missing tooth! That wonder is worth more than any toy."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa knew about his missing tooth! That wonder is worth more than any toy."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=32"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=32" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Rebecca S.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone
-                            after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=12"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=12" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Mark D.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be
-                            there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=5"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=5" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Sarah L.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa
-                            knew about his missing tooth! That wonder is worth more than any toy."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa knew about his missing tooth! That wonder is worth more than any toy."</p>
+                    </div>
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                        <div class="flex items-center gap-3 mb-2">
+                            <img src="https://i.pravatar.cc/150?img=32" class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <div>
+                                <div class="text-white font-bold text-sm">Rebecca S.</div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
+                            </div>
+                        </div>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
                     </div>
                 </div>
             </div>
 
             <div class="marquee-container">
                 <div class="marquee-content reverse">
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=9"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=9" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Emily R.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3
-                            years ago, but we still talk about the night Santa called. It's our tradition now."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3 years ago, but we still talk about the night Santa called. It's our tradition now."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=44"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=44" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">James T.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at
-                            age 9. This call pulled her right back into the magic for one more precious year."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at age 9. This call pulled her right back into the magic for one more precious year."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=20"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=20" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Maria G.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It
-                            wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=9"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=9" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Emily R.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3
-                            years ago, but we still talk about the night Santa called. It's our tradition now."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3 years ago, but we still talk about the night Santa called. It's our tradition now."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=44"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=44" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">James T.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at
-                            age 9. This call pulled her right back into the magic for one more precious year."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at age 9. This call pulled her right back into the magic for one more precious year."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=20"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=20" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Maria G.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It
-                            wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p>
                     </div>
                 </div>
             </div>
 
             <div class="marquee-container">
                 <div class="marquee-content slow">
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=11"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=11" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Grandma Sue</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three
-                            generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=60"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=60" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">David K.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his
-                            blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=24"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=24" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Sophie W.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving
-                            houses. Santa telling her he knows where she lives now gave her so much peace."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving houses. Santa telling her he knows where she lives now gave her so much peace."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=11"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=11" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Grandma Sue</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three
-                            generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=60"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=60" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">David K.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his
-                            blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
                         <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=24"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
+                            <img src="https://i.pravatar.cc/150?img=24" class="w-10 h-10 rounded-full border-2 border-white/30">
                             <div>
                                 <div class="text-white font-bold text-sm">Sophie W.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
+                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
                             </div>
                         </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving
-                            houses. Santa telling her he knows where she lives now gave her so much peace."</p>
+                        <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving houses. Santa telling her he knows where she lives now gave her so much peace."</p>
                     </div>
                 </div>
             </div>
-
-            <div class="marquee-container">
-                <div class="marquee-content slow">
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=11"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Grandma Sue</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three
-                            generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=60"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">David K.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his
-                            blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=24"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Sophie W.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving
-                            houses. Santa telling her he knows where she lives now gave her so much peace."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=11"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Grandma Sue</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three
-                            generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=60"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">David K.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his
-                            blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=24"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Sophie W.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving
-                            houses. Santa telling her he knows where she lives now gave her so much peace."</p>
-                    </div>
-                </div>
-            </div>
+        </div>
     </section>
-<section class="py-16 px-6 text-white relative z-10">
+    <section class="py-16 px-6 text-white relative z-10">
         <div class="max-w-7xl mx-auto text-center mb-12">
             <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-3 drop-shadow-lg">
                 Choose Their <span class="text-santa-red">Christmas Miracle</span>
@@ -1233,47 +1012,57 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
 
-            <div class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+            <div
+                class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02]">
 
                 <div class="p-8 relative z-10 bg-black/30 backdrop-blur-[1px] h-full rounded-xl">
                     <div class="absolute top-0 right-0 p-3 text-santa-gold">
                         <i data-lucide="bell" class="w-6 h-6"></i>
                     </div>
 
-                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Joyful Jingle</h3>
+                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Joyful Jingle
+                    </h3>
                     <p class="text-white font-semibold mb-4 text-sm tracking-wider">A Cherished Visual Keepsake</p>
 
                     <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
                         <li class="flex items-center gap-3">
-                            <i data-lucide="video" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <i data-lucide="video"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
                             <span class="text-base">Personalized HD Video Message</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i data-lucide="clock-rewind" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Guaranteed <strong class="text-santa-goldlight">Instant Delivery</strong></span>
+                            <i data-lucide="clock-rewind"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Guaranteed <strong class="text-santa-goldlight">Instant
+                                    Delivery</strong></span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i data-lucide="cloud-download" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <i data-lucide="cloud-download"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
                             <span class="text-base">Downloadable & Shareable File</span>
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-300 italic">
                             <i data-lucide="star" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
-                            <span class="text-sm"><strong class="text-white">Rated 4.9/5</strong> by 12,400+ Families!</span>
+                            <span class="text-sm"><strong class="text-white">Rated 4.9/5</strong> by 12,400+
+                                Families!</span>
                         </li>
                     </ul>
 
                     <div class="mt-8">
-                        <div class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
+                        <div
+                            class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
                             $15
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02] md:-mt-8">
-                
-                <div class="p-8 relative z-10 bg-gradient-to-br from-black/40 to-santa-red/10 backdrop-blur-[1px] h-full rounded-xl">
-                    
+            <div
+                class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02] md:-mt-8">
+
+                <div
+                    class="p-8 relative z-10 bg-gradient-to-br from-black/40 to-santa-red/10 backdrop-blur-[1px] h-full rounded-xl">
+
                     <div class="best-value-badge">
                         Best Value
                     </div>
@@ -1281,67 +1070,87 @@
                         <i data-lucide="star" class="w-6 h-6 fill-santa-gold"></i>
                     </div>
 
-                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Starry Night Bundle</h3>
-                    <p class="text-white font-semibold mb-4 text-sm tracking-wider">The Complete, Unforgettable Magic</p>
+                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Starry Night
+                        Bundle</h3>
+                    <p class="text-white font-semibold mb-4 text-sm tracking-wider">The Complete, Unforgettable Magic
+                    </p>
 
                     <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
                         <li class="flex items-center gap-3">
-                            <i data-lucide="video" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Personalized Video + <strong class="text-santa-goldlight">5 Min Voice Call</strong></span>
+                            <i data-lucide="video"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Personalized Video + <strong class="text-santa-goldlight">5 Min
+                                    Voice Call</strong></span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i data-lucide="message-circle-code" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base"><strong class="text-santa-goldlight">2 Min Bonus Video</strong> (For Sibling/Pet Greeting)</span>
+                            <i data-lucide="message-circle-code"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base"><strong class="text-santa-goldlight">2 Min Bonus Video</strong> (For
+                                Sibling/Pet Greeting)</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i data-lucide="cloud-download" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Both Keepsakes are <strong class="text-santa-goldlight">Downloadable</strong></span>
+                            <i data-lucide="cloud-download"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Both Keepsakes are <strong
+                                    class="text-santa-goldlight">Downloadable</strong></span>
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-300 italic">
                             <i data-lucide="trending-up" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
-                            <span class="text-sm"><strong class="text-white">Voted #1</strong> Best Value Experience!</span>
+                            <span class="text-sm"><strong class="text-white">Voted #1</strong> Best Value
+                                Experience!</span>
                         </li>
                     </ul>
 
                     <div class="mt-8">
-                        <div class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
+                        <div
+                            class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
                             $30
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02]">
-                
+            <div
+                class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+
                 <div class="p-8 relative z-10 bg-black/30 backdrop-blur-[1px] h-full rounded-xl">
                     <div class="absolute top-0 right-0 p-3 text-santa-gold">
                         <i data-lucide="phone-call" class="w-6 h-6"></i>
                     </div>
 
-                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Winter Warmth</h3>
+                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Winter Warmth
+                    </h3>
                     <p class="text-white font-semibold mb-4 text-sm tracking-wider">The Authentic Live Connection</p>
 
                     <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
                         <li class="flex items-center gap-3">
-                            <i data-lucide="phone" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base"><strong class="text-santa-goldlight">Up to 5 Minutes</strong> Heart-to-Heart Voice Call</span>
+                            <i data-lucide="phone"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base"><strong class="text-santa-goldlight">Up to 5 Minutes</strong>
+                                Heart-to-Heart Voice Call</span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i data-lucide="map-pin" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Santa Knows Their <strong class="text-santa-goldlight">Specific Wish</strong></span>
+                            <i data-lucide="map-pin"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Santa Knows Their <strong class="text-santa-goldlight">Specific
+                                    Wish</strong></span>
                         </li>
                         <li class="flex items-center gap-3">
-                            <i data-lucide="thumbs-up" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Specific Praise for <strong class="text-santa-goldlight">Good Deeds/Hobby</strong></span>
+                            <i data-lucide="thumbs-up"
+                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Specific Praise for <strong class="text-santa-goldlight">Good
+                                    Deeds/Hobby</strong></span>
                         </li>
                         <li class="flex items-center gap-3 text-sm text-gray-300 italic">
                             <i data-lucide="activity" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
-                            <span class="text-sm">98% of Parents Report <strong class="text-white">Pure Astonishment!</strong></span>
+                            <span class="text-sm">98% of Parents Report <strong class="text-white">Pure
+                                    Astonishment!</strong></span>
                         </li>
                     </ul>
 
                     <div class="mt-8">
-                        <div class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
+                        <div
+                            class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
                             $20
                         </div>
                     </div>
@@ -1374,9 +1183,11 @@
                     <span>How personalized are the Santa calls?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
-                <div class="faq-content px-6 pb-6 text-gray-300 text-sm leading-relaxed hidden">
-                    Each call includes your child's name, wish list, age, special achievements, and more.
-                    Santa speaks as if he's known them all year!
+                <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
+                    <div class="py-4">
+                        Each call includes your child's name, wish list, age, special achievements, and more.
+                        Santa speaks as if he's known them all year!
+                    </div>
                 </div>
             </div>
 
@@ -1387,9 +1198,11 @@
                     <span>Is the call live or a recording?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
-                <div class="faq-content px-6 pb-6 text-gray-300 text-sm leading-relaxed hidden">
-                    Your child receives both: a fully personalized pre-made video AND a live AI phone call from Santa.
-                    It feels shockingly real.
+                <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
+                    <div class="py-4">
+                        Your child receives both: a fully personalized pre-made video AND a live AI phone call from Santa.
+                        It feels shockingly real.
+                    </div>
                 </div>
             </div>
 
@@ -1400,9 +1213,11 @@
                     <span>How quickly will we receive the experience?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
-                <div class="faq-content px-6 pb-6 text-gray-300 text-sm leading-relaxed hidden">
-                    Instantly. Once you complete your details and checkout, the magic begins immediately.
-                    You’ll receive everything within seconds.
+                <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
+                    <div class="py-4">
+                        Instantly. Once you complete your details and checkout, the magic begins immediately.
+                        You’ll receive everything within seconds.
+                    </div>
                 </div>
             </div>
 
@@ -1413,8 +1228,10 @@
                     <span>Can multiple children be included?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
-                <div class="faq-content px-6 pb-6 text-gray-300 text-sm leading-relaxed hidden">
-                    Yes! You can add multiple children and Santa will mention each one individually.
+                <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
+                    <div class="py-4">
+                        Yes! You can add multiple children and Santa will mention each one individually.
+                    </div>
                 </div>
             </div>
         </div>
@@ -1690,6 +1507,36 @@
 
 
         const baseModalLegalText = 'I confirm I am 18+ and the parent/guardian, and I agree to the <a href="#" class="text-santa-gold hover:underline">Terms of Service</a> and <a href="#" class="text-santa-gold hover:underline">Privacy Policy</a>.';
+
+        // --- FAQ LOGIC ---
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i');
+
+                // Check if current is open by checking max-height
+                if (content.style.maxHeight) {
+                    // Close
+                    content.style.maxHeight = null;
+                    content.style.opacity = '0';
+                    icon.style.transform = 'rotate(0deg)';
+                } else {
+                    // Optional: Close others if you want an accordion effect (uncomment below)
+                    /*
+                    document.querySelectorAll('.faq-content').forEach(el => {
+                        el.style.maxHeight = null;
+                        el.style.opacity = '0';
+                    });
+                    document.querySelectorAll('.faq-toggle i').forEach(ic => ic.style.transform = 'rotate(0deg)');
+                    */
+
+                    // Open
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    content.style.opacity = '1';
+                    icon.style.transform = 'rotate(180deg)';
+                }
+            });
+        });
 
         // --- MODAL FUNCTIONS ---
         function openPaymentModal() {
