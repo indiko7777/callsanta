@@ -81,7 +81,9 @@
                             dark: '#990000',
                             gold: '#C5A059',
                             goldlight: '#E5C585'
-                        }
+                        },
+                        'christmas-green': '#15432E',
+                        'bright-gold': '#FFD700',
                     },
                     animation: {
                         'fade-in-up': 'fadeInUp 1s ease-out forwards',
@@ -106,6 +108,74 @@
     <style>
         body {
             background-color: #0f172a;
+        }
+/* Custom class for the new festive cards - combines the background image with styling */
+/* Removed .bundle-neon-border as it's no longer needed for a distinct border color/glow */
+        /* Custom class for the new festive cards - blends with original background */
+        .product-card-styled {
+            /* Fallback colors for safety if image fails */
+            background-color: #f7f7f7; 
+            /* Corrected path for image in /images folder */
+            background-image: url('images/Gemini_Generated_Image_3kk6l63kk6l63kk6.png'); 
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Override for text inside the cards to ensure readability against the stripes */
+        .product-card-styled h3 {
+            /* Apply a stronger shadow for readability */
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.7); 
+        }
+
+        /* Ensure feature list text is visible on the busy background */
+        .feature-list li {
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        /* NEW: Chic, exclusive Christmas-themed "Best Value" Badge */
+        .best-value-badge {
+            position: absolute;
+            top: 0; /* Positioned at the very top */
+            right: 15px; /* Slightly in from the right edge */
+            z-index: 20; /* Ensure it's always on top */
+            background-color: #C5A059; /* Santa Gold */
+            color: #15432E; /* Christmas Green text for contrast */
+            font-family: 'serif', sans-serif; /* Use a festive font if loaded, or fallback */
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 0.25rem 0.75rem;
+            border-bottom-left-radius: 10px; /* Rounded bottom-left corner */
+            border-bottom-right-radius: 10px; /* Rounded bottom-right corner */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Stronger shadow to make it pop */
+            transform: translateY(-100%) rotateZ(0deg); /* Start off-screen */
+            animation: slideInBadge 0.8s forwards ease-out 0.5s; /* Animation for a chic entrance */
+        }
+
+        /* Optional: Add a small decorative element to the badge */
+        .best-value-badge::before {
+            content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2315432E" stroke="%2315432E" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>');
+            display: inline-block;
+            width: 12px; /* Adjust size of the star */
+            height: 12px;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+
+
+        @keyframes slideInBadge {
+            0% {
+                transform: translateY(-100%) rotateZ(0deg);
+                opacity: 0;
+            }
+            70% {
+                transform: translateY(10%) rotateZ(-5deg); /* Slight overshoot */
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(0%) rotateZ(0deg);
+                opacity: 1;
+            }
         }
 
         /* Snow Effect */
@@ -425,18 +495,6 @@
 </head>
 
 <body class="text-white antialiased overflow-x-hidden font-sans selection:bg-santa-red selection:text-white">
-
-    <div class="fixed inset-0 pointer-events-none z-20 opacity-30" aria-hidden="true">
-        <div class="snowflake">❄</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❆</div>
-        <div class="snowflake">❄</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❆</div>
-        <div class="snowflake">❄</div>
-        <div class="snowflake">❅</div>
-        <div class="snowflake">❆</div>
-    </div>
 
     <div class="fixed inset-0 z-0">
         <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?q=80&w=2069&auto=format&fit=crop"
@@ -1162,41 +1220,132 @@
                     </div>
                 </div>
             </div>
-        </section>
-    <section class="bg-[#0a1026] py-12 px-6 text-white">
-        <h2 class="text-center text-3xl font-bold mb-10">Bring the Magic Home</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+    </section>
+<section class="py-16 px-6 text-white relative z-10">
+        <div class="max-w-7xl mx-auto text-center mb-12">
+            <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-3 drop-shadow-lg">
+                Choose Their <span class="text-santa-red">Christmas Miracle</span>
+            </h2>
+            <p class="text-gray-300 text-lg max-w-2xl mx-auto font-light leading-relaxed">
+                Every package is a personalized journey. Select the one that will create the biggest smile.
+            </p>
+        </div>
 
-            <div class="relative rounded-3xl p-6 bg-white/10 backdrop-blur-md shadow-xl border-4 border-white/40">
-                <div class="absolute -top-6 left-1/2 -translate-x-1/2 w-40 h-10 bg-white rounded-full shadow-md"></div>
-                <h3 class="text-xl font-semibold mb-2">Custom Santa Video</h3>
-                <p class="text-white/90 mb-4">
-                    A magical keepsake they’ll watch again and again — straight from Santa’s snowy North Pole studio.
-                </p>
-                <p class="text-sm text-white/60 mt-6">from $15</p>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
 
-            <div class="relative rounded-3xl p-6 bg-white/10 backdrop-blur-md shadow-xl border-4 border-white/40">
-                <h3 class="text-xl font-semibold mb-2">Live Personalized Call</h3>
-                <p class="text-white/90 mb-4">
-                    Hear Santa speak directly to your child — warm, comforting, and unforgettable.
-                </p>
-                <p class="text-sm text-white/60 mt-6">from $20</p>
-            </div>
+            <div class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02]">
 
-            <div class="relative rounded-3xl p-6 bg-white/10 backdrop-blur-md shadow-xl border-4 border-white/40">
-                <div class="absolute inset-0 pointer-events-none rounded-3xl"
-                    style="box-shadow: 0 0 12px 4px rgba(212, 36, 38, 0.4) inset;"></div>
+                <div class="p-8 relative z-10 bg-black/30 backdrop-blur-[1px] h-full rounded-xl">
+                    <div class="absolute top-0 right-0 p-3 text-santa-gold">
+                        <i data-lucide="bell" class="w-6 h-6"></i>
+                    </div>
 
-                <div class="absolute -top-3 right-3 ribbon-best-value">
-                    Best Value
+                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Joyful Jingle</h3>
+                    <p class="text-white font-semibold mb-4 text-sm tracking-wider">A Cherished Visual Keepsake</p>
+
+                    <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="video" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Personalized HD Video Message</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="clock-rewind" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Guaranteed <strong class="text-santa-goldlight">Instant Delivery</strong></span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="cloud-download" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Downloadable & Shareable File</span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300 italic">
+                            <i data-lucide="star" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
+                            <span class="text-sm"><strong class="text-white">Rated 4.9/5</strong> by 12,400+ Families!</span>
+                        </li>
+                    </ul>
+
+                    <div class="mt-8">
+                        <div class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
+                            $15
+                        </div>
+                    </div>
                 </div>
+            </div>
 
-                <h3 class="text-xl font-semibold mb-2">The Full Magic Bundle</h3>
-                <p class="text-white/90 mb-4">
-                    The video + the call. The complete Christmas experience — pure wonder.
-                </p>
-                <p class="text-sm text-white/60 mt-6">from $30</p>
+            <div class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02] md:-mt-8">
+                
+                <div class="p-8 relative z-10 bg-gradient-to-br from-black/40 to-santa-red/10 backdrop-blur-[1px] h-full rounded-xl">
+                    
+                    <div class="best-value-badge">
+                        Best Value
+                    </div>
+                    <div class="absolute top-0 right-0 p-3 text-santa-gold">
+                        <i data-lucide="star" class="w-6 h-6 fill-santa-gold"></i>
+                    </div>
+
+                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Starry Night Bundle</h3>
+                    <p class="text-white font-semibold mb-4 text-sm tracking-wider">The Complete, Unforgettable Magic</p>
+
+                    <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="video" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Personalized Video + <strong class="text-santa-goldlight">5 Min Voice Call</strong></span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="message-circle-code" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base"><strong class="text-santa-goldlight">2 Min Bonus Video</strong> (For Sibling/Pet Greeting)</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="cloud-download" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Both Keepsakes are <strong class="text-santa-goldlight">Downloadable</strong></span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300 italic">
+                            <i data-lucide="trending-up" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
+                            <span class="text-sm"><strong class="text-white">Voted #1</strong> Best Value Experience!</span>
+                        </li>
+                    </ul>
+
+                    <div class="mt-8">
+                        <div class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
+                            $30
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02]">
+                
+                <div class="p-8 relative z-10 bg-black/30 backdrop-blur-[1px] h-full rounded-xl">
+                    <div class="absolute top-0 right-0 p-3 text-santa-gold">
+                        <i data-lucide="phone-call" class="w-6 h-6"></i>
+                    </div>
+
+                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Winter Warmth</h3>
+                    <p class="text-white font-semibold mb-4 text-sm tracking-wider">The Authentic Live Connection</p>
+
+                    <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base"><strong class="text-santa-goldlight">Up to 5 Minutes</strong> Heart-to-Heart Voice Call</span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Santa Knows Their <strong class="text-santa-goldlight">Specific Wish</strong></span>
+                        </li>
+                        <li class="flex items-center gap-3">
+                            <i data-lucide="thumbs-up" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
+                            <span class="text-base">Specific Praise for <strong class="text-santa-goldlight">Good Deeds/Hobby</strong></span>
+                        </li>
+                        <li class="flex items-center gap-3 text-sm text-gray-300 italic">
+                            <i data-lucide="activity" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
+                            <span class="text-sm">98% of Parents Report <strong class="text-white">Pure Astonishment!</strong></span>
+                        </li>
+                    </ul>
+
+                    <div class="mt-8">
+                        <div class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
+                            $20
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
@@ -1461,8 +1610,7 @@
 
             <form id="modal-payment-view" class="p-6 space-y-4 hidden" onsubmit="return false;">
 
-                <div
-                    class="flex justify-between items-center p-4 rounded-xl bg-slate-900/90 border border-white/10">
+                <div class="flex justify-between items-center p-4 rounded-xl bg-slate-900/90 border border-white/10">
                     <span class="text-lg font-bold text-white">Total:</span>
                     <span id="modal-final-price-stripe" class="text-3xl font-serif font-bold text-santa-red">$30</span>
                 </div>
