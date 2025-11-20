@@ -6,7 +6,7 @@ const OrderSchema = new mongoose.Schema({
     stripePaymentIntentId: { type: String, required: true, unique: true },
     accessCode: { type: String, required: true, unique: true }, // The unique code for Twilio/ElevenLabs
     fulfillmentStatus: { type: String, default: 'PENDING_PAYMENT' }, // Tracks state
-    
+
     // Personalization Data
     childName: { type: String, required: true },
     childWish: { type: String, required: true },
@@ -15,11 +15,12 @@ const OrderSchema = new mongoose.Schema({
     // Parent/Contact Data
     parentEmail: { type: String, required: true },
     parentPhone: { type: String, required: true },
-    
+
     // Financial Data
     packageId: { type: String, required: true },
     amountPaid: { type: Number, required: true },
-    currency: { type: String, default: 'USD' }
+    currency: { type: String, default: 'USD' },
+    overageOption: { type: String, enum: ['auto_disconnect', 'overage_accepted'], default: 'auto_disconnect' }
 }, { timestamps: true });
 
 // Check if the model already exists before compiling

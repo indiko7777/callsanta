@@ -14,7 +14,7 @@ const PRODUCT_PRICES = {
 let cachedDb = null;
 const connectToDatabase = async (uri) => {
     if (cachedDb) return cachedDb;
-    
+
     const db = await mongoose.connect(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
@@ -34,7 +34,7 @@ const generateAccessCode = () => {
 // --- 4. ENDPOINT HANDLER ---
 exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
-    
+
     if (event.httpMethod !== 'POST') {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
@@ -42,9 +42,9 @@ exports.handler = async (event, context) => {
     try {
         // Connect to MongoDB Atlas
         await connectToDatabase(process.env.MONGODB_URI);
-        
+
         const body = JSON.parse(event.body);
-        const { package_id, parent_email, parent_phone, child_name, child_wish, child_deed } = body;
+        const { package_id, parent_email, parent_phone, child_name, child_wish, child_deed, overage_option } = body;
         const amount = PRODUCT_PRICES[package_id];
 
         if (!amount) {
@@ -59,9 +59,9 @@ exports.handler = async (event, context) => {
         });
 
         // --- B. CREATE PAYMENT INTENT ---
-        const paymentIntent = await stripe.paymentIntents.create({
+        const paymentIntentParams = {
             amount: amount,
-            currency: 'usd', 
+            currency: 'usd',
             customer: customer.id,
             description: `CallSanta.us Purchase: ${package_id}`,
             receipt_email: parent_email,
@@ -72,15 +72,23 @@ exports.handler = async (event, context) => {
                 child_wish: child_wish,
                 child_deed: child_deed,
                 parent_phone: parent_phone,
-                customer_id: customer.id 
+                customer_id: customer.id,
+                overage_option: overage_option || 'auto_disconnect'
             },
-        });
-        
+        };
+
+        // If user accepted overage, setup future usage for off-session charges
+        if (overage_option === 'overage_accepted') {
+            paymentIntentParams.setup_future_usage = 'off_session';
+        }
+
+        const paymentIntent = await stripe.paymentIntents.create(paymentIntentParams);
+
         // --- C. CREATE DATABASE RECORD (Status: PENDING_PAYMENT) ---
         const newOrder = await Order.create({
             stripeCustomerId: customer.id,
             stripePaymentIntentId: paymentIntent.id,
-            accessCode: generateAccessCode(), 
+            accessCode: generateAccessCode(),
             fulfillmentStatus: 'PENDING_PAYMENT',
             childName: child_name,
             childWish: child_wish,
@@ -89,6 +97,7 @@ exports.handler = async (event, context) => {
             parentPhone: parent_phone,
             packageId: package_id,
             amountPaid: amount,
+            overageOption: overage_option || 'auto_disconnect'
         });
 
         // --- D. SEND CLIENT SECRET TO FRONTEND ---
