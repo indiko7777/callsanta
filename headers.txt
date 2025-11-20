@@ -1,0 +1,25 @@
+Note: Unnecessary use of -X or --request, POST is already inferred.
+* Host localhost:3000 was resolved.
+* IPv6: ::1
+* IPv4: 127.0.0.1
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0*   Trying [::1]:3000...
+* Established connection to localhost (::1 port 3000) from ::1 port 53833 
+* using HTTP/1.x
+> POST /create-payment-intent HTTP/1.1
+> Host: localhost:3000
+> User-Agent: curl/8.16.0
+> Accept: */*
+>  Content-Type: application/json
+> Content-Length: 175
+> Content-Type: application/x-www-form-urlencoded
+> 
+} [175 bytes data]
+* upload completely sent off: 175 bytes
+< HTTP/1.1 400 Bad Request
+< Connection: close
+< 
+{ [0 bytes data]
+100   175    0     0  100   175      0  46604 --:--:-- --:--:-- --:--:-- 58333
+* shutting down connection #0
