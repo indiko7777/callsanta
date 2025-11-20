@@ -32,35 +32,44 @@
         <h1 class="text-5xl font-bold text-white">Payment Successful!</h1>
 
         <p class="text-xl text-gray-300">
-            Thank you for your purchase! Santa is preparing your personalized experience.
+            <span id="greeting-message">Thank you for your purchase!</span> Santa is preparing your personalized experience.
         </p>
 
-        <div class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl">
-            <h2 class="text-2xl font-semibold mb-4 text-santa-gold">What Happens Next?</h2>
-            <ol class="text-left space-y-3 text-gray-300 text-lg">
-                <li class="flex items-start gap-3">
-                    <span class="text-santa-red font-bold">1.</span>
-                    <span>Check your email for your unique 4-digit access code</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-santa-red font-bold">2.</span>
-                    <span>Call the Santa hotline number provided in the email</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-santa-red font-bold">3.</span>
-                    <span>Enter your access code when prompted</span>
-                </li>
-                <li class="flex items-start gap-3">
-                    <span class="text-santa-red font-bold">4.</span>
-                    <span>Experience the magic!</span>
-                </li>
-            </ol>
+        <!-- CONTAINER FOR CALL/CODE INSTRUCTIONS -->
+        <div id="call-fulfillment-container" class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl space-y-6">
+            
+            <h2 id="fulfillment-header" class="text-2xl font-semibold mb-4 text-santa-gold"></h2>
+            
+            <!-- --- ACCESS CODE DISPLAY (Visible for Bundle/Call) --- -->
+            <div id="code-display-block" class="bg-slate-800/80 p-6 rounded-xl mb-4 border-2 border-santa-red hidden">
+                <p class="text-sm text-gray-400 uppercase tracking-widest">Your Private Call Code:</p>
+                <p id="access-code-display" class="text-6xl font-mono font-bold text-santa-red animate-pulse-slow">
+                    Loading...
+                </p>
+                <p class="text-sm text-gray-400 mt-3">Call the Santa Hotline at: <span id="hotline-number" class="font-bold text-white">(555) 555-SANTA</span></p>
+            </div>
+            
+            <!-- --- INSTRUCTIONS LIST (Changes based on package) --- -->
+            <ol id="instructions-list" class="text-left space-y-3 text-gray-300 text-lg"></ol>
+
+            <div id="overage-policy" class="text-sm text-gray-300 mb-6">
+                <!-- Policy details loaded here by JS -->
+            </div>
+
         </div>
+
+        <!-- VIDEO ONLY INSTRUCTIONS -->
+        <div id="video-only-block" class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl hidden">
+            <h2 class="text-2xl font-semibold text-santa-gold mb-4">Your Video Keepsake is Generating!</h2>
+            <p class="text-lg text-gray-300">Your personalized video is being rendered now. The private link will be sent to your email (<span id="email-display" class="font-bold"></span>) shortly!</p>
+            <p class="text-sm text-santa-red mt-3">Videos typically arrive within 10 minutes during peak season.</p>
+        </div>
+
 
         <div class="bg-santa-red/10 border border-santa-red/30 rounded-xl p-4 mt-6">
             <p class="text-sm text-gray-300">
                 <i data-lucide="mail" class="w-4 h-4 inline mr-2"></i>
-                Your confirmation email will arrive within 5 minutes. Check your spam folder if you don't see it.
+                Your confirmation email (with the code and video link) is being sent to your inbox now.
             </p>
         </div>
 
@@ -72,13 +81,136 @@
 
     <script>
         lucide.createIcons();
+        
+        // --- CONFIGURATION ---
+        const GET_ORDER_DETAILS_URL = '/.netlify/functions/get-order-details';
+        // NOTE: Replace the number below with the actual Twilio number you purchased
+        const TWILIO_PHONE_NUMBER = "(555) 555-SANTA"; 
 
-        // Extract payment_intent from URL if present
-        const urlParams = new URLSearchParams(window.location.search);
-        const paymentIntent = urlParams.get('payment_intent');
-        if (paymentIntent) {
-            console.log('Payment Intent ID:', paymentIntent);
+        // --- INSTRUCTION SETS ---
+        const INSTRUCTIONS_CALL = `
+            <li class="flex items-start gap-3">
+                <span class="text-santa-red font-bold">1.</span>
+                <span><span class="font-bold">Find a quiet spot</span> with your child and hand them the phone.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-santa-red font-bold">2.</span>
+                <span>Dial the Santa Hotline number: <span class="font-bold">${TWILIO_PHONE_NUMBER}</span>.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-santa-red font-bold">3.</span>
+                <span>Enter the <span class="font-bold">4-digit Access Code</span> when prompted by Santa's Helper.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-santa-red font-bold">4.</span>
+                <span>Experience the magic!</span>
+            </li>
+        `;
+        const INSTRUCTIONS_VIDEO = `
+            <li class="flex items-start gap-3">
+                <span class="text-santa-red font-bold">1.</span>
+                <span>Your personalized video is now rendering at the North Pole.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-santa-red font-bold">2.</span>
+                <span>Check your email (<span id="email-list-display"></span>) for the private link in the next 10 minutes.</span>
+            </li>
+            <li class="flex items-start gap-3">
+                <span class="text-santa-red font-bold">3.</span>
+                <span>Gather your family, dim the lights, and hit play!</span>
+            </li>
+        `;
+
+        // --- MAIN FETCH FUNCTION ---
+        async function fetchOrderDetails() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const paymentIntentId = urlParams.get('payment_intent');
+            
+            const fulfillmentHeader = document.getElementById('fulfillment-header');
+            const codeDisplayBlock = document.getElementById('code-display-block');
+            const codeDisplay = document.getElementById('access-code-display');
+            const overagePolicy = document.getElementById('overage-policy');
+            const instructionsList = document.getElementById('instructions-list');
+            const greetingMessage = document.getElementById('greeting-message');
+            const videoOnlyBlock = document.getElementById('video-only-block');
+            const emailDisplay = document.getElementById('email-display');
+            const emailListDisplay = document.getElementById('email-list-display');
+            const callFulfillmentContainer = document.getElementById('call-fulfillment-container');
+            const hotlineNumberDisplay = document.getElementById('hotline-number');
+
+            // Set the phone number display immediately
+            hotlineNumberDisplay.innerText = TWILIO_PHONE_NUMBER;
+
+
+            if (!paymentIntentId) {
+                fulfillmentHeader.innerText = "Error: Payment ID Missing.";
+                codeDisplay.innerText = "ERROR";
+                return;
+            }
+
+            try {
+                // Fetch details from the backend using the Payment Intent ID
+                const response = await fetch(`${GET_ORDER_DETAILS_URL}?payment_intent_id=${paymentIntentId}`);
+                const data = await response.json();
+
+                if (data.error || !data.packageId) {
+                    fulfillmentHeader.innerText = "Error: Order not found.";
+                    codeDisplay.innerText = "ERROR";
+                    console.error("Order lookup failed:", data.error);
+                    return;
+                }
+                
+                // --- UPDATE GREETING AND EMAIL ---
+                greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
+                emailDisplay.innerText = data.parentEmail;
+                emailListDisplay.innerText = data.parentEmail;
+                
+                // --- CONDITIONAL FULFILLMENT LOGIC ---
+                const isCallPackage = (data.packageId === 'bundle' || data.packageId === 'call');
+                const isVideoPackage = (data.packageId === 'bundle' || data.packageId === 'video');
+
+                // Case 1 & 2: Call or Bundle
+                if (isCallPackage) {
+                    // Show Call-specific block and Code
+                    codeDisplayBlock.classList.remove('hidden');
+                    callFulfillmentContainer.classList.remove('hidden');
+                    videoOnlyBlock.classList.add('hidden'); 
+                    
+                    instructionsList.innerHTML = INSTRUCTIONS_CALL;
+                    codeDisplay.innerText = data.accessCode;
+                    fulfillmentHeader.innerText = "Your Live Call Access Code";
+                    
+                    // Overage Policy
+                    if (data.overageOption === 'overage_accepted') {
+                        overagePolicy.innerHTML = '<strong>Important:</strong> Your call may exceed 5 minutes. You agreed to pay $1.00 USD per minute for time over 5 minutes.';
+                    } else {
+                        overagePolicy.innerHTML = '<strong>Policy:</strong> Your call will automatically disconnect after 5 minutes to prevent extra charges.';
+                    }
+                    
+                    // If it's a Bundle, we also note the video is coming
+                    if (data.packageId === 'bundle') {
+                        fulfillmentHeader.innerText = "Bundle Access: Call Now, Video Arrives Soon";
+                    }
+
+                } 
+                
+                // Case 3: Video Only (Must check !isCallPackage to prevent bundle overwriting this)
+                if (isVideoPackage && !isCallPackage) {
+                    // Hide Call-specific block and show Video only block
+                    callFulfillmentContainer.classList.add('hidden'); 
+                    videoOnlyBlock.classList.remove('hidden');       
+                    fulfillmentHeader.innerText = "Your Video Keepsake is Generating!";
+                    instructionsList.innerHTML = INSTRUCTIONS_VIDEO;
+                    overagePolicy.innerHTML = ''; // Clear policy as it's video only
+                }
+
+            } catch (e) {
+                codeDisplay.innerText = "Error fetching details.";
+                console.error("Network or parsing error:", e);
+            }
         }
+
+        document.addEventListener('DOMContentLoaded', fetchOrderDetails);
     </script>
 </body>
 
