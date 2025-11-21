@@ -123,58 +123,30 @@ exports.handler = async (event, context) => {
         return respond(twiml);
     }
 
-    // --- STEP 3: SUCCESS - START ELEVENLABS AGENT (Using Success Audio) ---
+    // --- STEP 3: SUCCESS - CONNECT TO ELEVENLABS AGENT (Using SIP) ---
+    // We use SIP Trunking because direct WebSocket (<Stream>) requires a relay server to translate protocols.
+    // SIP allows Twilio to call ElevenLabs directly.
 
-    // Construct the ElevenLabs WebSocket URL
-    let streamUrl = '';
-    let agentIdOrUrl = ELEVENLABS_AGENT_ID;
-
-    if (!agentIdOrUrl) {
+    if (!ELEVENLABS_AGENT_ID) {
         console.error("CRITICAL: ELEVENLABS_AGENT_ID is missing.");
         twiml.say("Santa is having trouble connecting. Please contact support.");
         twiml.hangup();
         return respond(twiml);
     }
 
-    // Clean up the input: remove whitespace
-    agentIdOrUrl = agentIdOrUrl.trim();
+    console.log("Connecting to ElevenLabs via SIP...");
 
-    if (agentIdOrUrl.startsWith('wss://')) {
-        streamUrl = agentIdOrUrl;
-    } else if (agentIdOrUrl.startsWith('https://')) {
-        // Convert https to wss if the user pasted the HTTP URL
-        streamUrl = agentIdOrUrl.replace('https://', 'wss://');
-    } else {
-        // It's likely just the ID, construct the standard URL
-        streamUrl = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${agentIdOrUrl}`;
-    }
-
-    // Build personalization parameters
-    const params = new URLSearchParams({
-        childName: order.childName,
-        wish: order.childWish,
-        deed: order.childDeed,
-        overage: order.overageOption,
-        orderId: order._id.toString()
-    });
-
-    // Append parameters to the URL (handling existing query params correctly)
-    const separator = streamUrl.includes('?') ? '&' : '?';
-    const finalStreamUrl = `${streamUrl}${separator}${params.toString()}`;
-
-    console.log("Connecting to ElevenLabs with URL:", finalStreamUrl);
-
-    // Play pre-recorded connecting audio before streaming the AI
+    // Play pre-recorded connecting audio before dialing
     twiml.play(AUDIO_SUCCESS);
 
-    // Twilio <Connect> <Stream> is used for low-latency AI conversation
-    // NOTE: maxDuration is not supported on <Stream>, so we rely on the billing webhook for overage.
-    const connect = twiml.connect();
-    connect.stream({
-        url: finalStreamUrl
-    });
+    // Dial the ElevenLabs Agent via SIP
+    // Format: sip:{agent_id}@sip.rtc.elevenlabs.io
+    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io`;
 
-    // Fallback if connection fails or ends
+    const dial = twiml.dial();
+    dial.sip(sipUri);
+
+    // Fallback if the call fails or ends abruptly
     twiml.say("Ho ho ho! The connection to the North Pole was lost. Merry Christmas!");
 
     // Mark the code as USED immediately to prevent replay
