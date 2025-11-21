@@ -140,8 +140,9 @@ exports.handler = async (event, context) => {
     twiml.play(AUDIO_SUCCESS);
 
     // Dial the ElevenLabs Agent via SIP
-    // Format: sip:{agent_id}@sip.rtc.elevenlabs.io
-    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io`;
+    // Format: sip:{agent_id}@sip.rtc.elevenlabs.io:5060;transport=tcp
+    // NOTE: ElevenLabs requires TCP (UDP is not supported).
+    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io:5060;transport=tcp`;
 
     const dial = twiml.dial();
     dial.sip(sipUri);
