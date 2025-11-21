@@ -51,8 +51,11 @@ const respond = (twiml) => ({
 exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
 
+    console.log("Incoming Call Event:", JSON.stringify(event.body));
+
     // Ensure BASE_URL is set for audio files
     if (!BASE_URL) {
+        console.error("CRITICAL: BASE_URL is not set.");
         const twiml = new twilio.TwimlResponse();
         twiml.say("System configuration error. Please contact North Pole IT.");
         twiml.hangup();
@@ -62,6 +65,7 @@ exports.handler = async (event, context) => {
     try {
         await connectToDatabase(MONGODB_URI);
     } catch (e) {
+        console.error("DATABASE CONNECTION ERROR:", e);
         // Fallback response if DB fails entirely (prevents hanging call)
         const twiml = new twilio.TwimlResponse();
         twiml.say("We are experiencing a high volume of calls at the North Pole. Please try again in a few minutes.");
@@ -93,13 +97,24 @@ exports.handler = async (event, context) => {
 
     // --- STEP 2: CODE LOOKUP & VALIDATION ---
     const accessCode = digits;
+    console.log(`Received Digits/Code: ${accessCode}`);
 
     // Important: Pad the access code if necessary based on your database storage format (assuming 4 digits)
     const paddedCode = accessCode.padStart(4, '0');
 
-    const order = await Order.findOne({ accessCode: paddedCode });
+    let order;
+    try {
+        order = await Order.findOne({ accessCode: paddedCode });
+        console.log("Order Found:", order ? order._id : "NULL");
+    } catch (err) {
+        console.error("Error finding order:", err);
+        twiml.say("There was a problem checking your code. Please try again.");
+        twiml.hangup();
+        return respond(twiml);
+    }
 
     if (!order || order.fulfillmentStatus !== 'PENDING_PAYMENT') {
+        console.log("Invalid Code or Status:", order ? order.fulfillmentStatus : "No Order");
         // Code is invalid OR has already been used
         twiml.play(AUDIO_INVALID_CODE);
         twiml.hangup();
@@ -112,9 +127,15 @@ exports.handler = async (event, context) => {
     const maxDurationSeconds = (order.overageOption === 'auto_disconnect') ? 300 : 7200;
 
     // Construct the ElevenLabs WebSocket URL
-    // We support both a full URL (legacy) or just the Agent ID (preferred)
     let streamUrl = '';
     const agentIdOrUrl = ELEVENLABS_AGENT_ID;
+
+    if (!agentIdOrUrl) {
+        console.error("CRITICAL: ELEVENLABS_AGENT_ID is missing.");
+        twiml.say("Santa is having trouble connecting. Please contact support.");
+        twiml.hangup();
+        return respond(twiml);
+    }
 
     if (agentIdOrUrl.startsWith('wss://')) {
         streamUrl = agentIdOrUrl;
@@ -135,6 +156,8 @@ exports.handler = async (event, context) => {
     // Append parameters to the URL (handling existing query params correctly)
     const separator = streamUrl.includes('?') ? '&' : '?';
     const finalStreamUrl = `${streamUrl}${separator}${params.toString()}`;
+
+    console.log("Connecting to ElevenLabs...");
 
     // Play pre-recorded connecting audio before streaming the AI
     twiml.play(AUDIO_SUCCESS);

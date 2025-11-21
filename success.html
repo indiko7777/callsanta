@@ -216,15 +216,14 @@
             const greetingMessage = document.getElementById('greeting-message');
             const videoOnlyBlock = document.getElementById('video-only-block');
             const emailDisplay = document.getElementById('email-display');
-            const emailListDisplay = document.getElementById('email-list-display');
             const callFulfillmentContainer = document.getElementById('call-fulfillment-container');
             const emailNotice = document.getElementById('email-notice');
             const emailNoticeText = document.getElementById('email-notice-text');
 
             // --- UPDATE GREETING AND EMAIL ---
             greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
-            emailDisplay.innerText = data.parentEmail;
-            emailListDisplay.innerText = data.parentEmail;
+            // Only set emailDisplay if it exists (it's in the static HTML of video-only-block)
+            if (emailDisplay) emailDisplay.innerText = data.parentEmail;
 
             // --- CONDITIONAL FULFILLMENT LOGIC ---
             const isCallPackage = (data.packageId === 'bundle' || data.packageId === 'call');
@@ -263,7 +262,11 @@
                 callFulfillmentContainer.classList.add('hidden');
                 videoOnlyBlock.classList.remove('hidden');
                 fulfillmentHeader.innerText = "Your Video Keepsake is Generating!";
-                instructionsList.innerHTML = INSTRUCTIONS_VIDEO;
+
+                // Inject the email directly into the string
+                const instructionsWithEmail = INSTRUCTIONS_VIDEO.replace('<span id="email-list-display"></span>', `<span class="font-bold">${data.parentEmail}</span>`);
+                instructionsList.innerHTML = instructionsWithEmail;
+
                 overagePolicy.innerHTML = ''; // Clear policy as it's video only
                 emailNotice.classList.remove('hidden');
                 emailNoticeText.innerText = 'Your video link will be sent to your inbox shortly.';
