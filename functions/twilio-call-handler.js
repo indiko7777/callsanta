@@ -32,8 +32,6 @@ const connectToDatabase = async (uri) => {
     }
 
     const db = await mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
         bufferCommands: false,
     });
     cachedDb = db;
@@ -56,7 +54,7 @@ exports.handler = async (event, context) => {
     // Ensure BASE_URL is set for audio files
     if (!BASE_URL) {
         console.error("CRITICAL: BASE_URL is not set.");
-        const twiml = new twilio.TwimlResponse();
+        const twiml = new twilio.twiml.VoiceResponse();
         twiml.say("System configuration error. Please contact North Pole IT.");
         twiml.hangup();
         return respond(twiml);
@@ -67,13 +65,13 @@ exports.handler = async (event, context) => {
     } catch (e) {
         console.error("DATABASE CONNECTION ERROR:", e);
         // Fallback response if DB fails entirely (prevents hanging call)
-        const twiml = new twilio.TwimlResponse();
+        const twiml = new twilio.twiml.VoiceResponse();
         twiml.say("We are experiencing a high volume of calls at the North Pole. Please try again in a few minutes.");
         twiml.hangup();
         return respond(twiml);
     }
 
-    const twiml = new twilio.TwimlResponse();
+    const twiml = new twilio.twiml.VoiceResponse();
     const body = event.body ? new URLSearchParams(event.body) : new URLSearchParams();
     const digits = body.get('Digits');
 
