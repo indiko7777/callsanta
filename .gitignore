@@ -1,2 +1,16 @@
 # Local Netlify folder
 .netlify
+
+# Dependencies
+node_modules
+
+# Environment Variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# OS generated files
+.DS_Store
+Thumbs.db
