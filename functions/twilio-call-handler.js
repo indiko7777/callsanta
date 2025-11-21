@@ -5,7 +5,12 @@ const Order = require('./models/order');
 // --- CONFIG ---
 const MONGODB_URI = process.env.MONGODB_URI;
 // The BASE_URL environment variable (e.g., https://yourdomain.com) is crucial for audio paths.
-const BASE_URL = process.env.BASE_URL;
+// The BASE_URL environment variable (e.g., https://yourdomain.com) is crucial for audio paths.
+let baseUrl = process.env.BASE_URL || '';
+if (!baseUrl.endsWith('/')) {
+    baseUrl += '/';
+}
+const BASE_URL = baseUrl;
 // NOTE: REPLACE THIS WITH YOUR ACTUAL ELEVENLABS AGENT URL/ID
 const ELEVENLABS_AGENT_ID = process.env.ELEVENLABS_AGENT_ID;
 
