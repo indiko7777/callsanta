@@ -139,13 +139,16 @@ exports.handler = async (event, context) => {
     // Play pre-recorded connecting audio before dialing
     twiml.play(AUDIO_SUCCESS);
 
-    // Dial the ElevenLabs Agent via SIP
-    // Format: sip:{agent_id}@sip.rtc.elevenlabs.io:5060;transport=tcp
-    // NOTE: ElevenLabs requires TCP (UDP is not supported).
-    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io:5060;transport=tcp`;
+    // Dial the ElevenLabs Agent via SIP (Authenticated)
+    // SIP URI: sip:santa@sip.rtc.elevenlabs.io
+    // We use the credentials provided for the "callsanta" SIP Trunk.
+    const sipUri = `sip:santa@sip.rtc.elevenlabs.io:5060;transport=tcp`;
 
     const dial = twiml.dial();
-    dial.sip(sipUri);
+    dial.sip({
+        username: 'santa',
+        password: 'SantaClaus2025!'
+    }, sipUri);
 
     // Fallback if the call fails or ends abruptly
     twiml.say("Ho ho ho! The connection to the North Pole was lost. Merry Christmas!");
