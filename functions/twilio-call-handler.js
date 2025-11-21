@@ -5,7 +5,6 @@ const Order = require('./models/order');
 // --- CONFIG ---
 const MONGODB_URI = process.env.MONGODB_URI;
 // The BASE_URL environment variable (e.g., https://yourdomain.com) is crucial for audio paths.
-// The BASE_URL environment variable (e.g., https://yourdomain.com) is crucial for audio paths.
 let baseUrl = process.env.BASE_URL || '';
 if (!baseUrl.endsWith('/')) {
     baseUrl += '/';
@@ -126,12 +125,9 @@ exports.handler = async (event, context) => {
 
     // --- STEP 3: SUCCESS - START ELEVENLABS AGENT (Using Success Audio) ---
 
-    // Set Max Duration based on the parent's choice (5 min vs 2 hours)
-    const maxDurationSeconds = (order.overageOption === 'auto_disconnect') ? 300 : 7200;
-
     // Construct the ElevenLabs WebSocket URL
     let streamUrl = '';
-    const agentIdOrUrl = ELEVENLABS_AGENT_ID;
+    let agentIdOrUrl = ELEVENLABS_AGENT_ID;
 
     if (!agentIdOrUrl) {
         console.error("CRITICAL: ELEVENLABS_AGENT_ID is missing.");
@@ -140,10 +136,16 @@ exports.handler = async (event, context) => {
         return respond(twiml);
     }
 
+    // Clean up the input: remove whitespace
+    agentIdOrUrl = agentIdOrUrl.trim();
+
     if (agentIdOrUrl.startsWith('wss://')) {
         streamUrl = agentIdOrUrl;
+    } else if (agentIdOrUrl.startsWith('https://')) {
+        // Convert https to wss if the user pasted the HTTP URL
+        streamUrl = agentIdOrUrl.replace('https://', 'wss://');
     } else {
-        // It's just the ID, construct the standard URL
+        // It's likely just the ID, construct the standard URL
         streamUrl = `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${agentIdOrUrl}`;
     }
 
@@ -160,16 +162,20 @@ exports.handler = async (event, context) => {
     const separator = streamUrl.includes('?') ? '&' : '?';
     const finalStreamUrl = `${streamUrl}${separator}${params.toString()}`;
 
-    console.log("Connecting to ElevenLabs...");
+    console.log("Connecting to ElevenLabs with URL:", finalStreamUrl);
 
     // Play pre-recorded connecting audio before streaming the AI
     twiml.play(AUDIO_SUCCESS);
 
     // Twilio <Connect> <Stream> is used for low-latency AI conversation
-    twiml.connect().stream({
-        url: finalStreamUrl,
-        maxDuration: maxDurationSeconds
+    // NOTE: maxDuration is not supported on <Stream>, so we rely on the billing webhook for overage.
+    const connect = twiml.connect();
+    connect.stream({
+        url: finalStreamUrl
     });
+
+    // Fallback if connection fails or ends
+    twiml.say("Ho ho ho! The connection to the North Pole was lost. Merry Christmas!");
 
     // Mark the code as USED immediately to prevent replay
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
