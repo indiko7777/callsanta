@@ -65,10 +65,36 @@ async function generateAudio(text) {
 }
 
 // --- 3. VIDEO GENERATION (HeyGen) ---
-async function createHeyGenVideo(imageUrl, audioBase64, script) {
-    console.log("Creating HeyGen video with image:", imageUrl);
+// Step 1: Upload photo to HeyGen and get ID
+async function uploadPhotoToHeyGen(imageUrl) {
+    console.log("Uploading photo to HeyGen:", imageUrl);
 
-    // Step 1: Create the video generation request
+    const response = await fetch('https://api.heygen.com/v1/talking_photo', {
+        method: 'POST',
+        headers: {
+            'X-Api-Key': HEYGEN_API_KEY,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            image_url: imageUrl
+        }),
+    });
+
+    if (!response.ok) {
+        const err = await response.text();
+        console.error("HeyGen Photo Upload Error:", err);
+        throw new Error(`HeyGen Photo Upload Error: ${err}`);
+    }
+
+    const data = await response.json();
+    console.log("HeyGen Photo Uploaded:", data);
+    return data.data.talking_photo_id;
+}
+
+// Step 2: Create video with uploaded photo ID
+async function createHeyGenVideo(photoId, audioBase64) {
+    console.log("Creating HeyGen video with photo ID:", photoId);
+
     const response = await fetch('https://api.heygen.com/v2/video/generate', {
         method: 'POST',
         headers: {
@@ -79,7 +105,7 @@ async function createHeyGenVideo(imageUrl, audioBase64, script) {
             video_inputs: [{
                 character: {
                     type: "talking_photo",
-                    talking_photo_url: imageUrl
+                    talking_photo_id: photoId
                 },
                 voice: {
                     type: "audio",
@@ -232,9 +258,14 @@ exports.handler = async (event, context) => {
             const audioBase64 = await generateAudio(script);
             console.log("Audio generated.");
 
+            // Upload Photo to HeyGen
+            console.log(`Uploading photo to HeyGen: ${SANTA_IMAGE_URL}`);
+            const photoId = await uploadPhotoToHeyGen(SANTA_IMAGE_URL);
+            console.log(`Photo uploaded with ID: ${photoId}`);
+
             // Start Video Generation (HeyGen)
-            console.log(`Starting HeyGen Video with image: ${SANTA_IMAGE_URL}`);
-            const videoId = await createHeyGenVideo(SANTA_IMAGE_URL, audioBase64, script);
+            console.log(`Starting HeyGen Video with photo ID: ${photoId}`);
+            const videoId = await createHeyGenVideo(photoId, audioBase64);
             console.log(`HeyGen Video started: ${videoId}`);
 
             // Update Order
