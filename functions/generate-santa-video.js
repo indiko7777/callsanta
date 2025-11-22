@@ -65,19 +65,21 @@ async function generateAudio(text) {
 }
 
 // --- 3. VIDEO GENERATION (HeyGen) ---
-// Step 1: Upload photo to HeyGen and get ID
+// Step 1: Upload photo as asset to HeyGen
 async function uploadPhotoToHeyGen(imageUrl) {
     console.log("Uploading photo to HeyGen:", imageUrl);
 
-    const response = await fetch('https://api.heygen.com/v1/talking_photo', {
+    // First, fetch the image
+    const imageResponse = await fetch(imageUrl);
+    const imageBuffer = await imageResponse.arrayBuffer();
+
+    // Upload as asset
+    const response = await fetch('https://upload.heygen.com/v1/asset', {
         method: 'POST',
         headers: {
             'X-Api-Key': HEYGEN_API_KEY,
-            'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            image_url: imageUrl
-        }),
+        body: imageBuffer
     });
 
     if (!response.ok) {
@@ -88,7 +90,9 @@ async function uploadPhotoToHeyGen(imageUrl) {
 
     const data = await response.json();
     console.log("HeyGen Photo Uploaded:", data);
-    return data.data.talking_photo_id;
+
+    // The asset ID can be used as talking_photo_id
+    return data.data.id;
 }
 
 // Step 2: Create video with uploaded photo ID
