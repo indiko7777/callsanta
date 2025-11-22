@@ -68,8 +68,9 @@ async function generateAudio(text) {
 // Using manually uploaded HeyGen Photo Avatar ID
 const HEYGEN_AVATAR_ID = '02f60da9d3d44068a0322d63c1e34870';
 
-async function createHeyGenVideo(audioBase64) {
+async function createHeyGenVideo(scriptText) {
     console.log("Creating HeyGen video with avatar ID:", HEYGEN_AVATAR_ID);
+    console.log("Using script text:", scriptText);
 
     const response = await fetch('https://api.heygen.com/v2/video/generate', {
         method: 'POST',
@@ -84,8 +85,10 @@ async function createHeyGenVideo(audioBase64) {
                     talking_photo_id: HEYGEN_AVATAR_ID
                 },
                 voice: {
-                    type: "audio",
-                    audio_url: `data:audio/mp3;base64,${audioBase64}`
+                    type: "text",
+                    input_text: scriptText,
+                    voice_id: SANTA_VOICE_ID,
+                    provider: "elevenlabs"
                 },
                 background: {
                     type: "color",
@@ -234,14 +237,9 @@ exports.handler = async (event, context) => {
                 const script = generateSantaScript(order.childName, order.childWish, order.childDeed);
                 console.log("Script generated:", script);
 
-                // Generate Audio (ElevenLabs)
-                console.log("Generating Audio with ElevenLabs...");
-                const audioBase64 = await generateAudio(script);
-                console.log("Audio generated.");
-
-                // Start Video Generation (HeyGen) - NO UPLOAD NEEDED
+                // Start Video Generation (HeyGen with text-to-speech)
                 console.log(`Starting HeyGen Video with avatar ID: ${HEYGEN_AVATAR_ID}`);
-                const videoId = await createHeyGenVideo(audioBase64);
+                const videoId = await createHeyGenVideo(script);
                 console.log(`HeyGen Video started: ${videoId}`);
 
                 // Update Order with video ID
