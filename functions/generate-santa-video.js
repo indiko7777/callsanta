@@ -88,8 +88,8 @@ async function createHeyGenVideo(scriptText) {
                 },
                 voice: {
                     type: "text",
-                    input_text: scriptText
-                    // No voice_id - avatar will use its configured primary voice
+                    input_text: scriptText,
+                    voice_id: "3845f01de6254fe9b5d5cf3342a64a1e"
                 },
                 background: {
                     type: "color",
