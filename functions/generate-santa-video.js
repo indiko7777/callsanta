@@ -65,39 +65,11 @@ async function generateAudio(text) {
 }
 
 // --- 3. VIDEO GENERATION (HeyGen) ---
-// Step 1: Upload photo as asset to HeyGen
-async function uploadPhotoToHeyGen(imageUrl) {
-    console.log("Uploading photo to HeyGen:", imageUrl);
+// Using manually uploaded HeyGen Photo Avatar ID
+const HEYGEN_AVATAR_ID = '02f60da9d3d44068a0322d63c1e34870';
 
-    // First, fetch the image
-    const imageResponse = await fetch(imageUrl);
-    const imageBuffer = await imageResponse.arrayBuffer();
-
-    // Upload as asset
-    const response = await fetch('https://upload.heygen.com/v1/asset', {
-        method: 'POST',
-        headers: {
-            'X-Api-Key': HEYGEN_API_KEY,
-        },
-        body: imageBuffer
-    });
-
-    if (!response.ok) {
-        const err = await response.text();
-        console.error("HeyGen Photo Upload Error:", err);
-        throw new Error(`HeyGen Photo Upload Error: ${err}`);
-    }
-
-    const data = await response.json();
-    console.log("HeyGen Photo Uploaded:", data);
-
-    // The asset ID can be used as talking_photo_id
-    return data.data.id;
-}
-
-// Step 2: Create video with uploaded photo ID
-async function createHeyGenVideo(photoId, audioBase64) {
-    console.log("Creating HeyGen video with photo ID:", photoId);
+async function createHeyGenVideo(audioBase64) {
+    console.log("Creating HeyGen video with avatar ID:", HEYGEN_AVATAR_ID);
 
     const response = await fetch('https://api.heygen.com/v2/video/generate', {
         method: 'POST',
@@ -109,7 +81,7 @@ async function createHeyGenVideo(photoId, audioBase64) {
             video_inputs: [{
                 character: {
                     type: "talking_photo",
-                    talking_photo_id: photoId
+                    talking_photo_id: HEYGEN_AVATAR_ID
                 },
                 voice: {
                     type: "audio",
@@ -253,33 +225,52 @@ exports.handler = async (event, context) => {
         if (order.videoStatus === 'pending' || !order.videoStatus) {
             console.log(`Starting generation for Order ${order._id}`);
 
-            // Generate Script
-            const script = generateSantaScript(order.childName, order.childWish, order.childDeed);
-            console.log("Script generated:", script);
-
-            // Generate Audio (ElevenLabs)
-            console.log("Generating Audio with ElevenLabs...");
-            const audioBase64 = await generateAudio(script);
-            console.log("Audio generated.");
-
-            // Upload Photo to HeyGen
-            console.log(`Uploading photo to HeyGen: ${SANTA_IMAGE_URL}`);
-            const photoId = await uploadPhotoToHeyGen(SANTA_IMAGE_URL);
-            console.log(`Photo uploaded with ID: ${photoId}`);
-
-            // Start Video Generation (HeyGen)
-            console.log(`Starting HeyGen Video with photo ID: ${photoId}`);
-            const videoId = await createHeyGenVideo(photoId, audioBase64);
-            console.log(`HeyGen Video started: ${videoId}`);
-
-            // Update Order
+            // SAFEGUARD: Mark as processing IMMEDIATELY to prevent duplicate calls
             order.videoStatus = 'processing';
-            order.heygenVideoId = videoId;
             await order.save();
 
+            try {
+                // Generate Script
+                const script = generateSantaScript(order.childName, order.childWish, order.childDeed);
+                console.log("Script generated:", script);
+
+                // Generate Audio (ElevenLabs)
+                console.log("Generating Audio with ElevenLabs...");
+                const audioBase64 = await generateAudio(script);
+                console.log("Audio generated.");
+
+                // Start Video Generation (HeyGen) - NO UPLOAD NEEDED
+                console.log(`Starting HeyGen Video with avatar ID: ${HEYGEN_AVATAR_ID}`);
+                const videoId = await createHeyGenVideo(audioBase64);
+                console.log(`HeyGen Video started: ${videoId}`);
+
+                // Update Order with video ID
+                order.heygenVideoId = videoId;
+                await order.save();
+
+                return {
+                    statusCode: 200,
+                    body: JSON.stringify({ status: 'processing' })
+                };
+            } catch (error) {
+                // CRITICAL: Mark as FAILED to stop retries and prevent API abuse
+                console.error('Generation failed:', error);
+                order.videoStatus = 'failed';
+                order.errorMessage = error.message;
+                await order.save();
+
+                throw error; // Re-throw to be caught by outer handler
+            }
+        }
+
+        // If status is 'failed', return failed status (don't retry)
+        if (order.videoStatus === 'failed') {
             return {
-                statusCode: 200,
-                body: JSON.stringify({ status: 'processing' })
+                statusCode: 500,
+                body: JSON.stringify({
+                    status: 'failed',
+                    error: order.errorMessage || 'Video generation failed'
+                })
             };
         }
 
