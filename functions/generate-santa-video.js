@@ -252,14 +252,12 @@ exports.handler = async (event, context) => {
             const script = generateSantaScript(order.childName, order.childWish, order.childDeed);
             console.log("Script generated:", script);
 
-            // Generate Audio
-            console.log("Generating Audio...");
-            const audioDataUrl = await generateAudio(script);
-            console.log("Audio generated.");
+            // NOTE: Using D-ID's ElevenLabs integration directly
+            // No need to call ElevenLabs API separately
 
             // Start Video Generation
             console.log(`Starting D-ID Talk with image: ${SANTA_IMAGE_URL}`);
-            const talkId = await createTalk(SANTA_IMAGE_URL, audioDataUrl);
+            const talkId = await createTalk(SANTA_IMAGE_URL, script);
             console.log(`D-ID Talk started: ${talkId}`);
 
             // Update Order
