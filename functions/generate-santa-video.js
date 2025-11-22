@@ -88,9 +88,8 @@ async function createHeyGenVideo(scriptText) {
                 },
                 voice: {
                     type: "text",
-                    input_text: scriptText,
-                    voice_id: SANTA_VOICE_ID,
-                    provider: "elevenlabs"
+                    input_text: scriptText
+                    // No voice_id - avatar will use its configured primary voice
                 },
                 background: {
                     type: "color",
