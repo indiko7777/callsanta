@@ -97,8 +97,8 @@ async function createHeyGenVideo(scriptText) {
                 }
             }],
             dimension: {
-                width: 1920,
-                height: 1080
+                width: 1280,
+                height: 720
             },
             aspect_ratio: "16:9",
             test: false,
