@@ -77,9 +77,8 @@ async function createHeyGenVideo(imageUrl, audioBase64, script) {
         body: JSON.stringify({
             video_inputs: [{
                 character: {
-                    type: "photo",
-                    photo_url: imageUrl,
-                    photo_id: null
+                    type: "talking_photo",
+                    talking_photo_url: imageUrl
                 },
                 voice: {
                     type: "audio",
