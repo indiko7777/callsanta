@@ -4,19 +4,13 @@ const fetch = require('node-fetch');
 
 // --- CONFIGURATION ---
 const ELEVENLABS_API_KEY = process.env.Elevenlabs_API;
-let DID_API_KEY = process.env.DID_APIKEY || process.env['D_ID_APIKEY']; // Try both formats
+const HEYGEN_API_KEY = process.env.Heygen_APIKEY;
 
-// Ensure D-ID Key is properly formatted for Basic Auth
-if (DID_API_KEY && !DID_API_KEY.startsWith('Basic ')) {
-    // If it doesn't start with Basic, assume it's the raw key and encode it
-    DID_API_KEY = `Basic ${Buffer.from(DID_API_KEY).toString('base64')}`;
-}
+// Using user's Santa image
+const SITE_URL = process.env.URL || 'https://callsanta.us';
+const SANTA_IMAGE_URL = `${SITE_URL}/images/santaface.jpg`;
 
-// Using a reliable public image of Santa for D-ID generation to avoid 500 errors
-// Unsplash is usually reliable for bots
-const SANTA_IMAGE_URL = 'https://images.unsplash.com/photo-1543589077-47d81606c1bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
-
-const ELEVENLABS_VOICE_ID = 'uDsPstFWFBUXjIBimV7s'; // Updated Santa Voice ID
+const ELEVENLABS_VOICE_ID = 'uDsPstFWFBUXjIBimV7s'; // Santa Voice ID
 
 // --- DATABASE CONNECTION ---
 let cachedDb = null;
@@ -32,7 +26,6 @@ const connectToDatabase = async (uri) => {
 
 // --- 1. SCRIPT GENERATION ---
 function generateSantaScript(childName, childWish, childDeed) {
-    // Clean inputs
     const name = childName.trim();
     const wish = childWish.trim();
     const deed = childDeed.trim();
@@ -40,7 +33,7 @@ function generateSantaScript(childName, childWish, childDeed) {
     return `Ho ho ho! Hello ${name}! It is Santa Claus here at the North Pole. The elves told me you have been very good this year, especially for ${deed}. That makes me so happy! I also heard you are wishing for ${wish}. My reindeer and I are getting ready to fly, so keep being wonderful. Merry Christmas, ${name}!`;
 }
 
-// --- 2. AUDIO GENERATION (ElevenLabs) ---
+// --- 2. AUDIO GENERATION (ElevenLabs) - WAV format for better quality ---
 async function generateAudio(text) {
     const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${ELEVENLABS_VOICE_ID}`, {
         method: 'POST',
@@ -54,7 +47,8 @@ async function generateAudio(text) {
             voice_settings: {
                 stability: 0.6,
                 similarity_boost: 0.7,
-            }
+            },
+            output_format: "mp3_44100_128" // High quality MP3
         }),
     });
 
@@ -66,90 +60,71 @@ async function generateAudio(text) {
     // Get buffer and convert to base64
     const arrayBuffer = await response.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
-    return `data:audio/mpeg;base64,${buffer.toString('base64')}`;
+    return buffer.toString('base64');
 }
 
-// --- D-ID HELPER: CHECK AUTH ---
-async function checkDidAuth() {
-    try {
-        const response = await fetch('https://api.d-id.com/credits', {
-            method: 'GET',
-            headers: {
-                'Authorization': DID_API_KEY,
-            },
-        });
-        if (!response.ok) {
-            const err = await response.text();
-            console.error("D-ID Auth Check Failed:", err);
-            return false;
-        }
-        const data = await response.json();
-        console.log("D-ID Auth Success. Credits remaining:", JSON.stringify(data));
-        return true;
-    } catch (e) {
-        console.error("D-ID Auth Check Error:", e);
-        return false;
-    }
-}
+// --- 3. VIDEO GENERATION (HeyGen) ---
+async function createHeyGenVideo(imageUrl, audioBase64, script) {
+    console.log("Creating HeyGen video with image:", imageUrl);
 
-// --- 3. VIDEO GENERATION (D-ID) ---
-// Using D-ID with ElevenLabs voice provider
-async function createTalk(imageUrl, scriptText) {
-    console.log("Sending request to D-ID with Auth header length:", DID_API_KEY ? DID_API_KEY.length : 'MISSING');
-
-    // Pre-check Auth
-    const isAuthValid = await checkDidAuth();
-    if (!isAuthValid) {
-        throw new Error("D-ID Authentication Failed. Check API Key.");
-    }
-
-    const payload = {
-        source_url: imageUrl,
-        script: {
-            type: 'text',
-            input: scriptText,
-            provider: {
-                type: 'elevenlabs',
-                voice_id: ELEVENLABS_VOICE_ID
-            }
-        }
-    };
-
-    console.log("D-ID Request Payload:", JSON.stringify(payload));
-
-    const response = await fetch('https://api.d-id.com/talks', {
+    // Step 1: Create the video generation request
+    const response = await fetch('https://api.heygen.com/v2/video/generate', {
         method: 'POST',
         headers: {
-            'Authorization': DID_API_KEY,
+            'X-Api-Key': HEYGEN_API_KEY,
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+            video_inputs: [{
+                character: {
+                    type: "photo",
+                    photo_url: imageUrl,
+                    photo_id: null
+                },
+                voice: {
+                    type: "audio",
+                    audio_url: `data:audio/mp3;base64,${audioBase64}`
+                },
+                background: {
+                    type: "color",
+                    value: "#FFFFFF"
+                }
+            }],
+            dimension: {
+                width: 1920,
+                height: 1080
+            },
+            aspect_ratio: "16:9",
+            test: false,
+            caption: false
+        }),
     });
 
     if (!response.ok) {
         const err = await response.text();
-        console.error("D-ID API Error Response:", err);
-        throw new Error(`D-ID Create Talk Error: ${err}`);
+        console.error("HeyGen API Error Response:", err);
+        throw new Error(`HeyGen Create Video Error: ${err}`);
     }
 
     const data = await response.json();
-    console.log("D-ID Talk Created:", data);
-    return data.id;
+    console.log("HeyGen Video Created:", data);
+    return data.data.video_id;
 }
 
-async function getTalkStatus(talkId) {
-    const response = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+async function getHeyGenVideoStatus(videoId) {
+    const response = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
         method: 'GET',
         headers: {
-            'Authorization': DID_API_KEY,
+            'X-Api-Key': HEYGEN_API_KEY,
         },
     });
 
     if (!response.ok) {
-        throw new Error(`D-ID Get Status Error: ${response.statusText}`);
+        throw new Error(`HeyGen Get Status Error: ${response.statusText}`);
     }
 
-    return await response.json();
+    const data = await response.json();
+    return data.data;
 }
 
 const sgMail = require('@sendgrid/mail');
@@ -159,7 +134,7 @@ sgMail.setApiKey(process.env.sendgrid_API);
 async function sendVideoEmail(email, childName, videoUrl) {
     const msg = {
         to: email,
-        from: 'santa@callsanta.us', // Change to your verified sender
+        from: 'santa@callsanta.us',
         subject: `Santa has a video message for ${childName}!`,
         text: `Ho ho ho! Santa has recorded a special video just for ${childName}. Watch it here: ${videoUrl}`,
         html: `
@@ -211,14 +186,14 @@ exports.handler = async (event, context) => {
         }
 
         // 2. If processing, check status
-        if (order.videoStatus === 'processing' && order.didId) {
-            console.log(`Checking D-ID status for ${order.didId}...`);
-            const statusData = await getTalkStatus(order.didId);
-            console.log(`D-ID Status: ${statusData.status}`);
+        if (order.videoStatus === 'processing' && order.heygenVideoId) {
+            console.log(`Checking HeyGen status for ${order.heygenVideoId}...`);
+            const statusData = await getHeyGenVideoStatus(order.heygenVideoId);
+            console.log(`HeyGen Status: ${statusData.status}`);
 
-            if (statusData.status === 'done') {
+            if (statusData.status === 'completed') {
                 order.videoStatus = 'completed';
-                order.videoUrl = statusData.result_url;
+                order.videoUrl = statusData.video_url;
                 await order.save();
 
                 // Send Email
@@ -228,13 +203,13 @@ exports.handler = async (event, context) => {
                     statusCode: 200,
                     body: JSON.stringify({ status: 'completed', video_url: order.videoUrl })
                 };
-            } else if (statusData.status === 'error') {
-                console.error("D-ID Error Detail:", statusData);
+            } else if (statusData.status === 'failed') {
+                console.error("HeyGen Error Detail:", statusData);
                 order.videoStatus = 'failed';
                 await order.save();
                 return {
                     statusCode: 500,
-                    body: JSON.stringify({ status: 'failed', error: 'D-ID generation failed' })
+                    body: JSON.stringify({ status: 'failed', error: 'HeyGen generation failed' })
                 };
             } else {
                 return {
@@ -252,21 +227,19 @@ exports.handler = async (event, context) => {
             const script = generateSantaScript(order.childName, order.childWish, order.childDeed);
             console.log("Script generated:", script);
 
-            // NOTE: Using D-ID's ElevenLabs integration directly
-            // No need to call ElevenLabs API separately
+            // Generate Audio (ElevenLabs)
+            console.log("Generating Audio with ElevenLabs...");
+            const audioBase64 = await generateAudio(script);
+            console.log("Audio generated.");
 
-            // Start Video Generation
-            // Using user's Santa image
-            const SITE_URL = process.env.URL || 'https://callsanta.us';
-            const SANTA_IMAGE_URL = `${SITE_URL}/images/santaface.jpg`;
-
-            console.log(`Using Santa image: ${SANTA_IMAGE_URL}`);
-            const talkId = await createTalk(SANTA_IMAGE_URL, script);
-            console.log(`D-ID Talk started: ${talkId}`);
+            // Start Video Generation (HeyGen)
+            console.log(`Starting HeyGen Video with image: ${SANTA_IMAGE_URL}`);
+            const videoId = await createHeyGenVideo(SANTA_IMAGE_URL, audioBase64, script);
+            console.log(`HeyGen Video started: ${videoId}`);
 
             // Update Order
             order.videoStatus = 'processing';
-            order.didId = talkId;
+            order.heygenVideoId = videoId;
             await order.save();
 
             return {

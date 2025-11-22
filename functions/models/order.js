@@ -25,7 +25,8 @@ const OrderSchema = new mongoose.Schema({
     // Video Generation Data
     videoStatus: { type: String, default: 'pending' }, // pending, processing, completed, failed
     videoUrl: { type: String },
-    didId: { type: String } // D-ID Talk ID for polling
+    didId: { type: String }, // D-ID Talk ID for polling (legacy)
+    heygenVideoId: { type: String } // HeyGen Video ID for polling
 }, { timestamps: true });
 
 // Check if the model already exists before compiling
