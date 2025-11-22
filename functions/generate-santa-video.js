@@ -256,7 +256,11 @@ exports.handler = async (event, context) => {
             // No need to call ElevenLabs API separately
 
             // Start Video Generation
-            console.log(`Starting D-ID Talk with image: ${SANTA_IMAGE_URL}`);
+            // Using user's Santa image
+            const SITE_URL = process.env.URL || 'https://callsanta.us';
+            const SANTA_IMAGE_URL = `${SITE_URL}/images/santaface.jpg`;
+
+            console.log(`Using Santa image: ${SANTA_IMAGE_URL}`);
             const talkId = await createTalk(SANTA_IMAGE_URL, script);
             console.log(`D-ID Talk started: ${talkId}`);
 
