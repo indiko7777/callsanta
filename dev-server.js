@@ -74,6 +74,13 @@ const lambdaAdapter = (handler) => async (req, res) => {
         path: req.path
     };
 
+    // Debug logging
+    if (req.path.includes('generate-santa-video')) {
+        console.log(`[DevServer] ${req.method} ${req.path}`);
+        console.log(`[DevServer] Raw Body Type: ${typeof req.body}`);
+        console.log(`[DevServer] Event Body:`, eventBody);
+    }
+
     const context = { callbackWaitsForEmptyEventLoop: false };
 
     try {
@@ -127,7 +134,10 @@ const routes = [
     { path: '/.netlify/functions/call-billing-webhook', handler: callBillingWebhook, method: 'post' },
 
     { path: '/get-order-details', handler: getOrderDetails, method: 'get' },
-    { path: '/.netlify/functions/get-order-details', handler: getOrderDetails, method: 'get' }
+    { path: '/.netlify/functions/get-order-details', handler: getOrderDetails, method: 'get' },
+
+    { path: '/generate-santa-video', handler: require('./functions/generate-santa-video').handler, method: 'post' },
+    { path: '/.netlify/functions/generate-santa-video', handler: require('./functions/generate-santa-video').handler, method: 'post' }
 ];
 
 routes.forEach(route => {

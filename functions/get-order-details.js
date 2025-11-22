@@ -11,9 +11,8 @@ const connectToDatabase = async (uri) => {
     }
 
     const db = await mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
         bufferCommands: false,
+        family: 4, // Force IPv4
     });
     cachedDb = db;
     return db;
@@ -56,7 +55,8 @@ exports.handler = async (event, context) => {
                 packageId: order.packageId,
                 accessCode: order.accessCode,
                 overageOption: order.overageOption,
-                fulfillmentStatus: order.fulfillmentStatus
+                fulfillmentStatus: order.fulfillmentStatus,
+                order_id: order._id // Return ID for video polling
             }),
         };
 

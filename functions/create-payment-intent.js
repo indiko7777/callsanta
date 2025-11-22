@@ -16,15 +16,12 @@ const connectToDatabase = async (uri) => {
     if (cachedDb) return cachedDb;
 
     const db = await mongoose.connect(uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
         bufferCommands: false,
+        family: 4, // Force IPv4
     });
     cachedDb = db;
     return db;
 };
-
-
 // --- 3. HELPER: Generate a unique 4-digit code (for Twilio) ---
 const generateAccessCode = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();

@@ -58,22 +58,29 @@
             <div id="overage-policy" class="text-sm text-gray-300 mb-6">
                 <!-- Policy details loaded here by JS -->
             </div>
-
         </div>
 
         <!-- VIDEO ONLY INSTRUCTIONS -->
         <div id="video-only-block" class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl hidden">
             <h2 class="text-2xl font-semibold text-santa-gold mb-4">Your Video Keepsake is Generating!</h2>
-            <p class="text-lg text-gray-300">Your personalized video is being rendered now. The private link will be
-                sent to your email (<span id="email-display" class="font-bold"></span>) shortly!</p>
-            <p class="text-sm text-santa-red mt-3">Videos typically arrive within 10 minutes during peak season.</p>
-        </div>
 
+            <!-- Progress Bar Container -->
+            <div class="w-full bg-slate-800 rounded-full h-6 mb-4 overflow-hidden border border-white/10 relative">
+                <!-- "Sugar Cane" Color Bar (Light Green/Yellowish) -->
+                <div id="video-progress-bar"
+                    class="bg-[#F9FFF3] h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(249,255,243,0.5)]"
+                    style="width: 5%"></div>
+            </div>
+
+            <p id="video-status-text" class="text-lg text-gray-300 animate-pulse">Santa is checking his list twice...
+            </p>
+            <p class="text-sm text-gray-500 mt-2">Please stay on this page. This usually takes about 1 minute.</p>
+        </div>
 
         <div id="email-notice" class="bg-santa-red/10 border border-santa-red/30 rounded-xl p-4 mt-6 hidden">
             <p class="text-sm text-gray-300">
-                <i data-lucide="mail" class="w-4 h-4 inline mr-2"></i>
-                <span id="email-notice-text">Your confirmation email is being sent to your inbox now.</span>
+                <i data-lucide="check-circle" class="w-4 h-4 inline mr-2"></i>
+                <span id="email-notice-text">Your order is confirmed.</span>
             </p>
         </div>
 
@@ -117,7 +124,7 @@
             </li>
             <li class="flex items-start gap-3">
                 <span class="text-santa-red font-bold">2.</span>
-                <span>Check your email (<span id="email-list-display"></span>) for the private link in the next 10 minutes.</span>
+                <span><strong>Please wait here</strong> (approx. 1 minute). The video will pop up automatically!</span>
             </li>
             <li class="flex items-start gap-3">
                 <span class="text-santa-red font-bold">3.</span>
@@ -145,11 +152,11 @@
             const emailNoticeText = document.getElementById('email-notice-text');
 
             // Set the phone number display immediately
-            hotlineNumberDisplay.innerText = TWILIO_PHONE_NUMBER;
+            if (hotlineNumberDisplay) hotlineNumberDisplay.innerText = TWILIO_PHONE_NUMBER;
 
             if (!paymentIntentId) {
-                fulfillmentHeader.innerText = "Error: Payment ID Missing.";
-                codeDisplay.innerText = "ERROR";
+                if (fulfillmentHeader) fulfillmentHeader.innerText = "Error: Payment ID Missing.";
+                if (codeDisplay) codeDisplay.innerText = "ERROR";
                 return;
             }
 
@@ -165,9 +172,9 @@
                         const data = JSON.parse(orderData);
                         displayOrderDetails(data);
                     } else {
-                        fulfillmentHeader.innerText = "Order Details Unavailable";
-                        codeDisplay.innerText = "Check your email for access code";
-                        instructionsList.innerHTML = `
+                        if (fulfillmentHeader) fulfillmentHeader.innerText = "Order Details Unavailable";
+                        if (codeDisplay) codeDisplay.innerText = "Check your email for access code";
+                        if (instructionsList) instructionsList.innerHTML = `
                             <li class="flex items-start gap-3">
                                 <span class="text-santa-red font-bold">•</span>
                                 <span>Your order was successful! Check your email for your access code.</span>
@@ -177,8 +184,8 @@
                                 <span>Call <span class="font-bold">${TWILIO_PHONE_NUMBER}</span> and enter your 4-digit code.</span>
                             </li>
                         `;
-                        codeDisplayBlock.classList.remove('hidden');
-                        callFulfillmentContainer.classList.remove('hidden');
+                        if (codeDisplayBlock) codeDisplayBlock.classList.remove('hidden');
+                        if (callFulfillmentContainer) callFulfillmentContainer.classList.remove('hidden');
                     }
                     return;
                 }
@@ -186,8 +193,8 @@
                 const data = await response.json();
 
                 if (data.error || !data.packageId) {
-                    fulfillmentHeader.innerText = "Error: Order not found.";
-                    codeDisplay.innerText = "ERROR";
+                    if (fulfillmentHeader) fulfillmentHeader.innerText = "Error: Order not found.";
+                    if (codeDisplay) codeDisplay.innerText = "ERROR";
                     console.error("Order lookup failed:", data.error);
                     return;
                 }
@@ -202,7 +209,7 @@
                     const data = JSON.parse(orderData);
                     displayOrderDetails(data);
                 } else {
-                    codeDisplay.innerText = "Error loading details. Check your email.";
+                    if (codeDisplay) codeDisplay.innerText = "Error loading details. Check your email.";
                 }
             }
         }
@@ -221,7 +228,7 @@
             const emailNoticeText = document.getElementById('email-notice-text');
 
             // --- UPDATE GREETING AND EMAIL ---
-            greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
+            if (greetingMessage) greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
             // Only set emailDisplay if it exists (it's in the static HTML of video-only-block)
             if (emailDisplay) emailDisplay.innerText = data.parentEmail;
 
@@ -232,26 +239,28 @@
             // Case 1 & 2: Call or Bundle
             if (isCallPackage) {
                 // Show Call-specific block and Code
-                codeDisplayBlock.classList.remove('hidden');
-                callFulfillmentContainer.classList.remove('hidden');
-                videoOnlyBlock.classList.add('hidden');
+                if (codeDisplayBlock) codeDisplayBlock.classList.remove('hidden');
+                if (callFulfillmentContainer) callFulfillmentContainer.classList.remove('hidden');
+                if (videoOnlyBlock) videoOnlyBlock.classList.add('hidden');
 
-                instructionsList.innerHTML = INSTRUCTIONS_CALL;
-                codeDisplay.innerText = data.accessCode;
-                fulfillmentHeader.innerText = "Your Live Call Access Code";
+                if (instructionsList) instructionsList.innerHTML = INSTRUCTIONS_CALL;
+                if (codeDisplay) codeDisplay.innerText = data.accessCode;
+                if (fulfillmentHeader) fulfillmentHeader.innerText = "Your Live Call Access Code";
 
                 // Overage Policy
-                if (data.overageOption === 'overage_accepted') {
-                    overagePolicy.innerHTML = '<strong>Important:</strong> Your call may exceed 5 minutes. You agreed to pay $1.00 USD per minute for time over 5 minutes.';
-                } else {
-                    overagePolicy.innerHTML = '<strong>Policy:</strong> Your call will automatically disconnect after 5 minutes to prevent extra charges.';
+                if (overagePolicy) {
+                    if (data.overageOption === 'overage_accepted') {
+                        overagePolicy.innerHTML = '<strong>Important:</strong> Your call may exceed 5 minutes. You agreed to pay $1.00 USD per minute for time over 5 minutes.';
+                    } else {
+                        overagePolicy.innerHTML = '<strong>Policy:</strong> Your call will automatically disconnect after 5 minutes to prevent extra charges.';
+                    }
                 }
 
                 // If it's a Bundle, we also note the video is coming
                 if (data.packageId === 'bundle') {
-                    fulfillmentHeader.innerText = "Bundle Access: Call Now, Video Arrives Soon";
-                    emailNotice.classList.remove('hidden');
-                    emailNoticeText.innerText = 'Your confirmation email and video link will be sent to your inbox.';
+                    if (fulfillmentHeader) fulfillmentHeader.innerText = "Bundle Access: Call Now, Video Arrives Soon";
+                    if (emailNotice) emailNotice.classList.remove('hidden');
+                    if (emailNoticeText) emailNoticeText.innerText = 'Your confirmation email and video link will be sent to your inbox.';
                 }
 
             }
@@ -259,18 +268,139 @@
             // Case 3: Video Only (Must check !isCallPackage to prevent bundle overwriting this)
             if (isVideoPackage && !isCallPackage) {
                 // Hide Call-specific block and show Video only block
-                callFulfillmentContainer.classList.add('hidden');
-                videoOnlyBlock.classList.remove('hidden');
-                fulfillmentHeader.innerText = "Your Video Keepsake is Generating!";
+                if (callFulfillmentContainer) callFulfillmentContainer.classList.add('hidden');
+                if (videoOnlyBlock) videoOnlyBlock.classList.remove('hidden');
+                if (fulfillmentHeader) fulfillmentHeader.innerText = "Your Video Keepsake is Generating!";
 
                 // Inject the email directly into the string
                 const instructionsWithEmail = INSTRUCTIONS_VIDEO.replace('<span id="email-list-display"></span>', `<span class="font-bold">${data.parentEmail}</span>`);
-                instructionsList.innerHTML = instructionsWithEmail;
+                if (instructionsList) instructionsList.innerHTML = instructionsWithEmail;
 
-                overagePolicy.innerHTML = ''; // Clear policy as it's video only
-                emailNotice.classList.remove('hidden');
-                emailNoticeText.innerText = 'Your video link will be sent to your inbox shortly.';
+                if (overagePolicy) overagePolicy.innerHTML = ''; // Clear policy as it's video only
+                if (emailNotice) emailNotice.classList.remove('hidden');
+                if (emailNoticeText) emailNoticeText.innerText = 'Your video link will be sent to your inbox shortly.';
             }
+
+            // --- VIDEO POLLING (For Bundle & Video) ---
+            if (isVideoPackage) {
+                // Show video block if not already shown (for Bundle)
+                if (isCallPackage) {
+                    if (videoOnlyBlock) {
+                        videoOnlyBlock.classList.remove('hidden');
+                        // Adjust text for bundle
+                        const vHeader = videoOnlyBlock.querySelector('h2');
+                        if (vHeader) vHeader.innerText = "Bonus: Your Santa Video is Generating!";
+                        // We want to target the description paragraph, not the status text. 
+                        // The status text has id="video-status-text".
+                        // Let's just append a note or leave the default text which is "Santa is checking his list..."
+                    }
+                }
+
+                startVideoPolling(data.order_id || getOrderIdFromUrl());
+            }
+        }
+
+        function getOrderIdFromUrl() {
+            // Fallback if order_id isn't in the initial fetch (it should be passed back ideally)
+            return null;
+        }
+
+        async function startVideoPolling(orderId) {
+            if (!orderId) {
+                console.warn("No order ID available for video polling.");
+                return;
+            }
+
+            const videoBlock = document.getElementById('video-only-block');
+            if (!videoBlock) return;
+
+            const statusHeader = videoBlock.querySelector('h2');
+            const statusText = document.getElementById('video-status-text');
+            const progressBar = document.getElementById('video-progress-bar');
+
+            // Create a container for the video player if it doesn't exist
+            let playerContainer = document.getElementById('video-player-container');
+            if (!playerContainer) {
+                playerContainer = document.createElement('div');
+                playerContainer.id = 'video-player-container';
+                playerContainer.className = 'mt-6 hidden';
+                videoBlock.appendChild(playerContainer);
+            }
+
+            // Fake progress animation variables
+            let progress = 5;
+            const maxFakeProgress = 95;
+            const progressInterval = setInterval(() => {
+                if (progress < maxFakeProgress) {
+                    // Slow down as it gets higher
+                    const increment = progress < 50 ? 2 : (progress < 80 ? 1 : 0.2);
+                    progress += increment;
+                    if (progressBar) progressBar.style.width = `${Math.min(progress, 95)}%`;
+                }
+            }, 1000);
+
+            const poll = async () => {
+                try {
+                    const response = await fetch('/.netlify/functions/generate-santa-video', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ order_id: orderId })
+                    });
+                    const data = await response.json();
+
+                    if (data.status === 'completed' && data.video_url) {
+                        // Video Ready!
+                        clearInterval(progressInterval);
+                        if (progressBar) progressBar.style.width = '100%';
+
+                        if (statusHeader) {
+                            statusHeader.innerText = "Your Santa Video is Ready!";
+                            statusHeader.classList.add('text-green-400');
+                        }
+                        if (statusText) {
+                            statusText.innerText = "Watch it below or download it to keep forever.";
+                            statusText.classList.remove('animate-pulse');
+                        }
+
+                        playerContainer.innerHTML = `
+                            <video controls class="w-full rounded-xl shadow-lg border-2 border-santa-gold mb-4">
+                                <source src="${data.video_url}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                            <a href="${data.video_url}" download="Santa_Message.mp4" target="_blank" 
+                               class="inline-block w-full py-3 bg-green-600 hover:bg-green-700 text-white font-bold rounded-lg transition-colors">
+                                Download Video
+                            </a>
+                        `;
+                        playerContainer.classList.remove('hidden');
+                        return; // Stop polling
+                    } else if (data.status === 'failed') {
+                        clearInterval(progressInterval);
+                        if (statusHeader) statusHeader.innerText = "Video Generation Issue";
+                        if (statusText) statusText.innerText = "Santa's camera had a glitch. We will retry automatically.";
+                        return;
+                    } else {
+                        // Still processing
+                        console.log("Video status:", data.status);
+
+                        // Update text occasionally based on progress
+                        if (statusText) {
+                            if (progress > 30 && progress < 60) statusText.innerText = "Santa is recording your message...";
+                            if (progress >= 60) statusText.innerText = "The elves are editing the final cut...";
+                        }
+
+                        setTimeout(poll, 10000); // Poll every 10 seconds
+                    }
+                } catch (e) {
+                    console.error("Polling error:", e);
+                    setTimeout(poll, 10000);
+                }
+            };
+
+            // Start polling
+            poll();
         }
 
         document.addEventListener('DOMContentLoaded', fetchOrderDetails);
