@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 
 // --- CONFIGURATION ---
 const ELEVENLABS_API_KEY = process.env.Elevenlabs_API;
-let DID_API_KEY = process.env['D-ID_APIKEY'];
+let DID_API_KEY = process.env.DID_APIKEY || process.env['D_ID_APIKEY']; // Try both formats
 
 // Ensure D-ID Key is properly formatted for Basic Auth
 if (DID_API_KEY && !DID_API_KEY.startsWith('Basic ')) {
