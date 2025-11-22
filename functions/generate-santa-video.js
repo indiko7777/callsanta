@@ -11,6 +11,8 @@ const SITE_URL = process.env.URL || 'https://callsanta.us';
 const SANTA_IMAGE_URL = `${SITE_URL}/images/santaface.jpg`;
 
 const ELEVENLABS_VOICE_ID = 'uDsPstFWFBUXjIBimV7s'; // Santa Voice ID
+const SANTA_VOICE_ID = ELEVENLABS_VOICE_ID; // Alias for HeyGen integration
+
 
 // --- DATABASE CONNECTION ---
 let cachedDb = null;
