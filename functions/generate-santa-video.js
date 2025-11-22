@@ -30,7 +30,8 @@ function generateSantaScript(childName, childWish, childDeed) {
     const wish = childWish.trim();
     const deed = childDeed.trim();
 
-    return `Ho ho ho! Hello ${name}! It is Santa Claus here at the North Pole. The elves told me you have been very good this year, especially for ${deed}. That makes me so happy! I also heard you are wishing for ${wish}. My reindeer and I are getting ready to fly, so keep being wonderful. Merry Christmas, ${name}!`;
+    // Shorter script to save ElevenLabs credits
+    return `Ho ho ho! Hello ${name}! You've been so good this year, especially for ${deed}. I heard you're wishing for ${wish}. Keep being wonderful! Merry Christmas!`;
 }
 
 // --- 2. AUDIO GENERATION (ElevenLabs) - WAV format for better quality ---
