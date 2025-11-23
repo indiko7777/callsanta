@@ -1,13 +1,13 @@
 // functions/create-payment-intent.js
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const mongoose = require('mongoose');
-const Order = require('./models/order'); // Corrected Path
+const Order = require('./models/order');
 
 // --- 1. PRODUCT PRICING (In CENTS for USD) ---
 const PRODUCT_PRICES = {
-    bundle: 3000, // $30.00
-    call: 2000,    // $20.00
-    video: 1500    // $15.00
+    bundle: 2000, // $20.00
+    call: 1000,    // $10.00
+    video: 3500    // $35.00
 };
 
 // --- 2. DATABASE CONNECTION (Reused across calls) ---
@@ -22,11 +22,11 @@ const connectToDatabase = async (uri) => {
     cachedDb = db;
     return db;
 };
+
 // --- 3. HELPER: Generate a unique 4-digit code (for Twilio) ---
 const generateAccessCode = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
 };
-
 
 // --- 4. ENDPOINT HANDLER ---
 exports.handler = async (event, context) => {
@@ -42,10 +42,16 @@ exports.handler = async (event, context) => {
 
         const body = JSON.parse(event.body);
         const { package_id, parent_email, parent_phone, child_name, child_wish, child_deed, overage_option } = body;
-        const amount = PRODUCT_PRICES[package_id];
+
+        let amount = PRODUCT_PRICES[package_id];
 
         if (!amount) {
             return { statusCode: 400, body: JSON.stringify({ error: 'Invalid package ID.' }) };
+        }
+
+        // Add $5 (500 cents) if unlimited option is selected AND it's not the bundle (bundle includes it)
+        if (overage_option === 'unlimited' && package_id !== 'bundle') {
+            amount += 500;
         }
 
         // --- A. CREATE STRIPE CUSTOMER ---
@@ -74,17 +80,12 @@ exports.handler = async (event, context) => {
             },
         };
 
-        // If user accepted overage, setup future usage for off-session charges
-        if (overage_option === 'overage_accepted') {
-            paymentIntentParams.setup_future_usage = 'off_session';
-        }
-
-        const paymentIntent = await stripe.paymentIntents.create(paymentIntentParams);
+        const paymentIntentCreated = await stripe.paymentIntents.create(paymentIntentParams);
 
         // --- C. CREATE DATABASE RECORD (Status: PENDING_PAYMENT) ---
         const newOrder = await Order.create({
             stripeCustomerId: customer.id,
-            stripePaymentIntentId: paymentIntent.id,
+            stripePaymentIntentId: paymentIntentCreated.id,
             accessCode: generateAccessCode(),
             fulfillmentStatus: 'PENDING_PAYMENT',
             childName: child_name,
@@ -101,8 +102,8 @@ exports.handler = async (event, context) => {
         return {
             statusCode: 200,
             body: JSON.stringify({
-                clientSecret: paymentIntent.client_secret,
-                order_id: newOrder._id, // Pass our internal ID back for tracking
+                clientSecret: paymentIntentCreated.client_secret,
+                order_id: newOrder._id,
             }),
         };
 
