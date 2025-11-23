@@ -470,12 +470,25 @@
         .faq-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out;
+            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, padding 0.4s ease-in-out;
             opacity: 0;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+
+        .faq-content.active {
+            max-height: 500px;
+            opacity: 1;
+            padding-top: 1rem;
+            padding-bottom: 1rem;
         }
 
         .faq-item button i {
             transition: transform 0.3s ease;
+        }
+
+        .faq-item button.active i {
+            transform: rotate(180deg);
         }
 
         /* Mobile Adjustments for Hero */
@@ -1747,6 +1760,25 @@
         document.querySelectorAll('input[name="overage_option"]').forEach(input => {
             input.addEventListener('change', updateModalUIState);
         });
+
+        // FAQ Toggle Functionality
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', function () {
+                const faqItem = this.closest('.faq-item');
+                const faqContent = faqItem.querySelector('.faq-content');
+                const isActive = faqContent.classList.contains('active');
+
+                // Toggle the active state
+                if (isActive) {
+                    faqContent.classList.remove('active');
+                    this.classList.remove('active');
+                } else {
+                    faqContent.classList.add('active');
+                    this.classList.add('active');
+                }
+            });
+        });
+
 
         async function createPaymentIntent() {
             const childName = document.getElementById('form-child-name').value;
