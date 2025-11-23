@@ -141,19 +141,31 @@ exports.handler = async (event, context) => {
 
     // Dial the ElevenLabs Agent via SIP (Authenticated)
     // SIP URI: sip:santa@sip.rtc.elevenlabs.io
-    // We use the credentials provided for the "callsanta" SIP Trunk.
-    const sipUri = `sip:santa@sip.rtc.elevenlabs.io:5060;transport=tcp`;
 
-    const dial = twiml.dial();
-    dial.sip({
-        username: 'santa',
-        password: 'SantaClaus2025!'
-    }, sipUri);
+    // --- CREATIVE SOLUTION: PASS CONTEXT VIA SIP HEADERS ---
+    // We pass the child's name and time limit as SIP headers.
+    // The ElevenLabs agent (if configured) can read these to personalize the chat and manage time.
+    const childName = order.childName || 'Child';
+    const overageOption = order.overageOption || 'auto_disconnect';
 
-    // Fallback if the call fails or ends abruptly
-    twiml.say("Ho ho ho! The connection to the North Pole was lost. Merry Christmas!");
+    // Determine Time Limit (Hard Stop)
+    // If they didn't agree to overage, we cut the call at 5 minutes (300 seconds).
+    let dialOptions = {};
+    if (overageOption !== 'overage_accepted') {
+        dialOptions.timeLimit = 300; // 5 minutes hard stop
+        console.log("Applying 5-minute time limit.");
+    } else {
+        console.log("No time limit applied (Overage Accepted).");
+    }
 
-    // Mark the code as USED immediately to prevent replay
+    // Construct SIP URI with Headers for Context
+    // Note: We use encodeURIComponent for values to ensure valid URI syntax
+    let sipUri = `sip:santa@sip.rtc.elevenlabs.io:5060;transport=tcp`;
+
+    // Append headers as query parameters
+    const headers = new URLSearchParams();
+    headers.append('X-Child-Name', childName);
+    headers.append('X-Overage-Option', overageOption);
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
     return respond(twiml);

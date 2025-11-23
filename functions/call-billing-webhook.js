@@ -32,10 +32,8 @@ exports.handler = async (event, context) => {
     const callStatus = body.get('CallStatus'); // e.g., 'completed'
     const callSid = body.get('CallSid'); // Unique ID for logging
 
-    // We need the Payment Intent ID, which was passed to ElevenLabs and can be logged via a separate ElevenLabs webhook.
-    // For simplicity here, we assume the Order ID is passed via a hidden means, but the actual lookup is complex.
-    // --- VITAL ASSUMPTION: We retrieve the Stripe Customer ID from a temporary cache or a related webhook ---
-    // In a real production app, you'd likely use the CallSid to look up the active call record in your DB.
+    // We retrieve the Order ID from the query parameter passed in the action URL
+    const orderId = body.get('orderId') || event.queryStringParameters?.orderId;
 
     if (callStatus !== 'completed' || callDurationSeconds <= 300) {
         // Only proceed if call completed AND exceeded 5 minutes
@@ -45,11 +43,13 @@ exports.handler = async (event, context) => {
     try {
         await connectToDatabase(process.env.MONGODB_URI);
 
-        // 1. Retrieve the order and check policy
-        // NOTE: In production, you MUST find a way to link this call back to the specific Order.
-        // For now, we are finding the most recent fulfilled call as a fallback, which is risky in high volume.
-        // A better way is to store the CallSid in the Order when the call starts (in twilio-call-handler).
-        const order = await Order.findOne({ fulfillmentStatus: 'FULFILLED_CALL_STARTED' }).sort({ updatedAt: -1 });
+        if (!orderId) {
+            console.error("Missing orderId in webhook callback");
+            return { statusCode: 400, body: "Missing orderId" };
+        }
+
+        // 1. Retrieve the order directly by ID
+        const order = await Order.findById(orderId);
 
         if (!order || order.overageOption !== 'overage_accepted') {
             return { statusCode: 200, body: 'Overage not authorized or order not found.' };
