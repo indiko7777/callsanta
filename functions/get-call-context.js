@@ -61,12 +61,41 @@ exports.handler = async (event, context) => {
 
         // Return the dynamic variables for ElevenLabs
         // These keys must match the {{variables}} in your ElevenLabs Agent Prompt
+
+        // Re-calculate derived variables if needed, or rely on what's in the order if we stored it.
+        // Since we don't store daysUntilChristmas in the order, we calculate it again.
+        const today = new Date();
+        const currentYear = today.getFullYear();
+        let christmas = new Date(Date.UTC(currentYear, 11, 25));
+        if (today.getTime() > christmas.getTime()) {
+            christmas.setUTCFullYear(currentYear + 1);
+        }
+        const oneDay = 1000 * 60 * 60 * 24;
+        const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
+
+        const children = order.children || [];
+        // Fallback if children array is empty
+        if (children.length === 0 && order.childName) {
+            children.push({
+                name: order.childName,
+                wish: order.childWish || 'something special',
+                deed: order.childDeed || 'being good'
+            });
+        }
+
+        const childrenContext = children.map((child, index) => {
+            return `Child ${index + 1}: Name: ${child.name}, Wish: ${child.wish}, Good Deed: ${child.deed}`;
+        }).join('. ');
+
+        const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
+
         const responseData = {
             dynamic_variables: {
-                childName: order.childName,
-                childWish: order.childWish,
-                childDeed: order.childDeed,
-                overageOption: order.overageOption
+                child_count: children.length > 0 ? children.length : 1,
+                children_context: childrenContext,
+                npl_time: nplTime,
+                call_overage_option: order.overageOption || 'auto_disconnect',
+                days_until_christmas: daysUntilChristmas
             }
         };
 

@@ -153,13 +153,25 @@ exports.handler = async (event, context) => {
     }
 
     // Construct Children Context String
-    // Format: "Child 1: Name (Wish: X, Deed: Y). Child 2: Name..."
+    // Format: "Child 1: Name: X, Wish: Y, Good Deed: Z. Child 2: ..."
     let childrenContext = children.map((child, index) => {
-        return `Child ${index + 1}: ${child.name} (Wish: ${child.wish}, Deed: ${child.deed})`;
+        return `Child ${index + 1}: Name: ${child.name}, Wish: ${child.wish}, Good Deed: ${child.deed}`;
     }).join('. ');
 
     const overageOption = order.overageOption || 'auto_disconnect';
-    const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' }) + " NPL Time";
+
+    // NPL Time (North Pole Time) - approximating as UTC for simplicity
+    const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
+
+    // Calculate Days Until Christmas
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    let christmas = new Date(Date.UTC(currentYear, 11, 25)); // Dec 25th UTC
+    if (today.getTime() > christmas.getTime()) {
+        christmas.setUTCFullYear(currentYear + 1);
+    }
+    const oneDay = 1000 * 60 * 60 * 24;
+    const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
 
     // Determine Time Limit (Hard Stop)
     let timeLimit = 300; // Default 5 mins
@@ -189,7 +201,8 @@ exports.handler = async (event, context) => {
     `?X-Children-Context=${encodeURIComponent(childrenContext)}` +
     `&X-Child-Count=${childCount}` +
     `&X-Call-Overage-Option=${encodeURIComponent(overageOption)}` +
-    `&X-NPL-Time=${encodeURIComponent(nplTime)}`
+    `&X-Npl-Time=${encodeURIComponent(nplTime)}` +
+    `&X-Days-Until-Christmas=${daysUntilChristmas}`
     );
 
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });

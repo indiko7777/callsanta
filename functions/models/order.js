@@ -32,5 +32,11 @@ const OrderSchema = new mongoose.Schema({
     errorMessage: { type: String } // Error message if video generation fails
 }, { timestamps: true });
 
+// TTL Index: Automatically delete orders that are still 'PENDING_PAYMENT' after 1 hour (3600 seconds)
+OrderSchema.index({ createdAt: 1 }, {
+    expireAfterSeconds: 3600,
+    partialFilterExpression: { fulfillmentStatus: 'PENDING_PAYMENT' }
+});
+
 // Check if the model already exists before compiling
 module.exports = mongoose.models.Order || mongoose.model('Order', OrderSchema);
