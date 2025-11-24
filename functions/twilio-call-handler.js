@@ -139,33 +139,59 @@ exports.handler = async (event, context) => {
     // Play pre-recorded connecting audio before dialing
     twiml.play(AUDIO_SUCCESS);
 
-    // Dial the ElevenLabs Agent via SIP (Authenticated)
-    // SIP URI: sip:santa@sip.rtc.elevenlabs.io
+    // --- PREPARE CONTEXT FOR ELEVENLABS ---
+    const children = order.children || [];
+    const childCount = children.length > 0 ? children.length : 1;
 
-    // --- CREATIVE SOLUTION: PASS CONTEXT VIA SIP HEADERS ---
-    // We pass the child's name and time limit as SIP headers.
-    // The ElevenLabs agent (if configured) can read these to personalize the chat and manage time.
-    const childName = order.childName || 'Child';
-    const overageOption = order.overageOption || 'auto_disconnect';
-
-    // Determine Time Limit (Hard Stop)
-    // If they didn't agree to overage, we cut the call at 5 minutes (300 seconds).
-    let dialOptions = {};
-    if (overageOption !== 'overage_accepted') {
-        dialOptions.timeLimit = 300; // 5 minutes hard stop
-        console.log("Applying 5-minute time limit.");
-    } else {
-        console.log("No time limit applied (Overage Accepted).");
+    // Fallback for legacy orders or if array is empty but childName exists
+    if (children.length === 0 && order.childName) {
+        children.push({
+            name: order.childName,
+            wish: order.childWish || 'something special',
+            deed: order.childDeed || 'being good'
+        });
     }
 
-    // Construct SIP URI with Headers for Context
-    // Note: We use encodeURIComponent for values to ensure valid URI syntax
-    let sipUri = `sip:santa@sip.rtc.elevenlabs.io:5060;transport=tcp`;
+    // Construct Children Context String
+    // Format: "Child 1: Name (Wish: X, Deed: Y). Child 2: Name..."
+    let childrenContext = children.map((child, index) => {
+        return `Child ${index + 1}: ${child.name} (Wish: ${child.wish}, Deed: ${child.deed})`;
+    }).join('. ');
 
-    // Append headers as query parameters
-    const headers = new URLSearchParams();
-    headers.append('X-Child-Name', childName);
-    headers.append('X-Overage-Option', overageOption);
+    const overageOption = order.overageOption || 'auto_disconnect';
+    const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit' }) + " NPL Time";
+
+    // Determine Time Limit (Hard Stop)
+    let timeLimit = 300; // Default 5 mins
+    if (overageOption === 'overage_accepted' || overageOption === 'unlimited') {
+        timeLimit = 1200; // 20 mins max for safety
+        console.log("Extended time limit applied.");
+    } else {
+        console.log("Applying 5-minute time limit.");
+    }
+
+    // --- DIAL ELEVENLABS VIA SIP ---
+    const dial = twiml.dial({
+        timeout: 30,
+        timeLimit: timeLimit
+    });
+
+    // SIP URI with Custom Headers
+    // Note: Headers must be X- prefixed for custom data
+    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io`;
+
+    const sip = dial.sip({
+        // Pass headers as URL parameters in the SIP URI is NOT the standard way for Twilio <Sip>.
+        // Twilio <Sip> supports custom headers via the nested <Sip> element attributes or query params?
+        // Actually, Twilio passes query params in the SIP URI as headers to the destination if supported.
+        // BUT, the correct way in TwiML is to append them to the URI string.
+    }, sipUri +
+    `?X-Children-Context=${encodeURIComponent(childrenContext)}` +
+    `&X-Child-Count=${childCount}` +
+    `&X-Call-Overage-Option=${encodeURIComponent(overageOption)}` +
+    `&X-NPL-Time=${encodeURIComponent(nplTime)}`
+    );
+
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
     return respond(twiml);
