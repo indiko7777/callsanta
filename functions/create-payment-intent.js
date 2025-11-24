@@ -41,7 +41,7 @@ exports.handler = async (event, context) => {
         await connectToDatabase(process.env.MONGODB_URI);
 
         const body = JSON.parse(event.body);
-        const { package_id, parent_email, parent_phone, child_name, child_wish, child_deed, overage_option } = body;
+        const { package_id, parent_email, parent_phone, children, overage_option } = body;
 
         let amount = PRODUCT_PRICES[package_id];
 
@@ -49,15 +49,25 @@ exports.handler = async (event, context) => {
             return { statusCode: 400, body: JSON.stringify({ error: 'Invalid package ID.' }) };
         }
 
-        // Add $5 (500 cents) if unlimited option is selected AND it's not the bundle (bundle includes it)
+        // Pricing Logic:
+        // 1. Base price (package_id)
+        // 2. Extra children: $7.50 per child after the first one
+        const numChildren = Array.isArray(children) ? children.length : 1;
+        const extraChildPrice = 750; // $7.50 in cents
+        const extraChildrenCount = Math.max(0, numChildren - 1);
+        amount += extraChildrenCount * extraChildPrice;
+
+        // 3. Overage option (legacy check, keeping just in case)
         if (overage_option === 'unlimited' && package_id !== 'bundle') {
             amount += 500;
         }
 
         // --- A. CREATE STRIPE CUSTOMER ---
+        // Use the first child's name for the customer name or a generic one
+        const firstChildName = (children && children[0] && children[0].name) ? children[0].name : 'Child';
         const customer = await stripe.customers.create({
             email: parent_email,
-            name: `${child_name} Parent`,
+            name: `${firstChildName} Parent`,
             metadata: { package_id: package_id }
         });
 
@@ -66,14 +76,13 @@ exports.handler = async (event, context) => {
             amount: amount,
             currency: 'usd',
             customer: customer.id,
-            description: `CallSanta.us Purchase: ${package_id}`,
+            description: `CallSanta.us Purchase: ${package_id} (${numChildren} children)`,
             receipt_email: parent_email,
             automatic_payment_methods: { enabled: true },
             // Store personalization data in PI metadata for Stripe Dashboard visibility
+            // Note: Metadata has a 500 char limit per key. We'll store a summary.
             metadata: {
-                child_name: child_name,
-                child_wish: child_wish,
-                child_deed: child_deed,
+                child_count: numChildren,
                 parent_phone: parent_phone,
                 customer_id: customer.id,
                 overage_option: overage_option || 'auto_disconnect'
@@ -88,9 +97,7 @@ exports.handler = async (event, context) => {
             stripePaymentIntentId: paymentIntentCreated.id,
             accessCode: generateAccessCode(),
             fulfillmentStatus: 'PENDING_PAYMENT',
-            childName: child_name,
-            childWish: child_wish,
-            childDeed: child_deed,
+            children: children, // Save the array of children
             parentEmail: parent_email,
             parentPhone: parent_phone,
             packageId: package_id,

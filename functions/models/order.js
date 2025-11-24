@@ -8,9 +8,11 @@ const OrderSchema = new mongoose.Schema({
     fulfillmentStatus: { type: String, default: 'PENDING_PAYMENT' }, // Tracks state
 
     // Personalization Data
-    childName: { type: String, required: true },
-    childWish: { type: String, required: true },
-    childDeed: { type: String, required: true },
+    children: [{
+        name: { type: String, required: true },
+        wish: { type: String, required: true },
+        deed: { type: String, required: true }
+    }],
 
     // Parent/Contact Data
     parentEmail: { type: String, required: true },
@@ -20,7 +22,7 @@ const OrderSchema = new mongoose.Schema({
     packageId: { type: String, required: true },
     amountPaid: { type: Number, required: true },
     currency: { type: String, default: 'USD' },
-    overageOption: { type: String, enum: ['auto_disconnect', 'overage_accepted'], default: 'auto_disconnect' },
+    overageOption: { type: String, enum: ['auto_disconnect', 'overage_accepted', 'unlimited'], default: 'auto_disconnect' },
 
     // Video Generation Data
     videoStatus: { type: String, default: 'pending' }, // pending, processing, completed, failed

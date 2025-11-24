@@ -582,44 +582,61 @@
                             <h2 class="text-2xl font-serif font-bold text-santa-gold mb-6 text-center">Step 1: Child's
                                 First Name</h2>
 
-                            <div class="relative group">
-                                <div
-                                    class="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-santa-dark rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500">
+                            <!-- Small Child Count Selector -->
+                            <div class="flex justify-center mb-6">
+                                <div class="inline-flex bg-slate-900/80 rounded-lg p-1 border border-white/10">
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="child-count" value="1" class="peer sr-only" checked
+                                            onchange="updateChildCount(1)">
+                                        <div
+                                            class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 peer-checked:bg-santa-red peer-checked:text-white transition-all hover:text-white">
+                                            1 Child</div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="child-count" value="2" class="peer sr-only"
+                                            onchange="updateChildCount(2)">
+                                        <div
+                                            class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 peer-checked:bg-santa-red peer-checked:text-white transition-all hover:text-white">
+                                            2 Children</div>
+                                    </label>
+                                    <label class="cursor-pointer">
+                                        <input type="radio" name="child-count" value="3" class="peer sr-only"
+                                            onchange="updateChildCount(3)">
+                                        <div
+                                            class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 peer-checked:bg-santa-red peer-checked:text-white transition-all hover:text-white">
+                                            3 Children</div>
+                                    </label>
                                 </div>
-                                <div
-                                    class="relative flex items-center bg-slate-900/80 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl">
-                                    <div class="pl-4 text-gray-400">
-                                        <i data-lucide="user" class="w-5 h-5"></i>
-                                    </div>
-                                    <input id="form-child-name" type="text"
-                                        placeholder="Enter your child's first name..."
-                                        class="w-full bg-transparent border-none text-white placeholder-gray-500 focus:ring-0 px-4 py-3 text-lg outline-none font-medium"
-                                        required pattern="[A-Za-z\s]{2,}"
-                                        title="Please enter a valid name (2+ letters).">
-                                </div>
+                            </div>
+
+                            <div id="step-1-inputs" class="space-y-4">
+                                <!-- Dynamic inputs will be injected here -->
                             </div>
 
                             <button type="button" onclick="validateStep(1)"
                                 class="group relative w-full mt-6 py-4 px-6 bg-santa-red hover:bg-red-700 text-white rounded-xl font-semibold text-lg transition-all duration-300 shadow-[0_0_25px_rgba(212,36,38,0.4)] hover:shadow-[0_0_40px_rgba(212,36,38,0.6)] flex items-center justify-center gap-3 transform hover:-translate-y-0.5">
-                                <span>Start Personalization Now</span>
+                                <span>Next: Wishes</span>
                                 <i data-lucide="arrow-right"
                                     class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
                             </button>
-                            <div class="text-gray-400 text-sm mt-3">Santa will greet them by this exact name!</div>
+                            <div class="text-gray-400 text-sm mt-3 text-center">Santa will greet them by these exact
+                                names!</div>
                         </div>
 
                         <div id="step-2" class="step-form">
                             <h3 class="text-2xl font-serif font-bold text-santa-gold mb-6 text-center">Step 2: Their
                                 Biggest Wish</h3>
-                            <label for="form-child-wish"
-                                class="block text-xl font-semibold mb-2 text-santa-goldlight flex items-center gap-2">
+                            <div
+                                class="block text-xl font-semibold mb-4 text-santa-goldlight flex items-center gap-2 justify-center">
                                 <i data-lucide="gift" class="w-5 h-5"></i> What are they hoping for?
-                            </label>
-                            <input id="form-child-wish" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
-                                placeholder="e.g. The new red Lego set or 'a blue bike'" required minlength="4"
-                                title="Please provide a specific wish (4+ characters).">
-                            <div class="text-gray-400 text-sm mt-2 mb-6">Santa will mention this exact item during the
-                                call/video!</div>
+                            </div>
+
+                            <div id="step-2-inputs" class="space-y-6">
+                                <!-- Dynamic inputs will be injected here -->
+                            </div>
+
+                            <div class="text-gray-400 text-sm mt-4 mb-6 text-center">Santa will mention these exact
+                                items!</div>
                             <button type="button" onclick="validateStep(2)"
                                 class="mt-6 w-full py-3 bg-santa-red hover:bg-red-700 text-white rounded-xl font-semibold text-lg transition-colors">
                                 Next: Good Deeds <i data-lucide="chevron-right" class="w-4 h-4 inline-block ml-2"></i>
@@ -627,18 +644,19 @@
                         </div>
 
                         <div id="step-3" class="step-form">
-                            <h3 class="text-2xl font-serif font-bold text-santa-gold mb-6 text-center">Step 3: A Recent
-                                Good Deed</h3>
-                            <label for="form-child-deed"
-                                class="block text-xl font-semibold mb-2 text-santa-goldlight flex items-center gap-2">
-                                <i data-lucide="thumbs-up" class="w-5 h-5"></i> What is one recent accomplishment or
-                                hobby?
-                            </label>
-                            <input id="form-child-deed" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
-                                placeholder="e.g. Helped feed the dog, or is great at soccer" required minlength="5"
-                                title="Please describe a deed/hobby (5+ characters).">
-                            <div class="text-gray-400 text-sm mt-2 mb-6">This is the moment of magic: Santa will praise
-                                them for this specific thing!</div>
+                            <h3 class="text-2xl font-serif font-bold text-santa-gold mb-6 text-center">Step 3: Recent
+                                Good Deeds</h3>
+                            <div
+                                class="block text-xl font-semibold mb-4 text-santa-goldlight flex items-center gap-2 justify-center">
+                                <i data-lucide="thumbs-up" class="w-5 h-5"></i> Recent accomplishments?
+                            </div>
+
+                            <div id="step-3-inputs" class="space-y-6">
+                                <!-- Dynamic inputs will be injected here -->
+                            </div>
+
+                            <div class="text-gray-400 text-sm mt-4 mb-6 text-center">Santa will praise them for these
+                                specific things!</div>
                             <button type="button" onclick="validateStep(3)"
                                 class="mt-6 w-full py-3 bg-santa-red hover:bg-red-700 text-white rounded-xl font-semibold text-lg transition-colors">
                                 Next: Parent Details <i data-lucide="chevron-right"
@@ -1565,7 +1583,10 @@
                 <div id="pre-stripe-commit-section" class="space-y-4">
                     <div
                         class="flex justify-between items-center p-4 rounded-xl bg-slate-900/90 border border-white/10">
-                        <span class="text-lg font-bold text-white">Total Investment in Magic:</span>
+                        <div>
+                            <span class="text-lg font-bold text-white block">Total Investment in Magic:</span>
+                            <span id="modal-extra-charge-label" class="text-xs text-santa-goldlight hidden"></span>
+                        </div>
                         <span id="modal-final-price" class="text-3xl font-serif font-bold text-santa-red">$20</span>
                     </div>
 
@@ -1632,32 +1653,102 @@
         let modalPaymentMessage = document.getElementById('modal-payment-message');
         let modalSubmitBtn = document.getElementById('modal-submit-btn');
 
+        // --- Multi-Child Logic ---
+        let currentChildCount = 1;
+
+        function updateChildCount(count) {
+            currentChildCount = count;
+            renderChildInputs();
+        }
+
+        function renderChildInputs() {
+            const step1Container = document.getElementById('step-1-inputs');
+            const step2Container = document.getElementById('step-2-inputs');
+            const step3Container = document.getElementById('step-3-inputs');
+
+            step1Container.innerHTML = '';
+            step2Container.innerHTML = '';
+            step3Container.innerHTML = '';
+
+            for (let i = 1; i <= currentChildCount; i++) {
+                const suffix = currentChildCount > 1 ? ` ${i}` : '';
+
+                // Step 1: Name
+                step1Container.innerHTML += `
+                    <div class="relative group">
+                        <div class="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-santa-dark rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                        <div class="relative flex items-center bg-slate-900/80 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl">
+                            <div class="pl-4 text-gray-400">
+                                <i data-lucide="user" class="w-5 h-5"></i>
+                            </div>
+                            <input id="form-child-name-${i}" type="text"
+                                placeholder="Child${suffix} Name"
+                                class="w-full bg-transparent border-none text-white placeholder-gray-500 focus:ring-0 px-4 py-3 text-lg outline-none font-medium"
+                                required pattern="[A-Za-z\\s]{2,}"
+                                title="Please enter a valid name (2+ letters).">
+                        </div>
+                    </div>
+                `;
+
+                // Step 2: Wish
+                step2Container.innerHTML += `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Child${suffix} Wish</label>
+                        <input id="form-child-wish-${i}" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
+                            placeholder="e.g. A red bike" required minlength="4"
+                            title="Please provide a specific wish (4+ characters).">
+                    </div>
+                `;
+
+                // Step 3: Deed
+                step3Container.innerHTML += `
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Child${suffix} Good Deed</label>
+                        <input id="form-child-deed-${i}" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
+                            placeholder="e.g. Helped with dishes" required minlength="5"
+                            title="Please describe a deed/hobby (5+ characters).">
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        // Initialize inputs on load
+        renderChildInputs();
+
         function validateStep(step) {
-            let isValid = false;
+            let isValid = true;
+
             if (step === 1) {
-                const nameInput = document.getElementById('form-child-name');
-                if (nameInput.checkValidity()) {
-                    isValid = true;
-                    updateStepDisplay(2);
-                } else {
-                    nameInput.reportValidity();
+                for (let i = 1; i <= currentChildCount; i++) {
+                    const input = document.getElementById(`form-child-name-${i}`);
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        isValid = false;
+                        break;
+                    }
                 }
+                if (isValid) updateStepDisplay(2);
             } else if (step === 2) {
-                const wishInput = document.getElementById('form-child-wish');
-                if (wishInput.checkValidity()) {
-                    isValid = true;
-                    updateStepDisplay(3);
-                } else {
-                    wishInput.reportValidity();
+                for (let i = 1; i <= currentChildCount; i++) {
+                    const input = document.getElementById(`form-child-wish-${i}`);
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        isValid = false;
+                        break;
+                    }
                 }
+                if (isValid) updateStepDisplay(3);
             } else if (step === 3) {
-                const deedInput = document.getElementById('form-child-deed');
-                if (deedInput.checkValidity()) {
-                    isValid = true;
-                    updateStepDisplay(4);
-                } else {
-                    deedInput.reportValidity();
+                for (let i = 1; i <= currentChildCount; i++) {
+                    const input = document.getElementById(`form-child-deed-${i}`);
+                    if (!input.checkValidity()) {
+                        input.reportValidity();
+                        isValid = false;
+                        break;
+                    }
                 }
+                if (isValid) updateStepDisplay(4);
             }
             return isValid;
         }
@@ -1689,8 +1780,12 @@
                 return;
             }
 
-            const childName = document.getElementById('form-child-name').value;
-            document.getElementById('modal-child-summary').innerText = childName;
+            // Summary for modal
+            const names = [];
+            for (let i = 1; i <= currentChildCount; i++) {
+                names.push(document.getElementById(`form-child-name-${i}`).value);
+            }
+            document.getElementById('modal-child-summary').innerText = names.join(', ');
 
             const modalOverlay = document.getElementById('payment-modal-overlay');
             const modal = document.getElementById('payment-modal');
@@ -1736,6 +1831,11 @@
             //   - Auto-disconnect: +$0
             //   - Unlimited: +$5
 
+            // Extra Children: +$7.50 (750 cents) per extra child
+            const extraChildren = Math.max(0, currentChildCount - 1);
+            const extraChildCost = extraChildren * 750;
+            price += extraChildCost;
+
             if (packageId === 'bundle' || packageId === 'video') {
                 overageSection.classList.add('hidden');
             } else {
@@ -1746,7 +1846,15 @@
                 price += 500; // Add $5
             }
 
-            const formattedPrice = '$' + (price / 100);
+            const extraLabel = document.getElementById('modal-extra-charge-label');
+            if (extraChildren > 0) {
+                extraLabel.innerText = `(Includes +$${(extraChildCost / 100).toFixed(2)} for ${extraChildren} extra child${extraChildren > 1 ? 'ren' : ''})`;
+                extraLabel.classList.remove('hidden');
+            } else {
+                extraLabel.classList.add('hidden');
+            }
+
+            const formattedPrice = '$' + (price / 100).toFixed(2);
             finalPriceDisplay.innerText = formattedPrice;
             finalPriceStripe.innerText = formattedPrice;
             modalButtonText.innerText = `Secure Your Magic (${formattedPrice})`;
@@ -1781,9 +1889,16 @@
 
 
         async function createPaymentIntent() {
-            const childName = document.getElementById('form-child-name').value;
-            const childWish = document.getElementById('form-child-wish').value;
-            const childDeed = document.getElementById('form-child-deed').value;
+            // Collect Children Data
+            const children = [];
+            for (let i = 1; i <= currentChildCount; i++) {
+                children.push({
+                    name: document.getElementById(`form-child-name-${i}`).value,
+                    wish: document.getElementById(`form-child-wish-${i}`).value,
+                    deed: document.getElementById(`form-child-deed-${i}`).value
+                });
+            }
+
             const parentEmail = document.getElementById('form-parent-email').value;
             const parentPhone = document.getElementById('form-parent-phone').value;
             const selectedPackage = document.querySelector('input[name="package_id"]:checked');
@@ -1803,9 +1918,7 @@
             }
 
             const personalizationData = {
-                child_name: childName,
-                child_wish: childWish,
-                child_deed: childDeed,
+                children: children,
                 parent_email: parentEmail,
                 parent_phone: parentPhone,
                 package_id: selectedPackage.value,
