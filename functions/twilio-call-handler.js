@@ -122,7 +122,7 @@ exports.handler = async (event, context) => {
     // Mark order as started
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
-    // Prepare context (for logging only - webhook will provide to ElevenLabs)
+    // Prepare context (for logging)
     const children = order.children || [];
     if (children.length === 0 && order.childName) {
         children.push({
@@ -137,18 +137,18 @@ exports.handler = async (event, context) => {
         return `Child ${index + 1}: Name: ${child.name}, Wish: ${child.wish}, Good Deed: ${child.deed}`;
     }).join('. ');
 
-    console.log('Context for ElevenLabs:', { childCount, childrenContext });
+    console.log('Context:', { childCount, childrenContext });
 
-    // SIP DIAL WITH AUTHENTICATION
+    // SIP DIAL - Use phone number ID as username for auth
     const dial = twiml.dial({
         timeout: 30,
         timeLimit: timeLimit
     });
 
-    // SIP URI with username:password authentication
-    const sipUri = `sip:santa:Tenguiz10@sip.rtc.elevenlabs.io:5060;transport=tcp`;
+    // The phone number ID IS the username for this specific SIP endpoint
+    const sipUri = `sip:phnum_5101kajevc1tf7q8rb8msvpmkmqd:Tenguiz10@sip.rtc.elevenlabs.io:5060;transport=tcp`;
 
-    console.log(`Dialing ElevenLabs SIP trunk with authentication`);
+    console.log(`Dialing ElevenLabs phone: phnum_5101kajevc1tf7q8rb8msvpmkmqd`);
 
     dial.sip(sipUri);
 
