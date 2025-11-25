@@ -27,30 +27,39 @@ exports.handler = async (event, context) => {
         return { statusCode: 400, body: "Invalid JSON" };
     }
 
-    const callerId = body.caller_id;
-    console.log("ElevenLabs Context Request for Caller:", callerId);
+    const { access_code, order_id, caller_id } = body;
+    console.log("ElevenLabs Context Request:", { access_code, order_id, caller_id });
 
-    if (!callerId) {
-        return { statusCode: 400, body: "Missing caller_id" };
+    if (!access_code && !order_id && !caller_id) {
+        return { statusCode: 400, body: "Missing access_code, order_id, or caller_id" };
     }
 
     try {
         await connectToDatabase(MONGODB_URI);
 
-        // Find the most recent order for this caller ID that is in 'FULFILLED_CALL_STARTED' status
-        // Note: The caller_id from ElevenLabs might be the 'From' number.
-        // We need to match this with the 'accessCode' or just the most recent active order.
-        // Since we don't have the access code here, we rely on the phone number or recent activity.
-        // Ideally, we would pass the Order ID via SIP headers, but ElevenLabs support for custom headers is limited to X-CALL-ID.
+        let order;
 
-        // STRATEGY: Find the most recent order updated in the last 5 minutes with status 'FULFILLED_CALL_STARTED'.
-        const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+        // 1. Try to find by Access Code (most reliable if provided by Agent Tool)
+        if (access_code) {
+            order = await Order.findOne({ accessCode: access_code });
+        }
 
-        // We search for an order that was just marked as 'FULFILLED_CALL_STARTED' by twilio-call-handler.
-        const order = await Order.findOne({
-            fulfillmentStatus: 'FULFILLED_CALL_STARTED',
-            updatedAt: { $gte: fiveMinutesAgo }
-        }).sort({ updatedAt: -1 });
+        // 2. Try to find by Order ID
+        if (!order && order_id) {
+            order = await Order.findById(order_id);
+        }
+
+        // 3. Fallback: Find the most recent order for this caller ID
+        if (!order && caller_id) {
+            // STRATEGY: Find the most recent order updated in the last 5 minutes with status 'FULFILLED_CALL_STARTED'.
+            const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
+
+            // We search for an order that was just marked as 'FULFILLED_CALL_STARTED' by twilio-call-handler.
+            order = await Order.findOne({
+                fulfillmentStatus: 'FULFILLED_CALL_STARTED',
+                updatedAt: { $gte: fiveMinutesAgo }
+            }).sort({ updatedAt: -1 });
+        }
 
         if (!order) {
             console.warn("No active order found for context.");

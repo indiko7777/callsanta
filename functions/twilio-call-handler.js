@@ -140,15 +140,20 @@ exports.handler = async (event, context) => {
     twiml.play(AUDIO_SUCCESS);
 
     // Dial the ElevenLabs Agent via SIP (Authenticated)
-    // SIP URI with phone number ID and TCP transport
-    // We use the credentials provided for the "callsanta" SIP Trunk.
-    const sipUri = `sip:phnum_5101kajevc1tf7q8rb8msvpmkmqd@sip.rtc.elevenlabs.io:5060;transport=tcp`;
+    // Using the credentials from the "Callsanta" SIP Trunk configuration.
+    // SIP URI: sip:santa@sip.rtc.elevenlabs.io:5060;transport=tcp
+    const sipUri = `sip:santa@sip.rtc.elevenlabs.io:5060;transport=tcp`;
 
-    const dial = twiml.dial();
+    // We set the callerId to the Twilio number to ensure the call is verified.
+    // If TWILIO_PHONE_NUMBER is not set, we fallback to the caller's number (which might be unverified for SIP).
+    const dial = twiml.dial({
+        callerId: process.env.TWILIO_PHONE_NUMBER || event.From
+    });
+
     dial.sip({
-        username: 'phnum_5101kajevc1tf7q8rb8msvpmkmqd',
+        username: 'santa',
         password: 'Tenguiz10'
-    }, sipUri);
+    }, sipUri + `?X-Access-Code=${order.accessCode}&X-Order-Id=${order._id}`);
 
     // Fallback if the call fails or ends abruptly
     twiml.say("Ho ho ho! The connection to the North Pole was lost. Merry Christmas!");
