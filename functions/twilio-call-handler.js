@@ -4,40 +4,28 @@ const Order = require('./models/order');
 
 // --- CONFIG ---
 const MONGODB_URI = process.env.MONGODB_URI;
-// The BASE_URL environment variable (e.g., https://yourdomain.com) is crucial for audio paths.
 let baseUrl = process.env.BASE_URL || '';
 if (!baseUrl.endsWith('/')) {
     baseUrl += '/';
 }
 const BASE_URL = baseUrl;
-// NOTE: REPLACE THIS WITH YOUR ACTUAL ELEVENLABS AGENT URL/ID
 const ELEVENLABS_AGENT_ID = process.env.ELEVENLABS_AGENT_ID;
 
-// --- AUDIO PATHS (Must be hosted at BASE_URL/audio/...) ---
-// 1. Initial greeting and prompt to enter the code
+// --- AUDIO PATHS ---
 const AUDIO_INPUT_PROMPT = `${BASE_URL}audio/greeting.mp3`;
-// 2. Played if the user doesn't enter anything after 8 seconds
 const AUDIO_TIMEOUT = `${BASE_URL}audio/audio timeout.mp3`;
-// 3. Played if the code is invalid or already used
 const AUDIO_INVALID_CODE = `${BASE_URL}audio/invalid.mp3`;
-// 4. Played on successful code entry before connecting to the AI agent
 const AUDIO_SUCCESS = `${BASE_URL}audio/sucess.mp3`;
-
 
 // --- DATABASE CONNECTION ---
 let cachedDb = null;
 const connectToDatabase = async (uri) => {
     if (cachedDb) return cachedDb;
-
-    // Check if MongoDB URI is available
     if (!uri) {
         console.error("MONGODB_URI is not set.");
         throw new Error("Database connection configuration missing.");
     }
-
-    const db = await mongoose.connect(uri, {
-        bufferCommands: false,
-    });
+    const db = await mongoose.connect(uri, { bufferCommands: false });
     cachedDb = db;
     return db;
 };
@@ -55,7 +43,6 @@ exports.handler = async (event, context) => {
 
     console.log("Incoming Call Event:", JSON.stringify(event.body));
 
-    // Ensure BASE_URL is set for audio files
     if (!BASE_URL) {
         console.error("CRITICAL: BASE_URL is not set.");
         const twiml = new twilio.twiml.VoiceResponse();
@@ -68,7 +55,6 @@ exports.handler = async (event, context) => {
         await connectToDatabase(MONGODB_URI);
     } catch (e) {
         console.error("DATABASE CONNECTION ERROR:", e);
-        // Fallback response if DB fails entirely (prevents hanging call)
         const twiml = new twilio.twiml.VoiceResponse();
         twiml.say("We are experiencing a high volume of calls at the North Pole. Please try again in a few minutes.");
         twiml.hangup();
@@ -79,19 +65,14 @@ exports.handler = async (event, context) => {
     const body = event.body ? new URLSearchParams(event.body) : new URLSearchParams();
     const digits = body.get('Digits');
 
-    // --- STEP 1: INITIAL GATHER (Using Combined Audio) ---
+    // --- STEP 1: INITIAL GATHER ---
     if (!digits) {
-        // Initial call flow: Ask for the 4-digit code using the combined audio
         const gather = twiml.gather({
             action: '/.netlify/functions/twilio-call-handler',
             numDigits: 4,
             timeout: 8
         });
-
-        // Plays the combined greeting and prompt
         gather.play(AUDIO_INPUT_PROMPT);
-
-        // Timeout/Failure fallback (executed if no digits are entered)
         twiml.play(AUDIO_TIMEOUT);
         twiml.hangup();
         return respond(twiml);
@@ -100,8 +81,6 @@ exports.handler = async (event, context) => {
     // --- STEP 2: CODE LOOKUP & VALIDATION ---
     const accessCode = digits;
     console.log(`Received Digits/Code: ${accessCode}`);
-
-    // Important: Pad the access code if necessary based on your database storage format (assuming 4 digits)
     const paddedCode = accessCode.padStart(4, '0');
 
     let order;
@@ -117,16 +96,12 @@ exports.handler = async (event, context) => {
 
     if (!order || order.fulfillmentStatus !== 'PENDING_PAYMENT') {
         console.log("Invalid Code or Status:", order ? order.fulfillmentStatus : "No Order");
-        // Code is invalid OR has already been used
         twiml.play(AUDIO_INVALID_CODE);
         twiml.hangup();
         return respond(twiml);
     }
 
-    // --- STEP 3: SUCCESS - CONNECT TO ELEVENLABS AGENT (Using SIP) ---
-    // We use SIP Trunking because direct WebSocket (<Stream>) requires a relay server to translate protocols.
-    // SIP allows Twilio to call ElevenLabs directly.
-
+    // --- STEP 3: CONNECT TO ELEVENLABS ---
     if (!ELEVENLABS_AGENT_ID) {
         console.error("CRITICAL: ELEVENLABS_AGENT_ID is missing.");
         twiml.say("Santa is having trouble connecting. Please contact support.");
@@ -135,75 +110,29 @@ exports.handler = async (event, context) => {
     }
 
     console.log("Connecting to ElevenLabs via SIP...");
-
-    // Play pre-recorded connecting audio before dialing
     twiml.play(AUDIO_SUCCESS);
 
-    // --- PREPARE CONTEXT FOR ELEVENLABS ---
     const overageOption = order.overageOption || 'auto_disconnect';
-
-    // Determine Time Limit (Hard Stop)
     let timeLimit = 300; // Default 5 mins
     if (overageOption === 'overage_accepted' || overageOption === 'unlimited') {
-        timeLimit = 1200; // 20 mins max for safety
+        timeLimit = 1200; // 20 mins max
         console.log("Extended time limit applied.");
-    } else {
-        console.log("Applying 5-minute time limit.");
     }
 
-    // --- PREPARE FULL CONTEXT FOR SIP HEADERS ---
-    const children = order.children || [];
-
-    // Fallback for legacy orders
-    if (children.length === 0 && order.childName) {
-        children.push({
-            name: order.childName,
-            wish: order.childWish || 'something special',
-            deed: order.childDeed || 'being good'
-        });
-    }
-
-    const childCount = children.length > 0 ? children.length : 1;
-    const childrenContext = children.map((child, index) => {
-        return `Child ${index + 1}: Name: ${child.name}, Wish: ${child.wish}, Good Deed: ${child.deed}`;
-    }).join('. ');
-
-    const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
-
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    let christmas = new Date(Date.UTC(currentYear, 11, 25));
-    if (today.getTime() > christmas.getTime()) {
-        christmas.setUTCFullYear(currentYear + 1);
-    }
-    const oneDay = 1000 * 60 * 60 * 24;
-    const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
-
-    // --- DIAL ELEVENLABS VIA SIP WITH TCP TRANSPORT ---
     const dial = twiml.dial({
         timeout: 30,
         timeLimit: timeLimit
     });
 
-    // Mark order as call started BEFORE dialing
+    // Mark order as started so webhook can find it
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
-    // SIP URI with TCP transport + context in custom headers
-    // TCP has no packet size limit like UDP did (which caused error 32011)
-    // Testing if ElevenLabs reads these custom SIP headers directly
-    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io;transport=tcp` +
-        `?X-Child-Count=${childCount}` +
-        `&X-Children-Context=${encodeURIComponent(childrenContext)}` +
-        `&X-NPL-Time=${encodeURIComponent(nplTime)}` +
-        `&X-Days-Until-Christmas=${daysUntilChristmas}` +
-        `&X-Call-Overage-Option=${encodeURIComponent(overageOption)}` +
-        `&X-Order-ID=${encodeURIComponent(order._id.toString())}`;
+    // CLEAN SIP DIAL - No headers, webhook will provide ALL context
+    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.elevenlabs.io`;
 
-    console.log(`Dialing ElevenLabs with full context via TCP SIP headers`);
-    console.log(`Context size: ~${sipUri.length} bytes (TCP can handle this)`);
+    console.log(`Dialing ElevenLabs agent: ${ELEVENLABS_AGENT_ID}`);
+    console.log(`Webhook will provide context for order: ${order._id}`);
 
-    // Use SIP dial with context in headers
-    // Fallback: if ElevenLabs doesn't read headers, it can still call the webhook tool
     dial.sip(sipUri);
 
     return respond(twiml);
