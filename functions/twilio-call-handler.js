@@ -10,6 +10,7 @@ if (!baseUrl.endsWith('/')) {
 }
 const BASE_URL = baseUrl;
 const ELEVENLABS_AGENT_ID = process.env.ELEVENLABS_AGENT_ID;
+const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
 // --- AUDIO PATHS ---
 const AUDIO_INPUT_PROMPT = `${BASE_URL}audio/greeting.mp3`;
@@ -101,7 +102,7 @@ exports.handler = async (event, context) => {
         return respond(twiml);
     }
 
-    // --- STEP 3: CONNECT TO ELEVENLABS ---
+    // --- STEP 3: CONNECT TO ELEVENLABS VIA WEBSOCKET ---
     if (!ELEVENLABS_AGENT_ID) {
         console.error("CRITICAL: ELEVENLABS_AGENT_ID is missing.");
         twiml.say("Santa is having trouble connecting. Please contact support.");
@@ -109,7 +110,7 @@ exports.handler = async (event, context) => {
         return respond(twiml);
     }
 
-    console.log("Connecting to ElevenLabs via SIP...");
+    console.log("Connecting to ElevenLabs via WebSocket Stream...");
     twiml.play(AUDIO_SUCCESS);
 
     const overageOption = order.overageOption || 'auto_disconnect';
@@ -119,21 +120,69 @@ exports.handler = async (event, context) => {
         console.log("Extended time limit applied.");
     }
 
-    const dial = twiml.dial({
-        timeout: 30,
-        timeLimit: timeLimit
-    });
-
-    // Mark order as started so webhook can find it
+    // Mark order as started
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
-    // CLEAN SIP DIAL - No headers, webhook will provide ALL context
-    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.elevenlabs.io`;
+    // Prepare context to send in the signed URL
+    const children = order.children || [];
+    if (children.length === 0 && order.childName) {
+        children.push({
+            name: order.childName,
+            wish: order.childWish || 'something special',
+            deed: order.childDeed || 'being good'
+        });
+    }
 
-    console.log(`Dialing ElevenLabs agent: ${ELEVENLABS_AGENT_ID}`);
-    console.log(`Webhook will provide context for order: ${order._id}`);
+    const childCount = children.length > 0 ? children.length : 1;
+    const childrenContext = children.map((child, index) => {
+        return `Child ${index + 1}: Name: ${child.name}, Wish: ${child.wish}, Good Deed: ${child.deed}`;
+    }).join('. ');
 
-    dial.sip(sipUri);
+    const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    let christmas = new Date(Date.UTC(currentYear, 11, 25));
+    if (today.getTime() > christmas.getTime()) {
+        christmas.setUTCFullYear(currentYear + 1);
+    }
+    const oneDay = 1000 * 60 * 60 * 24;
+    const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
+
+    // Build context object for ElevenLabs
+    const conversationConfig = {
+        agent_id: ELEVENLABS_AGENT_ID,
+        child_count: childCount,
+        children_context: childrenContext,
+        npl_time: nplTime,
+        days_until_christmas: daysUntilChristmas,
+        call_overage_option: overageOption
+    };
+
+    console.log('ElevenLabs Config:', conversationConfig);
+
+    // Start WebSocket stream to ElevenLabs
+    // ElevenLabs will receive audio via WebSocket instead of SIP
+    const connect = twiml.connect();
+    const stream = connect.stream({
+        url: `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${ELEVENLABS_AGENT_ID}`,
+        track: 'both_tracks'
+    });
+
+    // Pass custom parameters (if supported by ElevenLabs)
+    stream.parameter({ name: 'child_count', value: childCount.toString() });
+    stream.parameter({ name: 'children_context', value: childrenContext });
+    stream.parameter({ name: 'npl_time', value: nplTime });
+    stream.parameter({ name: 'days_until_christmas', value: daysUntilChristmas.toString() });
+    stream.parameter({ name: 'call_overage_option', value: overageOption });
+    stream.parameter({ name: 'order_id', value: order._id.toString() });
+
+    console.log(`Streaming to ElevenLabs agent: ${ELEVENLABS_AGENT_ID}`);
+
+    // Set call timeout
+    setTimeout(() => {
+        console.log('Call time limit reached');
+    }, timeLimit * 1000);
 
     return respond(twiml);
 };
