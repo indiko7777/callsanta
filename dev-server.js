@@ -75,7 +75,8 @@ const lambdaAdapter = (handler) => async (req, res) => {
     };
 
     // Debug logging
-    if (req.path.includes('generate-santa-video')) {
+    // Debug logging
+    if (req.path.includes('send-confirmation-email')) {
         console.log(`[DevServer] ${req.method} ${req.path}`);
         console.log(`[DevServer] Raw Body Type: ${typeof req.body}`);
         console.log(`[DevServer] Event Body:`, eventBody);
@@ -136,8 +137,8 @@ const routes = [
     { path: '/get-order-details', handler: getOrderDetails, method: 'get' },
     { path: '/.netlify/functions/get-order-details', handler: getOrderDetails, method: 'get' },
 
-    { path: '/generate-santa-video', handler: require('./functions/generate-santa-video').handler, method: 'post' },
-    { path: '/.netlify/functions/generate-santa-video', handler: require('./functions/generate-santa-video').handler, method: 'post' }
+    { path: '/send-confirmation-email', handler: require('./functions/send-confirmation-email').handler, method: 'post' },
+    { path: '/.netlify/functions/send-confirmation-email', handler: require('./functions/send-confirmation-email').handler, method: 'post' }
 ];
 
 routes.forEach(route => {
