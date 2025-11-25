@@ -101,7 +101,7 @@ exports.handler = async (event, context) => {
         return respond(twiml);
     }
 
-    // --- STEP 3: CONNECT TO ELEVENLABS VIA WEBSOCKET ---
+    // --- STEP 3: CONNECT TO ELEVENLABS VIA SIP TRUNK ---
     if (!ELEVENLABS_AGENT_ID) {
         console.error("CRITICAL: ELEVENLABS_AGENT_ID is missing.");
         twiml.say("Santa is having trouble connecting. Please contact support.");
@@ -109,8 +109,15 @@ exports.handler = async (event, context) => {
         return respond(twiml);
     }
 
-    console.log("Connecting to ElevenLabs via WebSocket Stream...");
+    console.log("Connecting to ElevenLabs via SIP Trunk...");
     twiml.play(AUDIO_SUCCESS);
+
+    const overageOption = order.overageOption || 'auto_disconnect';
+    let timeLimit = 300; // Default 5 mins
+    if (overageOption === 'overage_accepted' || overageOption === 'unlimited') {
+        timeLimit = 1200; // 20 mins max
+        console.log("Extended time limit applied.");
+    }
 
     // Mark order as started
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
@@ -141,26 +148,22 @@ exports.handler = async (event, context) => {
     const oneDay = 1000 * 60 * 60 * 24;
     const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
 
-    const overageOption = order.overageOption || 'auto_disconnect';
+    console.log('Context:', { childCount, childrenContext, nplTime, daysUntilChristmas, overageOption });
 
-    console.log('Context:', { childCount, nplTime, daysUntilChristmas, overageOption });
-
-    // Start WebSocket stream to ElevenLabs
-    const connect = twiml.connect();
-    const stream = connect.stream({
-        url: `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${ELEVENLABS_AGENT_ID}`,
-        track: 'inbound_track'
+    // SIP DIAL with CORRECT URI and TCP transport
+    const dial = twiml.dial({
+        timeout: 30,
+        timeLimit: timeLimit
     });
 
-    // Pass context as stream parameters
-    stream.parameter({ name: 'child_count', value: childCount.toString() });
-    stream.parameter({ name: 'children_context', value: childrenContext });
-    stream.parameter({ name: 'npl_time', value: nplTime });
-    stream.parameter({ name: 'days_until_christmas', value: daysUntilChristmas.toString() });
-    stream.parameter({ name: 'call_overage_option', value: overageOption });
-    stream.parameter({ name: 'order_id', value: order._id.toString() });
+    // Use the CORRECT SIP URI from ElevenLabs SIP trunk configuration
+    // Format: sip:agent_id@sip.rtc.elevenlabs.io:5060;transport=tcp
+    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io:5060;transport=tcp`;
 
-    console.log(`Streaming to ElevenLabs agent: ${ELEVENLABS_AGENT_ID}`);
+    console.log(`Dialing ElevenLabs SIP trunk: ${sipUri}`);
+
+    // Dial without extra headers - your webhook tool will provide context
+    dial.sip(sipUri);
 
     return respond(twiml);
 };
