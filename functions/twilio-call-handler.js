@@ -151,27 +151,59 @@ exports.handler = async (event, context) => {
         console.log("Applying 5-minute time limit.");
     }
 
+    // --- PREPARE FULL CONTEXT FOR SIP HEADERS ---
+    const children = order.children || [];
+
+    // Fallback for legacy orders
+    if (children.length === 0 && order.childName) {
+        children.push({
+            name: order.childName,
+            wish: order.childWish || 'something special',
+            deed: order.childDeed || 'being good'
+        });
+    }
+
+    const childCount = children.length > 0 ? children.length : 1;
+    const childrenContext = children.map((child, index) => {
+        return `Child ${index + 1}: Name: ${child.name}, Wish: ${child.wish}, Good Deed: ${child.deed}`;
+    }).join('. ');
+
+    const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
+
+    const today = new Date();
+    const currentYear = today.getFullYear();
+    let christmas = new Date(Date.UTC(currentYear, 11, 25));
+    if (today.getTime() > christmas.getTime()) {
+        christmas.setUTCFullYear(currentYear + 1);
+    }
+    const oneDay = 1000 * 60 * 60 * 24;
+    const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
+
     // --- DIAL ELEVENLABS VIA SIP WITH TCP TRANSPORT ---
     const dial = twiml.dial({
         timeout: 30,
         timeLimit: timeLimit
     });
 
-    // Mark order as call started BEFORE dialing so webhook can find it
+    // Mark order as call started BEFORE dialing
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
-    // SIP URI with TCP transport to avoid UDP packet size limitations (Twilio error 32011)
-    // CRITICAL: Use ;transport=tcp to force TCP instead of UDP
-    // Pass minimal identifier (Order ID) so ElevenLabs can fetch context via webhook
-    // This is MUCH smaller than passing all children context (which caused error 32011)
+    // SIP URI with TCP transport + context in custom headers
+    // TCP has no packet size limit like UDP did (which caused error 32011)
+    // Testing if ElevenLabs reads these custom SIP headers directly
     const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io;transport=tcp` +
-        `?X-Order-ID=${encodeURIComponent(order._id.toString())}` +
-        `&X-Access-Code=${encodeURIComponent(paddedCode)}`;
+        `?X-Child-Count=${childCount}` +
+        `&X-Children-Context=${encodeURIComponent(childrenContext)}` +
+        `&X-NPL-Time=${encodeURIComponent(nplTime)}` +
+        `&X-Days-Until-Christmas=${daysUntilChristmas}` +
+        `&X-Call-Overage-Option=${encodeURIComponent(overageOption)}` +
+        `&X-Order-ID=${encodeURIComponent(order._id.toString())}`;
 
-    console.log(`Dialing ElevenLabs with Order ID: ${order._id}`);
+    console.log(`Dialing ElevenLabs with full context via TCP SIP headers`);
+    console.log(`Context size: ~${sipUri.length} bytes (TCP can handle this)`);
 
-    // Use SIP dial with minimal identifying headers
-    // Full context is delivered via ElevenLabs' webhook to get-call-context endpoint
+    // Use SIP dial with context in headers
+    // Fallback: if ElevenLabs doesn't read headers, it can still call the webhook tool
     dial.sip(sipUri);
 
     return respond(twiml);
