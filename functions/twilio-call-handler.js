@@ -122,7 +122,7 @@ exports.handler = async (event, context) => {
     // Mark order as started
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
-    // Prepare context
+    // Prepare context (for logging only - webhook will provide to ElevenLabs)
     const children = order.children || [];
     if (children.length === 0 && order.childName) {
         children.push({
@@ -137,32 +137,19 @@ exports.handler = async (event, context) => {
         return `Child ${index + 1}: Name: ${child.name}, Wish: ${child.wish}, Good Deed: ${child.deed}`;
     }).join('. ');
 
-    const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
+    console.log('Context for ElevenLabs:', { childCount, childrenContext });
 
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    let christmas = new Date(Date.UTC(currentYear, 11, 25));
-    if (today.getTime() > christmas.getTime()) {
-        christmas.setUTCFullYear(currentYear + 1);
-    }
-    const oneDay = 1000 * 60 * 60 * 24;
-    const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
-
-    console.log('Context:', { childCount, childrenContext, nplTime, daysUntilChristmas, overageOption });
-
-    // SIP DIAL with CORRECT URI and TCP transport
+    // SIP DIAL WITH AUTHENTICATION
     const dial = twiml.dial({
         timeout: 30,
         timeLimit: timeLimit
     });
 
-    // Use the CORRECT SIP URI from ElevenLabs SIP trunk configuration
-    // Format: sip:agent_id@sip.rtc.elevenlabs.io:5060;transport=tcp
-    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io:5060;transport=tcp`;
+    // SIP URI with username:password authentication
+    const sipUri = `sip:santa:Tenguiz10@sip.rtc.elevenlabs.io:5060;transport=tcp`;
 
-    console.log(`Dialing ElevenLabs SIP trunk: ${sipUri}`);
+    console.log(`Dialing ElevenLabs SIP trunk with authentication`);
 
-    // Dial without extra headers - your webhook tool will provide context
     dial.sip(sipUri);
 
     return respond(twiml);
