@@ -89,20 +89,21 @@ exports.handler = async (event, context) => {
 
         const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
 
-        const responseData = {
-            dynamic_variables: {
-                child_count: children.length > 0 ? children.length : 1,
-                children_context: childrenContext,
-                npl_time: nplTime,
-                call_overage_option: order.overageOption || 'auto_disconnect',
-                days_until_christmas: daysUntilChristmas
-            }
+        // Response format for ElevenLabs Tool (direct data, not wrapped)
+        const toolResponseData = {
+            child_count: children.length > 0 ? children.length : 1,
+            children_context: childrenContext,
+            npl_time: nplTime,
+            call_overage_option: order.overageOption || 'auto_disconnect',
+            days_until_christmas: daysUntilChristmas,
+            // Also provide a formatted text summary for easy consumption
+            summary: `You are calling ${children.length > 0 ? children.length : 1} child(ren). ${childrenContext}. Current NPL time is ${nplTime}. ${daysUntilChristmas} days until Christmas. Call overage option: ${order.overageOption || 'auto_disconnect'}.`
         };
 
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(responseData)
+            body: JSON.stringify(toolResponseData)
         };
 
     } catch (error) {

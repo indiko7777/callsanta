@@ -140,8 +140,6 @@ exports.handler = async (event, context) => {
     twiml.play(AUDIO_SUCCESS);
 
     // --- PREPARE CONTEXT FOR ELEVENLABS ---
-    // Note: Context is no longer passed via SIP headers due to UDP packet size limitations
-    // Instead, ElevenLabs will fetch context via the get-call-context webhook
     const overageOption = order.overageOption || 'auto_disconnect';
 
     // Determine Time Limit (Hard Stop)
@@ -159,18 +157,22 @@ exports.handler = async (event, context) => {
         timeLimit: timeLimit
     });
 
+    // Mark order as call started BEFORE dialing so webhook can find it
+    await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
+
     // SIP URI with TCP transport to avoid UDP packet size limitations (Twilio error 32011)
     // CRITICAL: Use ;transport=tcp to force TCP instead of UDP
-    // UDP has a ~1500 byte limit which causes 32011 errors when passing large context data
-    // ElevenLabs will receive full context via the get-call-context webhook instead
-    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io;transport=tcp`;
+    // Pass minimal identifier (Order ID) so ElevenLabs can fetch context via webhook
+    // This is MUCH smaller than passing all children context (which caused error 32011)
+    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io;transport=tcp` +
+        `?X-Order-ID=${encodeURIComponent(order._id.toString())}` +
+        `&X-Access-Code=${encodeURIComponent(paddedCode)}`;
 
-    // Use SIP dial without passing large context in headers
-    // Context is now delivered via ElevenLabs' webhook to get-call-context endpoint
+    console.log(`Dialing ElevenLabs with Order ID: ${order._id}`);
+
+    // Use SIP dial with minimal identifying headers
+    // Full context is delivered via ElevenLabs' webhook to get-call-context endpoint
     dial.sip(sipUri);
-
-    // Mark order as call started so get-call-context can find it
-    await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
     return respond(twiml);
 };
