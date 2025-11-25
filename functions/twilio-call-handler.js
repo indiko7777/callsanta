@@ -140,38 +140,9 @@ exports.handler = async (event, context) => {
     twiml.play(AUDIO_SUCCESS);
 
     // --- PREPARE CONTEXT FOR ELEVENLABS ---
-    const children = order.children || [];
-    const childCount = children.length > 0 ? children.length : 1;
-
-    // Fallback for legacy orders or if array is empty but childName exists
-    if (children.length === 0 && order.childName) {
-        children.push({
-            name: order.childName,
-            wish: order.childWish || 'something special',
-            deed: order.childDeed || 'being good'
-        });
-    }
-
-    // Construct Children Context String
-    // Format: "Child 1: Name: X, Wish: Y, Good Deed: Z. Child 2: ..."
-    let childrenContext = children.map((child, index) => {
-        return `Child ${index + 1}: Name: ${child.name}, Wish: ${child.wish}, Good Deed: ${child.deed}`;
-    }).join('. ');
-
+    // Note: Context is no longer passed via SIP headers due to UDP packet size limitations
+    // Instead, ElevenLabs will fetch context via the get-call-context webhook
     const overageOption = order.overageOption || 'auto_disconnect';
-
-    // NPL Time (North Pole Time) - approximating as UTC for simplicity
-    const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
-
-    // Calculate Days Until Christmas
-    const today = new Date();
-    const currentYear = today.getFullYear();
-    let christmas = new Date(Date.UTC(currentYear, 11, 25)); // Dec 25th UTC
-    if (today.getTime() > christmas.getTime()) {
-        christmas.setUTCFullYear(currentYear + 1);
-    }
-    const oneDay = 1000 * 60 * 60 * 24;
-    const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
 
     // Determine Time Limit (Hard Stop)
     let timeLimit = 300; // Default 5 mins
@@ -182,29 +153,23 @@ exports.handler = async (event, context) => {
         console.log("Applying 5-minute time limit.");
     }
 
-    // --- DIAL ELEVENLABS VIA SIP ---
+    // --- DIAL ELEVENLABS VIA SIP WITH TCP TRANSPORT ---
     const dial = twiml.dial({
         timeout: 30,
         timeLimit: timeLimit
     });
 
-    // SIP URI with Custom Headers
-    // Note: Headers must be X- prefixed for custom data
-    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io`;
+    // SIP URI with TCP transport to avoid UDP packet size limitations (Twilio error 32011)
+    // CRITICAL: Use ;transport=tcp to force TCP instead of UDP
+    // UDP has a ~1500 byte limit which causes 32011 errors when passing large context data
+    // ElevenLabs will receive full context via the get-call-context webhook instead
+    const sipUri = `sip:${ELEVENLABS_AGENT_ID}@sip.rtc.elevenlabs.io;transport=tcp`;
 
-    const sip = dial.sip({
-        // Pass headers as URL parameters in the SIP URI is NOT the standard way for Twilio <Sip>.
-        // Twilio <Sip> supports custom headers via the nested <Sip> element attributes or query params?
-        // Actually, Twilio passes query params in the SIP URI as headers to the destination if supported.
-        // BUT, the correct way in TwiML is to append them to the URI string.
-    }, sipUri +
-    `?X-Children-Context=${encodeURIComponent(childrenContext)}` +
-    `&X-Child-Count=${childCount}` +
-    `&X-Call-Overage-Option=${encodeURIComponent(overageOption)}` +
-    `&X-Npl-Time=${encodeURIComponent(nplTime)}` +
-    `&X-Days-Until-Christmas=${daysUntilChristmas}`
-    );
+    // Use SIP dial without passing large context in headers
+    // Context is now delivered via ElevenLabs' webhook to get-call-context endpoint
+    dial.sip(sipUri);
 
+    // Mark order as call started so get-call-context can find it
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
     return respond(twiml);
