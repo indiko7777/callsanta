@@ -10,7 +10,6 @@ if (!baseUrl.endsWith('/')) {
 }
 const BASE_URL = baseUrl;
 const ELEVENLABS_AGENT_ID = process.env.ELEVENLABS_AGENT_ID;
-const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
 // --- AUDIO PATHS ---
 const AUDIO_INPUT_PROMPT = `${BASE_URL}audio/greeting.mp3`;
@@ -113,17 +112,10 @@ exports.handler = async (event, context) => {
     console.log("Connecting to ElevenLabs via WebSocket Stream...");
     twiml.play(AUDIO_SUCCESS);
 
-    const overageOption = order.overageOption || 'auto_disconnect';
-    let timeLimit = 300; // Default 5 mins
-    if (overageOption === 'overage_accepted' || overageOption === 'unlimited') {
-        timeLimit = 1200; // 20 mins max
-        console.log("Extended time limit applied.");
-    }
-
     // Mark order as started
     await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
 
-    // Prepare context to send in the signed URL
+    // Prepare context
     const children = order.children || [];
     if (children.length === 0 && order.childName) {
         children.push({
@@ -149,27 +141,18 @@ exports.handler = async (event, context) => {
     const oneDay = 1000 * 60 * 60 * 24;
     const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
 
-    // Build context object for ElevenLabs
-    const conversationConfig = {
-        agent_id: ELEVENLABS_AGENT_ID,
-        child_count: childCount,
-        children_context: childrenContext,
-        npl_time: nplTime,
-        days_until_christmas: daysUntilChristmas,
-        call_overage_option: overageOption
-    };
+    const overageOption = order.overageOption || 'auto_disconnect';
 
-    console.log('ElevenLabs Config:', conversationConfig);
+    console.log('Context:', { childCount, nplTime, daysUntilChristmas, overageOption });
 
     // Start WebSocket stream to ElevenLabs
-    // ElevenLabs will receive audio via WebSocket instead of SIP
     const connect = twiml.connect();
     const stream = connect.stream({
         url: `wss://api.elevenlabs.io/v1/convai/conversation?agent_id=${ELEVENLABS_AGENT_ID}`,
-        track: 'both_tracks'
+        track: 'inbound_track'
     });
 
-    // Pass custom parameters (if supported by ElevenLabs)
+    // Pass context as stream parameters
     stream.parameter({ name: 'child_count', value: childCount.toString() });
     stream.parameter({ name: 'children_context', value: childrenContext });
     stream.parameter({ name: 'npl_time', value: nplTime });
@@ -178,11 +161,6 @@ exports.handler = async (event, context) => {
     stream.parameter({ name: 'order_id', value: order._id.toString() });
 
     console.log(`Streaming to ElevenLabs agent: ${ELEVENLABS_AGENT_ID}`);
-
-    // Set call timeout
-    setTimeout(() => {
-        console.log('Call time limit reached');
-    }, timeLimit * 1000);
 
     return respond(twiml);
 };
