@@ -100,78 +100,110 @@ exports.handler = async (event, context) => {
         const queryParams = event.queryStringParameters || {};
         if (!orderId) orderId = findKey(queryParams, 'x-order-id');
 
-        console.error('Payload keys:', Object.keys(payload));
-        if (metadata) console.error('Metadata keys:', Object.keys(metadata));
-        return successResponse; // Still return 200 to prevent retries
-    }
+        // 3. Fallback: Try to match by Phone Number (Caller ID)
+        if (!orderId) {
+            let customerPhone = findKey(metadata, 'x-customer-phone') || findKey(queryParams, 'x-customer-phone') || payload.caller_id;
+
+            if (customerPhone) {
+                console.log(`Looking up order by phone: ${customerPhone}`);
+
+                // Normalize phone: remove all non-digits
+                const normalizePhone = (p) => p ? p.replace(/\D/g, '') : '';
+                const normalizedCustomerPhone = normalizePhone(customerPhone);
+
+                // Strategy: Match the last 7 digits
+                const last7 = normalizedCustomerPhone.slice(-7);
+                if (last7.length >= 7) {
+                    const candidates = await Order.find({
+                        fulfillmentStatus: 'FULFILLED_CALL_STARTED'
+                    }).sort({ updatedAt: -1 }).limit(10); // Check last 10 active calls
+
+                    const phoneOrder = candidates.find(o => {
+                        const pPhone = normalizePhone(o.parentPhone);
+                        return pPhone.endsWith(last7);
+                    });
+
+                    if (phoneOrder) {
+                        orderId = phoneOrder._id;
+                        console.log(`Found order ${orderId} via phone number match (last 7 digits: ${last7})`);
+                    }
+                }
+            }
+        }
+
+        if (!orderId) {
+            console.error('No order ID found in ElevenLabs webhook payload');
+            console.error('Payload keys:', Object.keys(payload));
+            if (metadata) console.error('Metadata keys:', Object.keys(metadata));
+            return successResponse; // Still return 200 to prevent retries
+        }
 
         if (!conversation_id) {
-        console.error('No conversation_id in ElevenLabs webhook payload');
+            console.error('No conversation_id in ElevenLabs webhook payload');
+            return successResponse;
+        }
+
+        console.log(`Processing call data for Order ID: ${orderId}, Conversation ID: ${conversation_id}`);
+        await connectToDatabase(process.env.MONGODB_URI);
+
+        // Find the order
+        const order = await Order.findById(orderId);
+
+        if (!order) {
+            console.error(`Order not found: ${orderId}`);
+            return successResponse; // Still return 200
+        }
+
+        // Update order with call data
+        order.conversationId = conversation_id;
+        order.audioUrl = audio_url || null;
+
+        // Format transcript if it's an array
+        if (Array.isArray(transcript)) {
+            order.transcript = transcript.map(t => `${t.role === 'agent' ? 'Santa' : 'Child'}: ${t.message}`).join('\n');
+        } else {
+            order.transcript = transcript || null;
+        }
+        order.callDuration = duration_secs || 0;
+        order.fulfillmentStatus = 'CALL_COMPLETED';
+
+        await order.save();
+        console.log(`Call data saved for order ${orderId}`);
+
+        // If this is a bundle package, send post-call email
+        if (order.packageId === 'bundle') {
+            console.log('Triggering bundle post-call email...');
+
+            const emailFunction = require('./send-confirmation-email');
+            const emailResult = await emailFunction.handler({
+                httpMethod: 'POST',
+                body: JSON.stringify({
+                    order_id: orderId,
+                    email_type: 'bundle_post_call'
+                })
+            }, context);
+
+            if (emailResult.statusCode === 200) {
+                console.log(`Bundle post-call email sent to ${order.parentEmail}`);
+            } else {
+                console.error('Failed to send bundle post-call email:', emailResult.body);
+            }
+        }
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                status: 'success',
+                message: 'Call data saved successfully',
+                order_id: orderId,
+                conversation_id: conversation_id,
+                email_sent: order.packageId === 'bundle'
+            })
+        };
+
+    } catch (error) {
+        console.error('SAVE CALL DATA ERROR:', error);
+        // Still return 200 to prevent ElevenLabs from retrying
         return successResponse;
     }
-
-    console.log(`Processing call data for Order ID: ${orderId}, Conversation ID: ${conversation_id}`);
-
-    await connectToDatabase(process.env.MONGODB_URI);
-
-    // Find the order
-    const order = await Order.findById(orderId);
-
-    if (!order) {
-        console.error(`Order not found: ${orderId}`);
-        return successResponse; // Still return 200
-    }
-
-    // Update order with call data
-    order.conversationId = conversation_id;
-    order.audioUrl = audio_url || null;
-
-    // Format transcript if it's an array
-    if (Array.isArray(transcript)) {
-        order.transcript = transcript.map(t => `${t.role === 'agent' ? 'Santa' : 'Child'}: ${t.message}`).join('\n');
-    } else {
-        order.transcript = transcript || null;
-    }
-    order.callDuration = duration_secs || 0;
-    order.fulfillmentStatus = 'CALL_COMPLETED';
-
-    await order.save();
-    console.log(`Call data saved for order ${orderId}`);
-
-    // If this is a bundle package, send post-call email
-    if (order.packageId === 'bundle') {
-        console.log('Triggering bundle post-call email...');
-
-        const emailFunction = require('./send-confirmation-email');
-        const emailResult = await emailFunction.handler({
-            httpMethod: 'POST',
-            body: JSON.stringify({
-                order_id: orderId,
-                email_type: 'bundle_post_call'
-            })
-        }, context);
-
-        if (emailResult.statusCode === 200) {
-            console.log(`Bundle post-call email sent to ${order.parentEmail}`);
-        } else {
-            console.error('Failed to send bundle post-call email:', emailResult.body);
-        }
-    }
-
-    return {
-        statusCode: 200,
-        body: JSON.stringify({
-            status: 'success',
-            message: 'Call data saved successfully',
-            order_id: orderId,
-            conversation_id: conversation_id,
-            email_sent: order.packageId === 'bundle'
-        })
-    };
-
-} catch (error) {
-    console.error('SAVE CALL DATA ERROR:', error);
-    // Still return 200 to prevent ElevenLabs from retrying
-    return successResponse;
-}
 };
