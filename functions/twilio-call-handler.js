@@ -147,20 +147,25 @@ exports.handler = async (event, context) => {
 
     // We set the callerId to the Twilio number to ensure the call is verified.
     // If TWILIO_PHONE_NUMBER is not set, we fallback to the caller's number (which might be unverified for SIP).
+    const callerPhone = body.get('From');
     const dial = twiml.dial({
-        callerId: process.env.TWILIO_PHONE_NUMBER || event.From
+        callerId: process.env.TWILIO_PHONE_NUMBER || callerPhone
     });
 
     dial.sip({
         username: 'santa',
         password: 'Tenguiz10'
-    }, sipUri + `?X-Access-Code=${order.accessCode}&X-Order-Id=${order._id}&X-Customer-Phone=${encodeURIComponent(event.From)}`);
+    }, sipUri + `?X-Access-Code=${order.accessCode}&X-Order-Id=${order._id}&X-Customer-Phone=${encodeURIComponent(callerPhone)}`);
 
     // Fallback if the call fails or ends abruptly
     twiml.say("Ho ho ho! The connection to the North Pole was lost. Merry Christmas!");
 
     // Mark the code as USED immediately to prevent replay
-    await Order.updateOne({ _id: order._id }, { fulfillmentStatus: 'FULFILLED_CALL_STARTED' });
+    // AND update the parentPhone to the actual calling number to ensure webhook matching works
+    await Order.updateOne({ _id: order._id }, { 
+        fulfillmentStatus: 'FULFILLED_CALL_STARTED',
+        parentPhone: callerPhone
+    });
 
     return respond(twiml);
 };
