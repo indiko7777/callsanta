@@ -125,7 +125,13 @@ exports.handler = async (event, context) => {
         // Update order with call data
         order.conversationId = conversation_id;
         order.audioUrl = audio_url || null;
-        order.transcript = transcript || null;
+
+        // Format transcript if it's an array
+        if (Array.isArray(transcript)) {
+            order.transcript = transcript.map(t => `${t.role === 'agent' ? 'Santa' : 'Child'}: ${t.message}`).join('\n');
+        } else {
+            order.transcript = transcript || null;
+        }
         order.callDuration = duration_secs || 0;
         order.fulfillmentStatus = 'CALL_COMPLETED';
 

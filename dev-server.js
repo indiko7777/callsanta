@@ -8,6 +8,12 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
+console.log('--- ENV DEBUG ---');
+console.log('MONGODB_URI:', process.env.MONGODB_URI ? 'SET' : 'MISSING');
+console.log('STRIPE_SECRET_KEY:', process.env.STRIPE_SECRET_KEY ? 'SET' : 'MISSING');
+console.log('SENDGRID_API_KEY:', process.env.SENDGRID_API_KEY ? 'SET' : 'MISSING');
+console.log('-----------------');
+
 const app = express();
 
 // Parse JSON bodies (for Stripe/Frontend)
@@ -158,11 +164,32 @@ const routes = [
     { path: '/.netlify/functions/preview-email', handler: require('./functions/preview-email').handler, method: 'get' },
 
     { path: '/stripe-webhook', handler: require('./functions/stripe-webhook').handler, method: 'post' },
-    { path: '/.netlify/functions/stripe-webhook', handler: require('./functions/stripe-webhook').handler, method: 'post' }
+    { path: '/.netlify/functions/stripe-webhook', handler: require('./functions/stripe-webhook').handler, method: 'post' },
+
+    // Upgrade Payment Handler
+    { path: '/create-upgrade-payment', handler: require('./functions/create-upgrade-payment').handler, method: 'post' },
+    { path: '/.netlify/functions/create-upgrade-payment', handler: require('./functions/create-upgrade-payment').handler, method: 'post' },
+
+    // Media Portal API
+    { path: '/get-media', handler: require('./functions/get-media').handler, method: 'get' },
+    { path: '/.netlify/functions/get-media', handler: require('./functions/get-media').handler, method: 'get' },
+
+    // Upgrade Pages
+    { path: '/upgrade/recording', file: 'upgrade/recording.html' },
+    { path: '/upgrade/bundle', file: 'upgrade/bundle.html' },
+    { path: '/upgrade/return-call', file: 'upgrade/return-call.html' },
+
+    // Media Portal Page
+    { path: '/media', file: 'media.html' }
 ];
 
 routes.forEach(route => {
-    if (route.method === 'post') {
+    if (route.file) {
+        // Serve static file
+        app.get(route.path, (req, res) => {
+            res.sendFile(path.join(__dirname, route.file));
+        });
+    } else if (route.method === 'post') {
         app.post(route.path, lambdaAdapter(route.handler));
     } else {
         app.get(route.path, lambdaAdapter(route.handler));

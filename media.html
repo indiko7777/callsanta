@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Magic Moment with Santa - CallSanta.us</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&family=Inter:wght@400;600;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0F172A;
+            background-image: url('/images/email/christmas_email_bg.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #fff;
+        }
+
+        .font-christmas {
+            font-family: 'Mountains of Christmas', cursive;
+        }
+
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        audio::-webkit-media-controls-panel {
+            background-color: #f1f5f9;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Loading State -->
+    <div id="loading" class="text-center">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-red-500 mx-auto mb-4"></div>
+        <p class="text-xl font-christmas text-red-200">Loading magic...</p>
+    </div>
+
+    <!-- Error State -->
+    <div id="error" class="hidden max-w-md w-full glass-panel rounded-2xl p-8 text-center shadow-2xl">
+        <i data-lucide="alert-circle" class="w-16 h-16 text-red-500 mx-auto mb-4"></i>
+        <h2 class="text-2xl font-bold mb-2">Oops!</h2>
+        <p id="errorMessage" class="text-gray-300 mb-6">We couldn't find your magic moment.</p>
+        <a href="/"
+            class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full transition-colors">
+            Return Home
+        </a>
+    </div>
+
+    <!-- Content State -->
+    <div id="content"
+        class="hidden w-full max-w-4xl glass-panel rounded-2xl overflow-hidden shadow-2xl animate-fade-in">
+
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-red-700 to-red-900 p-6 text-center relative overflow-hidden">
+            <div class="absolute inset-0 bg-[url('/images/snow-pattern.png')] opacity-10"></div>
+            <h1 class="text-3xl md:text-5xl font-christmas font-bold text-white mb-2 drop-shadow-lg">
+                <span id="childNameDisplay">Your</span>'s Magic Moment
+            </h1>
+            <p class="text-red-100 text-sm md:text-base">A special memory from the North Pole</p>
+        </div>
+
+        <div class="p-6 md:p-10 space-y-8">
+
+            <!-- Audio Player Section -->
+            <div id="audioSection" class="hidden">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="bg-red-600 p-3 rounded-full">
+                        <i data-lucide="mic" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Call Recording</h2>
+                        <p class="text-sm text-gray-400" id="callDurationDisplay">Duration: 0:00</p>
+                    </div>
+                </div>
+
+                <div class="bg-white/10 rounded-xl p-4 backdrop-blur-sm">
+                    <audio id="audioPlayer" controls class="w-full h-12 rounded-lg">
+                        Your browser does not support the audio element.
+                    </audio>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <a id="downloadAudioBtn" href="#" download
+                        class="inline-flex items-center gap-2 text-sm text-red-300 hover:text-red-200 transition-colors">
+                        <i data-lucide="download" class="w-4 h-4"></i> Download MP3
+                    </a>
+                </div>
+            </div>
+
+            <!-- Video Player Section -->
+            <div id="videoSection" class="hidden">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="bg-green-600 p-3 rounded-full">
+                        <i data-lucide="video" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Personalized Video</h2>
+                        <p class="text-sm text-gray-400">Direct from Santa's Workshop</p>
+                    </div>
+                </div>
+
+                <div class="aspect-video bg-black rounded-xl overflow-hidden shadow-lg">
+                    <video id="videoPlayer" controls class="w-full h-full">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+
+                <div class="mt-4 text-center">
+                    <a id="downloadVideoBtn" href="#" download
+                        class="inline-flex items-center gap-2 text-sm text-green-300 hover:text-green-200 transition-colors">
+                        <i data-lucide="download" class="w-4 h-4"></i> Download Video
+                    </a>
+                </div>
+            </div>
+
+            <!-- Transcript Section -->
+            <div id="transcriptSection" class="hidden">
+                <div class="flex items-center gap-4 mb-4">
+                    <div class="bg-blue-600 p-3 rounded-full">
+                        <i data-lucide="file-text" class="w-6 h-6 text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white">Call Transcript</h2>
+                        <p class="text-sm text-gray-400">Read the magic</p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800/50 rounded-xl p-6 max-h-96 overflow-y-auto border border-slate-700">
+                    <div id="transcriptContent" class="space-y-4 text-gray-300 leading-relaxed">
+                        <!-- Transcript will be injected here -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="bg-slate-900/50 p-6 text-center border-t border-slate-800">
+            <p class="text-gray-400 text-sm mb-4">Want to talk to Santa again?</p>
+            <a href="/upgrade/return-call" id="returnCallBtn"
+                class="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-yellow-600 hover:from-yellow-600 hover:to-yellow-700 text-white font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-all">
+                <i data-lucide="phone-call" class="w-5 h-5"></i>
+                Book a Return Call
+            </a>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        async function loadMedia() {
+            const params = new URLSearchParams(window.location.search);
+            const orderId = params.get('order');
+            const accessCode = params.get('code');
+
+            if (params.get('demo') === 'true') {
+                // Demo Mode
+                document.getElementById('childNameDisplay').textContent = 'Timmy';
+                document.getElementById('audioSection').classList.remove('hidden');
+                document.getElementById('videoSection').classList.remove('hidden');
+                document.getElementById('transcriptSection').classList.remove('hidden');
+                document.getElementById('transcriptContent').innerHTML = '<p>Santa: Ho ho ho! Hello Timmy!</p><p>Timmy: Hi Santa!</p>';
+                document.getElementById('content').classList.remove('hidden');
+                document.getElementById('loading').classList.add('hidden');
+                lucide.createIcons();
+                return;
+            }
+
+            if (!orderId || !accessCode) {
+                showError('Missing order information.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`/.netlify/functions/get-media?orderId=${orderId}&accessCode=${accessCode}`);
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to load media');
+                }
+
+                // Update UI with data
+                const childName = data.childName || 'Child';
+                document.getElementById('childNameDisplay').textContent = childName;
+
+                // Update Return Call Link
+                const returnBtn = document.getElementById('returnCallBtn');
+                returnBtn.href = `/upgrade/return-call?order=${orderId}`;
+
+                let hasContent = false;
+
+                // Handle Audio
+                if (data.audioUrl) {
+                    document.getElementById('audioSection').classList.remove('hidden');
+                    const audioPlayer = document.getElementById('audioPlayer');
+                    audioPlayer.src = data.audioUrl;
+                    document.getElementById('downloadAudioBtn').href = data.audioUrl;
+
+                    if (data.callDuration) {
+                        const minutes = Math.floor(data.callDuration / 60);
+                        const seconds = data.callDuration % 60;
+                        document.getElementById('callDurationDisplay').textContent = `Duration: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+                    }
+                    hasContent = true;
+                }
+
+                // Handle Video
+                if (data.videoUrl) {
+                    document.getElementById('videoSection').classList.remove('hidden');
+                    const videoPlayer = document.getElementById('videoPlayer');
+                    videoPlayer.src = data.videoUrl;
+                    document.getElementById('downloadVideoBtn').href = data.videoUrl;
+                    hasContent = true;
+                }
+
+                // Handle Transcript
+                if (data.transcript) {
+                    document.getElementById('transcriptSection').classList.remove('hidden');
+                    const transcriptDiv = document.getElementById('transcriptContent');
+
+                    // Simple formatting: split by newlines and wrap in paragraphs
+                    // Or if it's chat format "Role: Text", style it
+                    const lines = data.transcript.split('\n');
+                    transcriptDiv.innerHTML = lines.map(line => {
+                        if (line.trim() === '') return '';
+                        return `<p>${line}</p>`;
+                    }).join('');
+                    hasContent = true;
+                }
+
+                if (!hasContent) {
+                    showError('No media content found for this order yet.');
+                    return;
+                }
+
+                // Show Content
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('content').classList.remove('hidden');
+                lucide.createIcons();
+
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        function showError(msg) {
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('error').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = msg;
+        }
+
+        window.addEventListener('DOMContentLoaded', loadMedia);
+    </script>
+</body>
+
+</html>
