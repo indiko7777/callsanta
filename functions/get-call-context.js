@@ -26,7 +26,6 @@ exports.handler = async (event, context) => {
         return { statusCode: 400, body: "Invalid JSON" };
     }
 
-    // Extract conversation_id along with other params
     const { access_code, order_id, caller_id, conversation_id } = body;
     console.log("ElevenLabs Context Request:", { access_code, order_id, caller_id, conversation_id });
 
@@ -39,7 +38,7 @@ exports.handler = async (event, context) => {
 
         let order;
 
-        // 1. Try to find by Access Code (most reliable)
+        // 1. Try to find by Access Code (Reliable for Tool use)
         if (access_code) {
             order = await Order.findOne({ accessCode: access_code });
         }
@@ -49,7 +48,7 @@ exports.handler = async (event, context) => {
             order = await Order.findById(order_id);
         }
 
-        // 3. Fallback: Find the most recent active order for this caller ID
+        // 3. Fallback: Find by active call status
         if (!order && caller_id) {
             const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
             order = await Order.findOne({
@@ -65,19 +64,13 @@ exports.handler = async (event, context) => {
 
         console.log("Found Order for Context:", order._id);
 
-        // --- CRITICAL FIX: Save conversation_id to Order immediately ---
-        if (conversation_id) {
+        // Try to link conversation ID if present (Optimization, not hard dependency anymore)
+        if (conversation_id && !order.conversationId) {
             order.conversationId = conversation_id;
-            // We can also ensure the status is correct
-            if (order.fulfillmentStatus === 'FULFILLED') {
-                 order.fulfillmentStatus = 'FULFILLED_CALL_STARTED';
-            }
             await order.save();
-            console.log(`Linked conversation ${conversation_id} to order ${order._id}`);
         }
-        // ---------------------------------------------------------------
 
-        // Prepare Dynamic Variables
+        // --- VARIABLES ---
         const today = new Date();
         const currentYear = today.getFullYear();
         let christmas = new Date(Date.UTC(currentYear, 11, 25));
@@ -116,6 +109,9 @@ exports.handler = async (event, context) => {
         }
 
         const toolResponseData = {
+            // --- CRITICAL: Pass order_id back to ElevenLabs to hold onto ---
+            order_id: order._id.toString(), 
+            // --------------------------------------------------------------
             child_count: children.length > 0 ? children.length : 1,
             children_context: childrenContext,
             greeting_names: greetingNames,
@@ -129,8 +125,8 @@ exports.handler = async (event, context) => {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                ...toolResponseData,
-                dynamic_variables: toolResponseData
+                ...toolResponseData, 
+                dynamic_variables: toolResponseData 
             })
         };
 
