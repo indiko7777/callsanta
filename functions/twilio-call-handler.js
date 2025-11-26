@@ -115,7 +115,8 @@ exports.handler = async (event, context) => {
         return respond(twiml);
     }
 
-    if (!order || order.fulfillmentStatus !== 'PENDING_PAYMENT') {
+    // Allow both PENDING_PAYMENT (legacy/testing) and PAYMENT_COMPLETED (production)
+    if (!order || (order.fulfillmentStatus !== 'PENDING_PAYMENT' && order.fulfillmentStatus !== 'PAYMENT_COMPLETED')) {
         console.log("Invalid Code or Status:", order ? order.fulfillmentStatus : "No Order");
         // Code is invalid OR has already been used
         twiml.play(AUDIO_INVALID_CODE);
