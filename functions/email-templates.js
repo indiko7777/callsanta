@@ -66,7 +66,7 @@ const generateEmailTemplate = (emailType, data) => {
                                     <div style="margin-bottom: 15px;">
                                         <span style="${styles.priceNew}">$5.00</span>
                                     </div>
-                                    <a href="${baseUrl}/upgrade/recording?order=${data.orderId}" style="${styles.link}">Add Recording &rarr;</a>
+                                    <a href="${baseUrl}/upgrade/recording?order=${data.accessCode}" style="${styles.link}">Add Recording &rarr;</a>
                                 </div>
                                 <div style="${styles.upsellItem}; border-color: #EAB308; background: #fffdf5;">
                                     <div style="background: #EAB308; color: #000; font-size: 10px; font-weight: bold; padding: 2px 8px; border-radius: 4px; display: inline-block; margin-bottom: 8px;">BEST VALUE</div>
@@ -76,7 +76,7 @@ const generateEmailTemplate = (emailType, data) => {
                                         <span style="${styles.priceOld}">$10.00</span>
                                         <span style="${styles.priceNew}">$7.50</span>
                                     </div>
-                                    <a href="${baseUrl}/upgrade/bundle?order=${data.orderId}" style="${styles.link}">Upgrade Now &rarr;</a>
+                                    <a href="${baseUrl}/upgrade/bundle?order=${data.accessCode}" style="${styles.link}">Upgrade Now &rarr;</a>
                                 </div>
                             </div>
                         </div>
@@ -168,11 +168,11 @@ const generateEmailTemplate = (emailType, data) => {
                         <p>It's here! Santa has finished recording a special message for ${data.childName}.</p>
                         
                         <div style="text-align: center; margin: 30px 0;">
-                            <a href="${baseUrl}/media?order=${data.orderId}&code=${data.accessCode}" style="position: relative; display: inline-block;">
+                            <a href="${baseUrl}/media?order=${data.accessCode}&code=${data.accessCode}" style="position: relative; display: inline-block;">
                                 <img src="${images.videoOverlay}" alt="Play Video" style="width: 100%; max-width: 400px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2);">
                             </a>
                             <br>
-                            <a href="${baseUrl}/media?order=${data.orderId}&code=${data.accessCode}" style="${styles.button}">Watch Video Now</a>
+                            <a href="${baseUrl}/media?order=${data.accessCode}&code=${data.accessCode}" style="${styles.button}">Watch Video Now</a>
                         </div>
                     </div>
                     <div style="${styles.footer}">
@@ -200,7 +200,7 @@ const generateEmailTemplate = (emailType, data) => {
                         <div style="${styles.highlightBox}">
                             <h3 style="margin-top: 0;">Your Magic Memories</h3>
                             <p>Call Duration: <strong>${Math.floor(data.callDuration / 60)}m ${data.callDuration % 60}s</strong></p>
-                            <a href="${baseUrl}/media?order=${data.orderId}&code=${data.accessCode}" style="${styles.button}">View Recording & Transcript</a>
+                            <a href="${baseUrl}/media?order=${data.accessCode}&code=${data.accessCode}" style="${styles.button}">View Recording & Transcript</a>
                         </div>
 
                         <div style="${styles.upsellContainer}">
@@ -212,7 +212,7 @@ const generateEmailTemplate = (emailType, data) => {
                                     <span style="${styles.priceNew}">$10.00</span>
                                     <span style="background: #16A34A; color: white; font-size: 11px; font-weight: bold; padding: 2px 6px; border-radius: 4px; margin-left: 8px; vertical-align: middle;">50% OFF</span>
                                 </div>
-                                <a href="${baseUrl}/upgrade/return-call?order=${data.orderId}" style="${styles.button}; background-color: #16A34A; margin-top: 0;">Book Return Call</a>
+                                <a href="${baseUrl}/upgrade/return-call?order=${data.accessCode}" style="${styles.button}; background-color: #16A34A; margin-top: 0;">Book Return Call</a>
                             </div>
                         </div>
                     </div>
