@@ -9,7 +9,9 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Outfit:wght@300;400;600;700&display=swap"
+        rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -23,6 +25,7 @@
                     },
                     fontFamily: {
                         'outfit': ['Outfit', 'sans-serif'],
+                        'playfair': ['Playfair Display', 'serif'],
                     }
                 }
             }
@@ -33,10 +36,14 @@
             font-family: 'Outfit', sans-serif;
         }
 
-        @keyframes fadeIn {
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(30px);
             }
 
             to {
@@ -45,374 +52,386 @@
             }
         }
 
-        .animate-fadeIn {
-            animation: fadeIn 0.6s ease-out forwards;
+        .animate-fadeInUp {
+            animation: fadeInUp 0.8s ease-out forwards;
         }
 
         .stagger-1 {
-            animation-delay: 0.1s;
-            opacity: 0;
-        }
-
-        .stagger-2 {
             animation-delay: 0.2s;
             opacity: 0;
         }
 
-        .stagger-3 {
-            animation-delay: 0.3s;
-            opacity: 0;
-        }
-
-        .stagger-4 {
+        .stagger-2 {
             animation-delay: 0.4s;
             opacity: 0;
         }
 
-        .snowflake {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: 1.5em;
-            animation: fall linear infinite;
+        .stagger-3 {
+            animation-delay: 0.6s;
+            opacity: 0;
         }
 
-        @keyframes fall {
-            to {
-                transform: translateY(100vh);
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .glass-card {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg,
+                    rgba(197, 160, 89, 0.1) 0%,
+                    rgba(197, 160, 89, 0.3) 50%,
+                    rgba(197, 160, 89, 0.1) 100%);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
             }
         }
     </style>
 </head>
 
-<body
-    class="bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+<body class="bg-slate-950 text-white min-h-screen overflow-y-auto">
 
-    <!-- Snowflakes Background -->
-    <div id="snowflakes-container"></div>
+    <!-- Christmas Background -->
+    <div class="fixed inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/70 to-slate-950/90 z-10"></div>
+        <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=1920&q=80" alt="Christmas background"
+            class="w-full h-full object-cover opacity-40">
+    </div>
 
-    <div class="max-w-3xl mx-auto text-center space-y-8 relative z-10">
-        <!-- Success Icon -->
-        <div
-            class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-green-500/50 animate-fadeIn">
-            <i data-lucide="check" class="w-14 h-14 text-white"></i>
-        </div>
+    <!-- Content Container -->
+    <div class="relative z-20 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto space-y-8">
 
-        <!-- Main Heading -->
-        <div class="animate-fadeIn stagger-1">
-            <h1 class="text-5xl md:text-6xl font-bold text-white mb-3">🎄 Payment Successful! 🎄</h1>
-            <p class="text-xl md:text-2xl text-gray-300">
-                <span id="greeting-message">Thank you for your purchase!</span>
-            </p>
-        </div>
-
-        <!-- CALL PACKAGE SUCCESS -->
-        <div id="call-success-container" class="hidden animate-fadeIn stagger-2">
-            <div
-                class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-8 md:p-10 rounded-3xl border-2 border-santa-gold/30 shadow-2xl backdrop-blur-sm space-y-6">
-
-                <div class="flex items-center justify-center gap-3 mb-4">
-                    <i data-lucide="phone-call" class="w-8 h-8 text-santa-gold"></i>
-                    <h2 class="text-3xl font-bold text-santa-gold">Your Live Call is Ready!</h2>
-                </div>
-
-                <!-- Access Code Display -->
+            <!-- Success Badge -->
+            <div class="text-center animate-fadeInUp">
                 <div
-                    class="bg-gradient-to-br from-santa-red/20 to-red-900/20 p-8 rounded-2xl border-2 border-santa-red shadow-xl">
-                    <p class="text-sm text-gray-400 uppercase tracking-widest mb-2">Your Private Access Code</p>
-                    <p id="access-code-display"
-                        class="text-7xl md:text-8xl font-mono font-bold text-santa-red tracking-wider">
-                        ----
-                    </p>
-                    <div class="mt-6 pt-6 border-t border-white/10">
-                        <p class="text-gray-300 mb-2">📞 Santa's Hotline:</p>
-                        <p id="hotline-number" class="text-2xl md:text-3xl font-bold text-white">+1 (438) 795-1562</p>
+                    class="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full shadow-2xl shadow-green-500/50 mb-6 float-animation">
+                    <i data-lucide="check" class="w-10 h-10 sm:w-12 sm:h-12 text-white stroke-[3]"></i>
+                </div>
+                <h1
+                    class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-white mb-4 leading-tight">
+                    Payment Successful!
+                </h1>
+                <p class="text-lg sm:text-xl md:text-2xl text-gray-200 font-light">
+                    <span id="greeting-message">Thank you for your purchase!</span>
+                </p>
+            </div>
+
+            <!-- CALL PACKAGE SUCCESS -->
+            <div id="call-success-container" class="hidden animate-fadeInUp stagger-1">
+                <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl space-y-6 sm:space-y-8">
+
+                    <!-- Big Title -->
+                    <div class="text-center pb-6 border-b border-white/10">
+                        <h2
+                            class="hero-title text-3xl sm:text-4xl md:text-5xl font-black text-santa-gold mb-3 leading-tight">
+                            Santa is Waiting<br class="sm:hidden"> for Your Call!
+                        </h2>
+                        <p class="text-base sm:text-lg text-gray-300">The magic is just a phone call away</p>
+                    </div>
+
+                    <!-- Access Code Card -->
+                    <div
+                        class="bg-gradient-to-br from-santa-red/20 via-red-900/30 to-santa-red/20 p-6 sm:p-8 lg:p-10 rounded-2xl border-2 border-santa-red shadow-xl shimmer">
+                        <p class="text-xs sm:text-sm text-gray-300 uppercase tracking-widest mb-3 text-center">Your
+                            Private Access Code</p>
+                        <p id="access-code-display"
+                            class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-mono font-black text-santa-red text-center tracking-wider mb-6">
+                            ----
+                        </p>
+                        <div class="pt-6 border-t border-white/20 text-center">
+                            <p class="text-sm sm:text-base text-gray-300 mb-2">Santa's Hotline</p>
+                            <p id="hotline-number" class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">+1
+                                (438) 795-1562</p>
+                        </div>
+                    </div>
+
+                    <!-- Instructions -->
+                    <div class="glass-card p-6 sm:p-8 rounded-2xl space-y-4 sm:space-y-5">
+                        <h3 class="text-xl sm:text-2xl font-bold text-santa-gold flex items-center gap-3">
+                            <i data-lucide="phone-call" class="w-6 h-6 sm:w-7 sm:h-7"></i>
+                            How to Connect with Santa
+                        </h3>
+                        <ol class="space-y-4 sm:space-y-5">
+                            <li class="flex items-start gap-3 sm:gap-4">
+                                <span
+                                    class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-santa-red rounded-full flex items-center justify-center font-bold text-white text-sm sm:text-base">1</span>
+                                <span class="text-base sm:text-lg text-gray-200 pt-1"><span
+                                        class="font-semibold text-white">Find a quiet spot</span> with your child and
+                                    hand them the phone.</span>
+                            </li>
+                            <li class="flex items-start gap-3 sm:gap-4">
+                                <span
+                                    class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-santa-red rounded-full flex items-center justify-center font-bold text-white text-sm sm:text-base">2</span>
+                                <span class="text-base sm:text-lg text-gray-200 pt-1">Dial <span
+                                        class="font-bold text-white">+1 (438) 795-1562</span></span>
+                            </li>
+                            <li class="flex items-start gap-3 sm:gap-4">
+                                <span
+                                    class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-santa-red rounded-full flex items-center justify-center font-bold text-white text-sm sm:text-base">3</span>
+                                <span class="text-base sm:text-lg text-gray-200 pt-1">Enter your <span
+                                        class="font-bold text-white">4-digit Access Code</span> when prompted</span>
+                            </li>
+                            <li class="flex items-start gap-3 sm:gap-4">
+                                <span
+                                    class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-santa-red rounded-full flex items-center justify-center font-bold text-white text-sm sm:text-base">4</span>
+                                <span class="text-base sm:text-lg font-semibold text-santa-gold pt-1">Experience the
+                                    magic!</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Overage Policy -->
+                    <div id="overage-policy"
+                        class="glass-card p-4 sm:p-5 rounded-xl text-sm sm:text-base text-gray-300">
+                        <!-- Policy details loaded here by JS -->
                     </div>
                 </div>
+            </div>
 
-                <!-- Instructions -->
-                <div class="text-left space-y-4 bg-slate-800/50 p-6 rounded-xl border border-white/5">
-                    <h3 class="text-xl font-semibold text-santa-gold flex items-center gap-2">
-                        <i data-lucide="list-checks" class="w-5 h-5"></i>
-                        How to Connect with Santa:
-                    </h3>
-                    <ol class="space-y-3 text-gray-300 text-lg">
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">1</span>
-                            <span><span class="font-semibold text-white">Find a quiet spot</span> with your child and
-                                hand them the phone.</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">2</span>
-                            <span>Dial the Santa Hotline: <span class="font-bold text-white">+1 (438)
-                                    795-1562</span></span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">3</span>
-                            <span>Enter your <span class="font-bold text-white">4-digit Access Code</span> when prompted
-                                by Santa's Helper.</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">4</span>
-                            <span class="font-semibold text-santa-gold">Experience the magic! ✨</span>
-                        </li>
-                    </ol>
-                </div>
+            <!-- VIDEO PACKAGE SUCCESS -->
+            <div id="video-success-container" class="hidden animate-fadeInUp stagger-1">
+                <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl space-y-6 sm:space-y-8">
 
-                <!-- Overage Policy -->
-                <div id="overage-policy"
-                    class="text-sm text-gray-300 bg-slate-900/50 p-4 rounded-lg border border-white/5">
-                    <!-- Policy details loaded here by JS -->
+                    <!-- Big Title -->
+                    <div class="text-center pb-6 border-b border-white/10">
+                        <h2
+                            class="hero-title text-3xl sm:text-4xl md:text-5xl font-black text-purple-400 mb-3 leading-tight">
+                            Your Santa Video<br class="sm:hidden"> is On Its Way!
+                        </h2>
+                        <p class="text-base sm:text-lg text-gray-300">A magical keepsake is being created</p>
+                    </div>
+
+                    <!-- Video Icon -->
+                    <div class="flex justify-center mb-6">
+                        <div
+                            class="w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl flex items-center justify-center border-2 border-purple-400/30 float-animation">
+                            <i data-lucide="sparkles" class="w-16 h-16 sm:w-20 sm:h-20 text-purple-400"></i>
+                        </div>
+                    </div>
+
+                    <!-- Delivery Info -->
+                    <div
+                        class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-6 sm:p-8 rounded-2xl border border-purple-400/20">
+                        <div class="flex items-start gap-4 mb-4">
+                            <i data-lucide="mail" class="w-7 h-7 sm:w-8 sm:h-8 text-purple-400 flex-shrink-0 mt-1"></i>
+                            <div class="text-left flex-1">
+                                <h3 class="text-xl sm:text-2xl font-bold text-purple-300 mb-3">Video Delivery
+                                    Information</h3>
+                                <p class="text-base sm:text-lg text-gray-200 leading-relaxed mb-4">
+                                    Your personalized Santa video will be <span class="font-bold text-white">sent to
+                                        your email within 24 hours</span>.
+                                    Our elves are working hard to create something truly magical for you!
+                                </p>
+                                <div class="flex items-center gap-3 bg-slate-900/50 p-4 rounded-xl">
+                                    <i data-lucide="inbox" class="w-5 h-5 text-purple-400"></i>
+                                    <span class="text-sm sm:text-base text-gray-300">Check: <span
+                                            id="video-email-display"
+                                            class="font-semibold text-white ml-1"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- What to Expect -->
+                    <div class="glass-card p-6 sm:p-8 rounded-2xl">
+                        <h3 class="text-lg sm:text-xl font-bold text-purple-300 flex items-center gap-2 mb-4">
+                            <i data-lucide="gift" class="w-6 h-6"></i>
+                            What to Expect
+                        </h3>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3 text-base sm:text-lg text-gray-200">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                <span>Personalized video message from Santa</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-base sm:text-lg text-gray-200">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                <span>High-quality video to download and keep forever</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-base sm:text-lg text-gray-200">
+                                <i data-lucide="check-circle" class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                <span>Delivery within 24 hours to your inbox</span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- VIDEO PACKAGE SUCCESS -->
-        <div id="video-success-container" class="hidden animate-fadeIn stagger-2">
-            <div
-                class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-8 md:p-10 rounded-3xl border-2 border-purple-500/30 shadow-2xl backdrop-blur-sm space-y-6">
+            <!-- BUNDLE PACKAGE SUCCESS -->
+            <div id="bundle-success-container" class="hidden animate-fadeInUp stagger-1">
+                <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl space-y-6 sm:space-y-8">
 
-                <div class="flex items-center justify-center gap-3 mb-4">
-                    <i data-lucide="video" class="w-8 h-8 text-purple-400"></i>
-                    <h2 class="text-3xl font-bold text-purple-400">Your Santa Video is On Its Way!</h2>
-                </div>
+                    <!-- Big Title -->
+                    <div class="text-center pb-6 border-b border-white/10">
+                        <h2
+                            class="hero-title text-3xl sm:text-4xl md:text-5xl font-black text-santa-gold mb-3 leading-tight">
+                            Santa is Waiting<br class="sm:hidden"> for Your Call!
+                        </h2>
+                        <p class="text-base sm:text-lg text-gray-300">The complete magical experience awaits</p>
+                    </div>
 
-                <!-- Video Icon -->
-                <div
-                    class="w-32 h-32 mx-auto bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center border-2 border-purple-400/30">
-                    <i data-lucide="sparkles" class="w-16 h-16 text-purple-400"></i>
-                </div>
+                    <!-- Access Code Card -->
+                    <div
+                        class="bg-gradient-to-br from-santa-red/20 via-red-900/30 to-santa-red/20 p-6 sm:p-8 lg:p-10 rounded-2xl border-2 border-santa-red shadow-xl shimmer">
+                        <p class="text-xs sm:text-sm text-gray-300 uppercase tracking-widest mb-3 text-center">Your
+                            Private Access Code</p>
+                        <p id="bundle-access-code-display"
+                            class="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-mono font-black text-santa-red text-center tracking-wider mb-6">
+                            ----
+                        </p>
+                        <div class="pt-6 border-t border-white/20 text-center">
+                            <p class="text-sm sm:text-base text-gray-300 mb-2">Santa's Hotline</p>
+                            <p id="bundle-hotline-number" class="text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+                                +1 (438) 795-1562</p>
+                        </div>
+                    </div>
 
-                <!-- Important Notice -->
-                <div
-                    class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-6 rounded-xl border border-purple-400/20">
-                    <div class="flex items-start gap-3 mb-4">
-                        <i data-lucide="mail" class="w-6 h-6 text-purple-400 flex-shrink-0 mt-1"></i>
-                        <div class="text-left">
-                            <h3 class="text-xl font-semibold text-purple-300 mb-2">Video Delivery Information</h3>
-                            <p class="text-gray-300 leading-relaxed">
-                                Your personalized Santa video will be <span class="font-bold text-white">sent to your
-                                    email within 24 hours</span>.
-                                Our elves are working hard to create something truly magical for you!
+                    <!-- Instructions -->
+                    <div class="glass-card p-6 sm:p-8 rounded-2xl space-y-4 sm:space-y-5">
+                        <h3 class="text-xl sm:text-2xl font-bold text-santa-gold flex items-center gap-3">
+                            <i data-lucide="phone-call" class="w-6 h-6 sm:w-7 sm:h-7"></i>
+                            Call Santa Now - Unlimited Time!
+                        </h3>
+                        <ol class="space-y-4 sm:space-y-5">
+                            <li class="flex items-start gap-3 sm:gap-4">
+                                <span
+                                    class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-santa-red rounded-full flex items-center justify-center font-bold text-white text-sm sm:text-base">1</span>
+                                <span class="text-base sm:text-lg text-gray-200 pt-1"><span
+                                        class="font-semibold text-white">Find a quiet spot</span> with your child and
+                                    hand them the phone.</span>
+                            </li>
+                            <li class="flex items-start gap-3 sm:gap-4">
+                                <span
+                                    class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-santa-red rounded-full flex items-center justify-center font-bold text-white text-sm sm:text-base">2</span>
+                                <span class="text-base sm:text-lg text-gray-200 pt-1">Dial <span
+                                        class="font-bold text-white">+1 (438) 795-1562</span></span>
+                            </li>
+                            <li class="flex items-start gap-3 sm:gap-4">
+                                <span
+                                    class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-santa-red rounded-full flex items-center justify-center font-bold text-white text-sm sm:text-base">3</span>
+                                <span class="text-base sm:text-lg text-gray-200 pt-1">Enter your <span
+                                        class="font-bold text-white">4-digit Access Code</span></span>
+                            </li>
+                            <li class="flex items-start gap-3 sm:gap-4">
+                                <span
+                                    class="flex-shrink-0 w-8 h-8 sm:w-10 sm:h-10 bg-santa-red rounded-full flex items-center justify-center font-bold text-white text-sm sm:text-base">4</span>
+                                <span class="text-base sm:text-lg font-semibold text-santa-gold pt-1">Enjoy unlimited
+                                    talk time!</span>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <!-- Bundle Benefits -->
+                    <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
+                        <!-- SMS -->
+                        <div
+                            class="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 p-5 sm:p-6 rounded-2xl border border-blue-400/20">
+                            <div class="flex items-start gap-3 mb-3">
+                                <i data-lucide="message-square-more" class="w-7 h-7 text-blue-400 flex-shrink-0"></i>
+                                <h4 class="text-lg sm:text-xl font-bold text-blue-300">Personalized SMS</h4>
+                            </div>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                <span class="font-semibold text-white">Text messages from Santa</span> leading up to
+                                Christmas
+                            </p>
+                        </div>
+
+                        <!-- Audio Keepsake -->
+                        <div
+                            class="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 p-5 sm:p-6 rounded-2xl border border-emerald-400/20">
+                            <div class="flex items-start gap-3 mb-3">
+                                <i data-lucide="mic" class="w-7 h-7 text-emerald-400 flex-shrink-0"></i>
+                                <h4 class="text-lg sm:text-xl font-bold text-emerald-300">Audio Keepsake</h4>
+                            </div>
+                            <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
+                                <span class="font-semibold text-white">Recording & transcript</span> sent within 24
+                                hours
                             </p>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2 text-sm text-gray-400 bg-slate-900/50 p-3 rounded-lg">
-                        <i data-lucide="inbox" class="w-4 h-4"></i>
-                        <span>Check your inbox at: <span id="video-email-display"
-                                class="font-semibold text-white ml-1"></span></span>
+
+                    <!-- Email Notice -->
+                    <div
+                        class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-5 sm:p-6 rounded-2xl border border-purple-400/20">
+                        <div class="flex items-start gap-3 sm:gap-4">
+                            <i data-lucide="mail" class="w-6 h-6 sm:w-7 sm:h-7 text-purple-400 flex-shrink-0 mt-1"></i>
+                            <div class="flex-1">
+                                <h3 class="text-lg sm:text-xl font-bold text-purple-300 mb-2">Coming to Your Email</h3>
+                                <ul class="space-y-2 text-sm sm:text-base text-gray-300 mb-3">
+                                    <li class="flex items-start gap-2">
+                                        <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0 mt-1"></i>
+                                        <span>Full call recording</span>
+                                    </li>
+                                    <li class="flex items-start gap-2">
+                                        <i data-lucide="check" class="w-4 h-4 text-green-400 flex-shrink-0 mt-1"></i>
+                                        <span>Complete transcript</span>
+                                    </li>
+                                </ul>
+                                <div class="flex items-center gap-2 bg-slate-900/50 p-3 rounded-lg text-sm">
+                                    <i data-lucide="inbox" class="w-4 h-4"></i>
+                                    <span id="bundle-email-display" class="font-semibold text-white"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <!-- What to Expect -->
-                <div class="text-left space-y-3 bg-slate-800/50 p-6 rounded-xl border border-white/5">
-                    <h3 class="text-lg font-semibold text-purple-300 flex items-center gap-2">
-                        <i data-lucide="info" class="w-5 h-5"></i>
-                        What to Expect:
-                    </h3>
-                    <ul class="space-y-2 text-gray-300">
-                        <li class="flex items-start gap-2">
-                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
-                            <span>A personalized video message from Santa himself</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
-                            <span>High-quality video you can download and keep forever</span>
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
-                            <span>Delivery within 24 hours to your email inbox</span>
-                        </li>
-                    </ul>
-                </div>
             </div>
-        </div>
 
-        <!-- BUNDLE PACKAGE SUCCESS -->
-        <div id="bundle-success-container" class="hidden animate-fadeIn stagger-2">
-            <div
-                class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-8 md:p-10 rounded-3xl border-2 border-santa-gold/30 shadow-2xl backdrop-blur-sm space-y-6">
-
-                <div class="flex items-center justify-center gap-3 mb-4">
-                    <i data-lucide="gift" class="w-8 h-8 text-santa-gold"></i>
-                    <h2 class="text-3xl font-bold text-santa-gold">The Complete Santa Experience!</h2>
-                </div>
-
-                <!-- Access Code Display -->
-                <div
-                    class="bg-gradient-to-br from-santa-red/20 to-red-900/20 p-8 rounded-2xl border-2 border-santa-red shadow-xl">
-                    <p class="text-sm text-gray-400 uppercase tracking-widest mb-2">Your Private Access Code</p>
-                    <p id="bundle-access-code-display"
-                        class="text-7xl md:text-8xl font-mono font-bold text-santa-red tracking-wider">
-                        ----
+            <!-- Contact & Home -->
+            <div class="space-y-4 animate-fadeInUp stagger-2">
+                <div class="glass-card p-5 sm:p-6 rounded-2xl text-center">
+                    <p class="text-base sm:text-lg text-gray-300 flex items-center justify-center gap-2 flex-wrap">
+                        <i data-lucide="help-circle" class="w-5 h-5 sm:w-6 sm:h-6 text-santa-gold"></i>
+                        <span>Questions? Email us at</span>
+                        <a href="mailto:info@callsanta.us"
+                            class="font-bold text-santa-gold hover:text-white transition-colors">
+                            info@callsanta.us
+                        </a>
                     </p>
-                    <div class="mt-6 pt-6 border-t border-white/10">
-                        <p class="text-gray-300 mb-2">📞 Santa's Hotline:</p>
-                        <p id="bundle-hotline-number" class="text-2xl md:text-3xl font-bold text-white">+1 (438)
-                            795-1562</p>
-                    </div>
                 </div>
 
-                <!-- Call Instructions -->
-                <div class="text-left space-y-4 bg-slate-800/50 p-6 rounded-xl border border-white/5">
-                    <h3 class="text-xl font-semibold text-santa-gold flex items-center gap-2">
-                        <i data-lucide="phone-call" class="w-5 h-5"></i>
-                        Call Santa Now - Unlimited Time!
-                    </h3>
-                    <ol class="space-y-3 text-gray-300 text-lg">
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">1</span>
-                            <span><span class="font-semibold text-white">Find a quiet spot</span> with your child and
-                                hand them the phone.</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">2</span>
-                            <span>Dial the Santa Hotline: <span class="font-bold text-white">+1 (438)
-                                    795-1562</span></span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">3</span>
-                            <span>Enter your <span class="font-bold text-white">4-digit Access Code</span> when
-                                prompted.</span>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <span
-                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">4</span>
-                            <span class="font-semibold text-santa-gold">Enjoy unlimited talk time with Santa! ✨</span>
-                        </li>
-                    </ol>
-                </div>
-
-                <!-- Bundle Benefits -->
-                <div class="grid md:grid-cols-2 gap-4">
-                    <!-- SMS Follow-ups -->
-                    <div
-                        class="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 p-5 rounded-xl border border-blue-400/20">
-                        <div class="flex items-start gap-3">
-                            <i data-lucide="message-square-more" class="w-6 h-6 text-blue-400 flex-shrink-0 mt-1"></i>
-                            <div class="text-left">
-                                <h4 class="text-lg font-semibold text-blue-300 mb-2">Personalized SMS Messages</h4>
-                                <p class="text-sm text-gray-300 leading-relaxed">
-                                    Your child will receive <span class="font-bold text-white">personalized text
-                                        messages from Santa</span> leading up to Christmas, keeping the magic alive!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Call Recording & Transcript -->
-                    <div
-                        class="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 p-5 rounded-xl border border-emerald-400/20">
-                        <div class="flex items-start gap-3">
-                            <i data-lucide="mic" class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1"></i>
-                            <div class="text-left">
-                                <h4 class="text-lg font-semibold text-emerald-300 mb-2">Audio Keepsake</h4>
-                                <p class="text-sm text-gray-300 leading-relaxed">
-                                    <span class="font-bold text-white">Call recording & transcript</span> will be sent
-                                    to your email within 24 hours. Relive the magic anytime!
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Email Delivery Notice -->
-                <div
-                    class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-6 rounded-xl border border-purple-400/20">
-                    <div class="flex items-start gap-3">
-                        <i data-lucide="mail" class="w-6 h-6 text-purple-400 flex-shrink-0 mt-1"></i>
-                        <div class="text-left flex-1">
-                            <h3 class="text-xl font-semibold text-purple-300 mb-2">
-                                <i data-lucide="sparkles" class="w-5 h-5 inline mr-1"></i>
-                                What's Coming to Your Email
-                            </h3>
-                            <ul class="space-y-2 text-gray-300 text-sm mb-3">
-                                <li class="flex items-start gap-2">
-                                    <i data-lucide="check-circle"
-                                        class="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5"></i>
-                                    <span><span class="font-bold text-white">Call recording</span> - Download and listen
-                                        to the magical conversation</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i data-lucide="check-circle"
-                                        class="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5"></i>
-                                    <span><span class="font-bold text-white">Full transcript</span> - Read every word
-                                        Santa said</span>
-                                </li>
-                                <li class="flex items-start gap-2">
-                                    <i data-lucide="check-circle"
-                                        class="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5"></i>
-                                    <span><span class="font-bold text-white">Delivery within 24 hours</span> to your
-                                        inbox</span>
-                                </li>
-                            </ul>
-                            <div class="flex items-center gap-2 text-sm text-gray-400 bg-slate-900/50 p-3 rounded-lg">
-                                <i data-lucide="inbox" class="w-4 h-4"></i>
-                                <span>Check your inbox at: <span id="bundle-email-display"
-                                        class="font-semibold text-white ml-1"></span></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Contact Information -->
-        <div class="animate-fadeIn stagger-3">
-            <div class="bg-slate-900/50 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
-                <p class="text-gray-300 flex items-center justify-center gap-2 flex-wrap">
-                    <i data-lucide="help-circle" class="w-5 h-5 text-santa-gold"></i>
-                    <span>Questions? Contact us at:</span>
-                    <a href="mailto:info@callsanta.us"
-                        class="font-semibold text-santa-gold hover:text-santa-red transition-colors">
-                        info@callsanta.us
+                <div class="text-center">
+                    <a href="/"
+                        class="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-santa-red to-red-700 hover:from-red-700 hover:to-santa-red rounded-2xl font-bold text-base sm:text-lg transition-all duration-300 shadow-2xl hover:shadow-santa-red/50 hover:scale-105">
+                        <i data-lucide="home" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                        Return to Home
                     </a>
-                </p>
+                </div>
             </div>
-        </div>
-
-        <!-- Return Home Button -->
-        <div class="animate-fadeIn stagger-4">
-            <a href="/"
-                class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-santa-red to-red-700 hover:from-red-700 hover:to-santa-red rounded-xl font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105">
-                <i data-lucide="home" class="w-5 h-5"></i>
-                Return to Home
-            </a>
         </div>
     </div>
 
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
 
-        // Create snowflakes
-        function createSnowflakes() {
-            const container = document.getElementById('snowflakes-container');
-            const snowflakeCount = 20;
-
-            for (let i = 0; i < snowflakeCount; i++) {
-                const snowflake = document.createElement('div');
-                snowflake.className = 'snowflake';
-                snowflake.innerHTML = '❄';
-                snowflake.style.left = Math.random() * 100 + '%';
-                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
-                snowflake.style.animationDelay = Math.random() * 5 + 's';
-                container.appendChild(snowflake);
-            }
-        }
-        createSnowflakes();
-
-        // --- CONFIGURATION ---
         const GET_ORDER_DETAILS_URL = '/.netlify/functions/get-order-details';
         const TWILIO_PHONE_NUMBER = "+1 (438) 795-1562";
 
-        // --- MAIN FETCH FUNCTION ---
         async function fetchOrderDetails() {
             const urlParams = new URLSearchParams(window.location.search);
             const paymentIntentId = urlParams.get('payment_intent');
@@ -424,10 +443,8 @@
             }
 
             try {
-                // Try to fetch details from the backend
                 const response = await fetch(`${GET_ORDER_DETAILS_URL}?payment_intent_id=${paymentIntentId}`);
 
-                // If backend function doesn't exist (404), fall back to localStorage
                 if (!response.ok) {
                     console.log('Backend function not available, using localStorage fallback');
                     const orderData = localStorage.getItem('lastOrderData');
@@ -452,7 +469,6 @@
 
             } catch (e) {
                 console.error("Network or parsing error:", e);
-                // Fallback to localStorage
                 const orderData = localStorage.getItem('lastOrderData');
                 if (orderData) {
                     const data = JSON.parse(orderData);
@@ -469,17 +485,14 @@
             const videoContainer = document.getElementById('video-success-container');
             const bundleContainer = document.getElementById('bundle-success-container');
 
-            // Update greeting
             if (greetingMessage && data.childName) {
                 greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
             }
 
-            // Hide all containers first
             callContainer.classList.add('hidden');
             videoContainer.classList.add('hidden');
             bundleContainer.classList.add('hidden');
 
-            // Display appropriate container based on package type
             if (data.packageId === 'call') {
                 displayCallSuccess(data);
             } else if (data.packageId === 'video') {
@@ -500,21 +513,20 @@
                 accessCodeDisplay.innerText = data.accessCode;
             }
 
-            // Display overage policy
             if (overagePolicy) {
                 if (data.overageOption === 'unlimited') {
                     overagePolicy.innerHTML = `
-                        <div class="flex items-start gap-2">
-                            <i data-lucide="infinity" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="infinity" class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
                             <div>
-                                <strong class="text-white">Unlimited Talk Time:</strong> You selected unlimited call time. Talk as long as you'd like with no time limits!
+                                <strong class="text-white">Unlimited Talk Time:</strong> You selected unlimited call time. Talk as long as you'd like!
                             </div>
                         </div>
                     `;
                 } else {
                     overagePolicy.innerHTML = `
-                        <div class="flex items-start gap-2">
-                            <i data-lucide="info" class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"></i>
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="info" class="w-6 h-6 text-blue-400 flex-shrink-0 mt-0.5"></i>
                             <div>
                                 <strong class="text-white">Policy:</strong> Your call will automatically disconnect after 5 minutes to prevent extra charges.
                             </div>
@@ -559,7 +571,6 @@
             }
         }
 
-        // Initialize on page load
         document.addEventListener('DOMContentLoaded', fetchOrderDetails);
     </script>
 </body>
