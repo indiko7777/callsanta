@@ -18,7 +18,6 @@ exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
 
     // ElevenLabs sends a POST request with JSON body
-    // Payload structure: { "call_id": "...", "caller_id": "+1...", "agent_id": "..." }
     let body = {};
     try {
         body = JSON.parse(event.body || '{}');
@@ -27,8 +26,9 @@ exports.handler = async (event, context) => {
         return { statusCode: 400, body: "Invalid JSON" };
     }
 
-    const { access_code, order_id, caller_id } = body;
-    console.log("ElevenLabs Context Request:", { access_code, order_id, caller_id });
+    // Extract conversation_id along with other params
+    const { access_code, order_id, caller_id, conversation_id } = body;
+    console.log("ElevenLabs Context Request:", { access_code, order_id, caller_id, conversation_id });
 
     if (!access_code && !order_id && !caller_id) {
         return { statusCode: 400, body: "Missing access_code, order_id, or caller_id" };
@@ -39,7 +39,7 @@ exports.handler = async (event, context) => {
 
         let order;
 
-        // 1. Try to find by Access Code (most reliable if provided by Agent Tool)
+        // 1. Try to find by Access Code (most reliable)
         if (access_code) {
             order = await Order.findOne({ accessCode: access_code });
         }
@@ -49,12 +49,9 @@ exports.handler = async (event, context) => {
             order = await Order.findById(order_id);
         }
 
-        // 3. Fallback: Find the most recent order for this caller ID
+        // 3. Fallback: Find the most recent active order for this caller ID
         if (!order && caller_id) {
-            // STRATEGY: Find the most recent order updated in the last 5 minutes with status 'FULFILLED_CALL_STARTED'.
             const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-
-            // We search for an order that was just marked as 'FULFILLED_CALL_STARTED' by twilio-call-handler.
             order = await Order.findOne({
                 fulfillmentStatus: 'FULFILLED_CALL_STARTED',
                 updatedAt: { $gte: fiveMinutesAgo }
@@ -68,11 +65,19 @@ exports.handler = async (event, context) => {
 
         console.log("Found Order for Context:", order._id);
 
-        // Return the dynamic variables for ElevenLabs
-        // These keys must match the {{variables}} in your ElevenLabs Agent Prompt
+        // --- CRITICAL FIX: Save conversation_id to Order immediately ---
+        if (conversation_id) {
+            order.conversationId = conversation_id;
+            // We can also ensure the status is correct
+            if (order.fulfillmentStatus === 'FULFILLED') {
+                 order.fulfillmentStatus = 'FULFILLED_CALL_STARTED';
+            }
+            await order.save();
+            console.log(`Linked conversation ${conversation_id} to order ${order._id}`);
+        }
+        // ---------------------------------------------------------------
 
-        // Re-calculate derived variables if needed, or rely on what's in the order if we stored it.
-        // Since we don't store daysUntilChristmas in the order, we calculate it again.
+        // Prepare Dynamic Variables
         const today = new Date();
         const currentYear = today.getFullYear();
         let christmas = new Date(Date.UTC(currentYear, 11, 25));
@@ -83,7 +88,6 @@ exports.handler = async (event, context) => {
         const daysUntilChristmas = Math.ceil((christmas.getTime() - today.getTime()) / oneDay);
 
         const children = order.children || [];
-        // Fallback if children array is empty
         if (children.length === 0 && order.childName) {
             children.push({
                 name: order.childName,
@@ -98,7 +102,6 @@ exports.handler = async (event, context) => {
 
         const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
 
-        // Format names for natural greeting: "Alice", "Alice and Bob", "Alice, Bob, and Charlie"
         const names = children.map(c => c.name);
         let greetingNames = "";
         if (names.length === 0) {
@@ -112,15 +115,13 @@ exports.handler = async (event, context) => {
             greetingNames = `${names.join(', ')}, and ${last}`;
         }
 
-        // Response format for ElevenLabs Tool (direct data) AND Initiation Webhook (dynamic_variables)
         const toolResponseData = {
             child_count: children.length > 0 ? children.length : 1,
             children_context: childrenContext,
-            greeting_names: greetingNames, // New variable for First Message
+            greeting_names: greetingNames,
             npl_time: nplTime,
             call_overage_option: order.overageOption || 'auto_disconnect',
             days_until_christmas: daysUntilChristmas,
-            // Also provide a formatted text summary for easy consumption
             summary: `You are calling ${children.length > 0 ? children.length : 1} child(ren). ${childrenContext}. Current NPL time is ${nplTime}. ${daysUntilChristmas} days until Christmas. Call overage option: ${order.overageOption || 'auto_disconnect'}.`
         };
 
@@ -128,8 +129,8 @@ exports.handler = async (event, context) => {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                ...toolResponseData, // Flat properties for the Tool
-                dynamic_variables: toolResponseData // Wrapped properties for Initiation Webhook
+                ...toolResponseData,
+                dynamic_variables: toolResponseData
             })
         };
 

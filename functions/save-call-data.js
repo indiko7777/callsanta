@@ -18,18 +18,15 @@ const connectToDatabase = async (uri) => {
 const verifyWebhookSignature = (payload, signature, secret) => {
     if (!secret) {
         console.warn('ELEVENLABS_WEBHOOK_SECRET not set - skipping signature verification');
-        return true; // Allow if no secret configured
+        return true;
     }
-
     if (!signature) {
         console.error('No signature provided in webhook request');
         return false;
     }
-
     const hmac = crypto.createHmac('sha256', secret);
     hmac.update(payload);
     const expectedSignature = hmac.digest('hex');
-
     return crypto.timingSafeEqual(
         Buffer.from(signature),
         Buffer.from(expectedSignature)
@@ -40,118 +37,99 @@ const verifyWebhookSignature = (payload, signature, secret) => {
 exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
 
-    // Always return 200 to acknowledge webhook (prevent retries)
     const successResponse = {
         statusCode: 200,
         body: JSON.stringify({ status: 'received' })
     };
 
     if (event.httpMethod !== 'POST') {
-        console.log('Invalid method for save-call-data webhook');
         return successResponse;
     }
 
-    // Verify webhook signature (HMAC)
     const signature = event.headers['x-elevenlabs-signature'] || event.headers['X-ElevenLabs-Signature'];
     const webhookSecret = process.env.ELEVENLABS_WEBHOOK_SECRET;
 
-    // DEBUG: Log all headers to see what we are getting
-    console.log('Incoming Webhook Headers:', JSON.stringify(event.headers));
-
+    // Check signature but don't block execution to avoid losing data during debug
     if (!verifyWebhookSignature(event.body, signature, webhookSecret)) {
         console.error('⚠️ Invalid or missing webhook signature');
-        console.error('Proceeding anyway for debugging purposes...');
-        // We DO NOT return 401 here anymore, to unblock the user.
-        // return {
-        //     statusCode: 401,
-        //     body: JSON.stringify({ error: 'Invalid signature' })
-        // };
     }
-
-    console.log('✅ Webhook signature verified');
 
     try {
         const rawPayload = JSON.parse(event.body || '{}');
         console.log('ElevenLabs Webhook Payload:', JSON.stringify(rawPayload, null, 2));
 
-        // Handle both flat and nested 'data' structures (ElevenLabs varies)
         const payload = rawPayload.data ? rawPayload.data : rawPayload;
-        const isNested = !!rawPayload.data;
-
-        // Extract data with fallbacks for different payload structures
         const conversation_id = payload.conversation_id;
-        
-        // Transcript can be in payload.transcript or payload.data.transcript
         const transcript = payload.transcript;
-        
-        // Audio URL might not be present in 'post_call_transcription'
         const audio_url = payload.audio_url;
 
-        // Duration is often in metadata
         let duration_secs = payload.duration_secs;
         if (!duration_secs && payload.metadata) {
             duration_secs = payload.metadata.call_duration_secs;
         }
 
-        // Extract order ID from custom parameters
+        await connectToDatabase(process.env.MONGODB_URI);
+
         let orderId = null;
+        let order = null;
 
-        // Helper to find key case-insensitively
-        const findKey = (obj, key) => {
-            if (!obj) return null;
-            const found = Object.keys(obj).find(k => k.toLowerCase() === key.toLowerCase());
-            return found ? obj[found] : null;
-        };
-
-        // 1. Try to find Order ID in metadata/extra_body
-        // Check payload.metadata (flat) or payload.conversation_initiation_client_data (nested)
-        if (payload.metadata) orderId = findKey(payload.metadata, 'x-order-id');
-        
-        if (!orderId && payload.conversation_initiation_client_data) {
-            const clientData = payload.conversation_initiation_client_data;
-            if (clientData.custom_llm_extra_body) {
-                orderId = findKey(clientData.custom_llm_extra_body, 'x-order-id');
+        // --- STRATEGY 1: Look up by Conversation ID (The most reliable method) ---
+        if (conversation_id) {
+            console.log(`Attempting to find order by conversation_id: ${conversation_id}`);
+            order = await Order.findOne({ conversationId: conversation_id });
+            if (order) {
+                orderId = order._id;
+                console.log(`✅ Found order via conversation_id: ${orderId}`);
             }
         }
-        
-        if (!orderId && payload.custom_llm_extra_body) {
-             orderId = findKey(payload.custom_llm_extra_body, 'x-order-id');
+
+        // --- STRATEGY 2: Look for explicit Order ID in metadata ---
+        if (!order) {
+            const findKey = (obj, key) => {
+                if (!obj) return null;
+                const found = Object.keys(obj).find(k => k.toLowerCase() === key.toLowerCase());
+                return found ? obj[found] : null;
+            };
+
+            if (payload.metadata) orderId = findKey(payload.metadata, 'x-order-id');
+            
+            if (!orderId && payload.conversation_initiation_client_data) {
+                const clientData = payload.conversation_initiation_client_data;
+                if (clientData.custom_llm_extra_body) {
+                    orderId = findKey(clientData.custom_llm_extra_body, 'x-order-id');
+                }
+            }
+            
+            if (!orderId) orderId = findKey(payload, 'x-order-id');
+            
+            // Check Query Params
+            const queryParams = event.queryStringParameters || {};
+            if (!orderId) orderId = findKey(queryParams, 'x-order-id');
+
+            if (orderId) {
+                order = await Order.findById(orderId);
+            }
         }
-        
-        if (!orderId) orderId = findKey(payload, 'x-order-id');
 
-        // 2. Check SIP Headers/Query Params (often passed in metadata or query)
-        const queryParams = event.queryStringParameters || {};
-        if (!orderId) orderId = findKey(queryParams, 'x-order-id');
-
-        // 3. Fallback: Try to match by Phone Number (Caller ID)
-        if (!orderId) {
-            // Phone location varies: 
-            // Flat: payload.caller_id
-            // Nested: payload.phone_call.external_number
-            let customerPhone = findKey(payload, 'caller_id');
-            
-            if (!customerPhone && payload.phone_call) {
-                customerPhone = payload.phone_call.external_number;
-            }
-            
-            if (!customerPhone) {
-                 customerPhone = findKey(queryParams, 'x-customer-phone');
-            }
+        // --- STRATEGY 3: Fallback to Phone Number ---
+        if (!order) {
+            let customerPhone = null;
+            // payload.caller_id might not exist in post_call_audio, check nested objects
+            if (payload.caller_id) customerPhone = payload.caller_id;
+            else if (payload.phone_call) customerPhone = payload.phone_call.external_number;
+            else if (event.queryStringParameters) customerPhone = event.queryStringParameters['x-customer-phone'];
 
             if (customerPhone) {
                 console.log(`Looking up order by phone: ${customerPhone}`);
-
-                // Normalize phone: remove all non-digits
                 const normalizePhone = (p) => p ? p.replace(/\D/g, '') : '';
                 const normalizedCustomerPhone = normalizePhone(customerPhone);
-
-                // Strategy: Match the last 7 digits
                 const last7 = normalizedCustomerPhone.slice(-7);
+
                 if (last7.length >= 7) {
+                    // Look for recently started calls
                     const candidates = await Order.find({
                         fulfillmentStatus: 'FULFILLED_CALL_STARTED'
-                    }).sort({ updatedAt: -1 }).limit(10); // Check last 10 active calls
+                    }).sort({ updatedAt: -1 }).limit(10);
 
                     const phoneOrder = candidates.find(o => {
                         const pPhone = normalizePhone(o.parentPhone);
@@ -159,86 +137,74 @@ exports.handler = async (event, context) => {
                     });
 
                     if (phoneOrder) {
-                        orderId = phoneOrder._id;
-                        console.log(`Found order ${orderId} via phone number match (last 7 digits: ${last7})`);
+                        order = phoneOrder;
+                        orderId = order._id;
+                        console.log(`✅ Found order via phone number match: ${orderId}`);
                     }
                 }
             }
         }
 
-        if (!orderId) {
-            console.error('No order ID found in ElevenLabs webhook payload');
-            console.error('Payload keys:', Object.keys(payload));
-            if (metadata) console.error('Metadata keys:', Object.keys(metadata));
-            return successResponse; // Still return 200 to prevent retries
-        }
-
-        if (!conversation_id) {
-            console.error('No conversation_id in ElevenLabs webhook payload');
+        if (!order) {
+            console.error('❌ Could not identify order for this webhook.');
+            // Fixed the ReferenceError crash here:
+            if (payload.metadata) {
+                console.error('Metadata keys:', Object.keys(payload.metadata));
+            } else {
+                console.error('No metadata in payload');
+            }
             return successResponse;
         }
 
-        console.log(`Processing call data for Order ID: ${orderId}, Conversation ID: ${conversation_id}`);
-        await connectToDatabase(process.env.MONGODB_URI);
-
-        // Find the order
-        const order = await Order.findById(orderId);
-
-        if (!order) {
-            console.error(`Order not found: ${orderId}`);
-            return successResponse; // Still return 200
+        // --- SAVE DATA ---
+        // Ensure conversationId is set if we found order by other means
+        if (!order.conversationId && conversation_id) {
+            order.conversationId = conversation_id;
         }
 
-        // Update order with call data
-        order.conversationId = conversation_id;
-        order.audioUrl = audio_url || null;
-
-        // Format transcript if it's an array
-        if (Array.isArray(transcript)) {
-            order.transcript = transcript.map(t => `${t.role === 'agent' ? 'Santa' : 'Child'}: ${t.message}`).join('\n');
-        } else {
-            order.transcript = transcript || null;
+        if (audio_url) order.audioUrl = audio_url;
+        
+        if (transcript) {
+            if (Array.isArray(transcript)) {
+                order.transcript = transcript.map(t => `${t.role === 'agent' ? 'Santa' : 'Child'}: ${t.message}`).join('\n');
+            } else {
+                order.transcript = transcript;
+            }
         }
-        order.callDuration = duration_secs || 0;
+        
+        if (duration_secs) order.callDuration = duration_secs;
+        
         order.fulfillmentStatus = 'CALL_COMPLETED';
-
         await order.save();
-        console.log(`Call data saved for order ${orderId}`);
+        console.log(`Call data saved for order ${order._id}`);
 
-        // If this is a bundle package, send post-call email
+        // --- TRIGGER EMAIL ---
         if (order.packageId === 'bundle') {
             console.log('Triggering bundle post-call email...');
-
             const emailFunction = require('./send-confirmation-email');
-            const emailResult = await emailFunction.handler({
+            
+            // Ensure audioUrl is available for the email function
+            if (!order.audioUrl) {
+                console.warn("Warning: Triggering email but audioUrl is missing/null");
+            }
+
+            await emailFunction.handler({
                 httpMethod: 'POST',
                 body: JSON.stringify({
-                    order_id: orderId,
+                    order_id: order._id.toString(),
                     email_type: 'bundle_post_call'
                 })
             }, context);
-
-            if (emailResult.statusCode === 200) {
-                console.log(`Bundle post-call email sent to ${order.parentEmail}`);
-            } else {
-                console.error('Failed to send bundle post-call email:', emailResult.body);
-            }
+            console.log(`Bundle post-call email logic executed for ${order.parentEmail}`);
         }
 
         return {
             statusCode: 200,
-            body: JSON.stringify({
-                status: 'success',
-                message: 'Call data saved successfully',
-                order_id: orderId,
-                conversation_id: conversation_id,
-                email_sent: order.packageId === 'bundle'
-            })
+            body: JSON.stringify({ status: 'success', order_id: order._id })
         };
 
     } catch (error) {
         console.error('SAVE CALL DATA ERROR:', error);
-        // Still return 200 to prevent ElevenLabs from retrying
         return successResponse;
     }
 };
