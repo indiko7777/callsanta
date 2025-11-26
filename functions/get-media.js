@@ -32,14 +32,28 @@ exports.handler = async (event, context) => {
     try {
         await connectToDatabase(process.env.MONGODB_URI);
 
-        const order = await Order.findById(orderId);
+        // Robust order lookup: try ObjectId first, then accessCode
+        let order;
+        const trimmedOrderId = orderId.trim();
+
+        if (mongoose.Types.ObjectId.isValid(trimmedOrderId)) {
+            order = await Order.findById(trimmedOrderId);
+        }
+
+        // If not found by ID (or invalid ID), try accessCode (case-insensitive)
+        if (!order) {
+            order = await Order.findOne({
+                accessCode: { $regex: new RegExp(`^${trimmedOrderId}$`, 'i') }
+            });
+        }
 
         if (!order) {
+            console.log(`Order not found for ID/AccessCode: ${trimmedOrderId}`);
             return { statusCode: 404, body: JSON.stringify({ error: 'Order not found' }) };
         }
 
-        // Verify access code
-        if (order.accessCode !== accessCode) {
+        // Verify access code (case-insensitive comparison)
+        if (order.accessCode.toLowerCase() !== accessCode.trim().toLowerCase()) {
             return { statusCode: 403, body: JSON.stringify({ error: 'Invalid access code' }) };
         }
 
