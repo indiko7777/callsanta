@@ -1,5 +1,5 @@
 [build]
-  command = "echo 'No build step required'"
+  command = "npm run build"
   publish = "."
   functions = "functions"
 
