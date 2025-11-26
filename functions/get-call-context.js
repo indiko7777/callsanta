@@ -98,7 +98,7 @@ exports.handler = async (event, context) => {
 
         const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
 
-        // Response format for ElevenLabs Tool (direct data, not wrapped)
+        // Response format for ElevenLabs Tool (direct data) AND Initiation Webhook (dynamic_variables)
         const toolResponseData = {
             child_count: children.length > 0 ? children.length : 1,
             children_context: childrenContext,
@@ -112,7 +112,10 @@ exports.handler = async (event, context) => {
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(toolResponseData)
+            body: JSON.stringify({
+                ...toolResponseData, // Flat properties for the Tool
+                dynamic_variables: toolResponseData // Wrapped properties for Initiation Webhook
+            })
         };
 
     } catch (error) {
