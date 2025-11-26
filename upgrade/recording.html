@@ -39,6 +39,31 @@
             </p>
         </div>
 
+        <!-- Price Box -->
+        <div class="bg-slate-800/50 rounded-xl p-6 mb-8 border border-slate-700">
+            <div class="flex justify-between items-center mb-4">
+                <span class="text-gray-300">Call Recording</span>
+                <span class="text-2xl font-bold text-white">$5.00</span>
+            </div>
+            <ul class="space-y-2 text-sm text-gray-400">
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check" class="w-4 h-4 text-green-500 mt-1 flex-shrink-0"></i>
+                    <span>High-quality MP3 download</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check" class="w-4 h-4 text-green-500 mt-1 flex-shrink-0"></i>
+                    <span>Share with family & friends</span>
+                </li>
+                <li class="flex items-start gap-2">
+                    <i data-lucide="check" class="w-4 h-4 text-green-500 mt-1 flex-shrink-0"></i>
+                    <span>Secure lifetime access</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Payment Element -->
+        <div id="payment-element" class="mb-6"></div>
+        <div id="error-message" class="text-red-400 text-sm mb-4 hidden"></div>
 
         <!-- Submit Button -->
         <button id="submit"
@@ -60,57 +85,78 @@
         }
 
         async function initialize() {
-            const response = await fetch('/.netlify/functions/create-upgrade-payment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ originalOrderId, upgradeType: 'recording' }),
-            });
-
-            const { clientSecret, error } = await response.json();
-
-            if (error) {
-                document.getElementById('error-message').textContent = error;
-                document.getElementById('error-message').classList.remove('hidden');
-                return;
-            }
-
-            const elements = stripe.elements({
-                clientSecret,
-                appearance: {
-                    theme: 'night'
-                }
-            });
-
-            const paymentElement = elements.create('payment');
-            paymentElement.mount('#payment-element');
-
-            document.getElementById('submit').addEventListener('click', async () => {
-                setLoading(true);
-
-                const { error } = await stripe.confirmPayment({
-                    elements,
-                    confirmParams: {
-                        return_url: window.location.origin + '/success.html',
-                    },
+            try {
+                const response = await fetch('/.netlify/functions/create-upgrade-payment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ originalOrderId, upgradeType: 'recording' }),
                 });
 
-                if (error) {
-                    document.getElementById('error-message').textContent = error.message;
-                    document.getElementById('error-message').classList.remove('hidden');
-                    setLoading(false);
+                const data = await response.json();
+
+                if (data.error) {
+                    const errorDiv = document.getElementById('error-message');
+                    if (errorDiv) {
+                        errorDiv.textContent = data.error;
+                        errorDiv.classList.remove('hidden');
+                    }
+                    return;
                 }
-            });
+
+                const { clientSecret } = data;
+
+                const elements = stripe.elements({
+                    clientSecret,
+                    appearance: {
+                        theme: 'night'
+                    }
+                });
+
+                const paymentElement = elements.create('payment');
+                paymentElement.mount('#payment-element');
+
+                document.getElementById('submit').addEventListener('click', async () => {
+                    setLoading(true);
+
+                    const { error } = await stripe.confirmPayment({
+                        elements,
+                        confirmParams: {
+                            return_url: window.location.origin + '/success.html',
+                        },
+                    });
+
+                    if (error) {
+                        const errorDiv = document.getElementById('error-message');
+                        if (errorDiv) {
+                            errorDiv.textContent = error.message;
+                            errorDiv.classList.remove('hidden');
+                        }
+                        setLoading(false);
+                    }
+                });
+            } catch (err) {
+                console.error("Initialization error:", err);
+                const errorDiv = document.getElementById('error-message');
+                if (errorDiv) {
+                    errorDiv.textContent = "Failed to load payment system. Please try again.";
+                    errorDiv.classList.remove('hidden');
+                }
+            }
         }
 
         function setLoading(isLoading) {
+            const submitBtn = document.getElementById('submit');
+            const btnText = document.getElementById('button-text');
+            const spinner = document.getElementById('spinner');
+
             if (isLoading) {
-                document.getElementById('submit').disabled = true;
-                document.getElementById('button-text').classList.add('hidden');
-                document.getElementById('spinner').classList.remove('hidden');
+                submitBtn.disabled = true;
+                btnText.classList.add('hidden');
+                spinner.classList.remove('hidden');
             } else {
-                document.getElementById('submit').disabled = false;
-                document.getElementById('button-text').classList.remove('hidden');
-                document.getElementById('spinner').classList.add('hidden');
+                submitBtn.disabled = false;
+                btnText.classList.remove('hidden');
+                spinner.classList.add('hidden');
             }
         }
 
