@@ -116,18 +116,15 @@
 
 <body class="bg-slate-950 text-white min-h-screen overflow-y-auto">
 
-    <!-- Christmas Background -->
     <div class="fixed inset-0 z-0">
         <div class="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/70 to-slate-950/90 z-10"></div>
         <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=1920&q=80" alt="Christmas background"
             class="w-full h-full object-cover opacity-40">
     </div>
 
-    <!-- Content Container -->
     <div class="relative z-20 min-h-screen py-8 px-4 sm:px-6 lg:px-8">
         <div class="max-w-4xl mx-auto space-y-8">
 
-            <!-- Success Badge -->
             <div class="text-center animate-fadeInUp">
                 <div
                     class="inline-flex items-center justify-center w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full shadow-2xl shadow-green-500/50 mb-6 float-animation">
@@ -142,11 +139,9 @@
                 </p>
             </div>
 
-            <!-- CALL PACKAGE SUCCESS -->
             <div id="call-success-container" class="hidden animate-fadeInUp stagger-1">
                 <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl space-y-6 sm:space-y-8">
 
-                    <!-- Big Title -->
                     <div class="text-center pb-6 border-b border-white/10">
                         <h2
                             class="hero-title text-3xl sm:text-4xl md:text-5xl font-black text-santa-gold mb-3 leading-tight">
@@ -155,7 +150,6 @@
                         <p class="text-base sm:text-lg text-gray-300">The magic is just a phone call away</p>
                     </div>
 
-                    <!-- Access Code Card -->
                     <div
                         class="bg-gradient-to-br from-santa-red/20 via-red-900/30 to-santa-red/20 p-6 sm:p-8 lg:p-10 rounded-2xl border-2 border-santa-red shadow-xl shimmer">
                         <p class="text-xs sm:text-sm text-gray-300 uppercase tracking-widest mb-3 text-center">Your
@@ -171,7 +165,6 @@
                         </div>
                     </div>
 
-                    <!-- Instructions -->
                     <div class="glass-card p-6 sm:p-8 rounded-2xl space-y-4 sm:space-y-5">
                         <h3 class="text-xl sm:text-2xl font-bold text-santa-gold flex items-center gap-3">
                             <i data-lucide="phone-call" class="w-6 h-6 sm:w-7 sm:h-7"></i>
@@ -206,19 +199,15 @@
                         </ol>
                     </div>
 
-                    <!-- Overage Policy -->
                     <div id="overage-policy"
                         class="glass-card p-4 sm:p-5 rounded-xl text-sm sm:text-base text-gray-300">
-                        <!-- Policy details loaded here by JS -->
-                    </div>
+                        </div>
                 </div>
             </div>
 
-            <!-- VIDEO PACKAGE SUCCESS -->
             <div id="video-success-container" class="hidden animate-fadeInUp stagger-1">
                 <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl space-y-6 sm:space-y-8">
 
-                    <!-- Big Title -->
                     <div class="text-center pb-6 border-b border-white/10">
                         <h2
                             class="hero-title text-3xl sm:text-4xl md:text-5xl font-black text-purple-400 mb-3 leading-tight">
@@ -227,7 +216,6 @@
                         <p class="text-base sm:text-lg text-gray-300">A magical keepsake is being created</p>
                     </div>
 
-                    <!-- Video Icon -->
                     <div class="flex justify-center mb-6">
                         <div
                             class="w-32 h-32 sm:w-40 sm:h-40 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-3xl flex items-center justify-center border-2 border-purple-400/30 float-animation">
@@ -235,12 +223,12 @@
                         </div>
                     </div>
 
-                    <!-- Delivery Info -->
                     <div
                         class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-6 sm:p-8 rounded-2xl border border-purple-400/20">
                         <div class="flex items-start gap-4 mb-4">
-                            <i data-lucide="mail" class="w-7 h-7 sm:w-8 sm:h-8 text-purple-400 flex-shrink-0 mt-1"></i>
-                            <div class="text-left flex-1">
+                            <i data-lucide="mail"
+                                class="w-7 h-7 sm:w-8 sm:h-8 text-purple-400 flex-shrink-0 mt-1"></i>
+                            <div class="text-left flex-1 min-w-0">
                                 <h3 class="text-xl sm:text-2xl font-bold text-purple-300 mb-3">Video Delivery
                                     Information</h3>
                                 <p class="text-base sm:text-lg text-gray-200 leading-relaxed mb-4">
@@ -248,17 +236,16 @@
                                         your email within 24 hours</span>.
                                     Our elves are working hard to create something truly magical for you!
                                 </p>
-                                <div class="flex items-center gap-3 bg-slate-900/50 p-4 rounded-xl">
-                                    <i data-lucide="inbox" class="w-5 h-5 text-purple-400"></i>
-                                    <span class="text-sm sm:text-base text-gray-300">Check: <span
+                                <div class="flex items-start gap-3 bg-slate-900/50 p-4 rounded-xl">
+                                    <i data-lucide="inbox" class="w-5 h-5 text-purple-400 flex-shrink-0 mt-0.5"></i>
+                                    <span class="text-sm sm:text-base text-gray-300 break-words w-full">Check: <span
                                             id="video-email-display"
-                                            class="font-semibold text-white ml-1"></span></span>
+                                            class="font-semibold text-white ml-1 break-all"></span></span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- What to Expect -->
                     <div class="glass-card p-6 sm:p-8 rounded-2xl">
                         <h3 class="text-lg sm:text-xl font-bold text-purple-300 flex items-center gap-2 mb-4">
                             <i data-lucide="gift" class="w-6 h-6"></i>
@@ -266,15 +253,18 @@
                         </h3>
                         <ul class="space-y-3">
                             <li class="flex items-start gap-3 text-base sm:text-lg text-gray-200">
-                                <i data-lucide="check-circle" class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                <i data-lucide="check-circle"
+                                    class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
                                 <span>Personalized video message from Santa</span>
                             </li>
                             <li class="flex items-start gap-3 text-base sm:text-lg text-gray-200">
-                                <i data-lucide="check-circle" class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                <i data-lucide="check-circle"
+                                    class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
                                 <span>High-quality video to download and keep forever</span>
                             </li>
                             <li class="flex items-start gap-3 text-base sm:text-lg text-gray-200">
-                                <i data-lucide="check-circle" class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                <i data-lucide="check-circle"
+                                    class="w-6 h-6 text-green-400 flex-shrink-0 mt-0.5"></i>
                                 <span>Delivery within 24 hours to your inbox</span>
                             </li>
                         </ul>
@@ -282,11 +272,9 @@
                 </div>
             </div>
 
-            <!-- BUNDLE PACKAGE SUCCESS -->
             <div id="bundle-success-container" class="hidden animate-fadeInUp stagger-1">
                 <div class="glass-card rounded-3xl p-6 sm:p-8 lg:p-10 shadow-2xl space-y-6 sm:space-y-8">
 
-                    <!-- Big Title -->
                     <div class="text-center pb-6 border-b border-white/10">
                         <h2
                             class="hero-title text-3xl sm:text-4xl md:text-5xl font-black text-santa-gold mb-3 leading-tight">
@@ -295,7 +283,6 @@
                         <p class="text-base sm:text-lg text-gray-300">The complete magical experience awaits</p>
                     </div>
 
-                    <!-- Access Code Card -->
                     <div
                         class="bg-gradient-to-br from-santa-red/20 via-red-900/30 to-santa-red/20 p-6 sm:p-8 lg:p-10 rounded-2xl border-2 border-santa-red shadow-xl shimmer">
                         <p class="text-xs sm:text-sm text-gray-300 uppercase tracking-widest mb-3 text-center">Your
@@ -311,7 +298,6 @@
                         </div>
                     </div>
 
-                    <!-- Instructions -->
                     <div class="glass-card p-6 sm:p-8 rounded-2xl space-y-4 sm:space-y-5">
                         <h3 class="text-xl sm:text-2xl font-bold text-santa-gold flex items-center gap-3">
                             <i data-lucide="phone-call" class="w-6 h-6 sm:w-7 sm:h-7"></i>
@@ -346,13 +332,12 @@
                         </ol>
                     </div>
 
-                    <!-- Bundle Benefits -->
                     <div class="grid sm:grid-cols-2 gap-4 sm:gap-6">
-                        <!-- SMS -->
                         <div
                             class="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 p-5 sm:p-6 rounded-2xl border border-blue-400/20">
                             <div class="flex items-start gap-3 mb-3">
-                                <i data-lucide="message-square-more" class="w-7 h-7 text-blue-400 flex-shrink-0"></i>
+                                <i data-lucide="message-square-more"
+                                    class="w-7 h-7 text-blue-400 flex-shrink-0"></i>
                                 <h4 class="text-lg sm:text-xl font-bold text-blue-300">Personalized SMS</h4>
                             </div>
                             <p class="text-sm sm:text-base text-gray-300 leading-relaxed">
@@ -361,7 +346,6 @@
                             </p>
                         </div>
 
-                        <!-- Audio Keepsake -->
                         <div
                             class="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 p-5 sm:p-6 rounded-2xl border border-emerald-400/20">
                             <div class="flex items-start gap-3 mb-3">
@@ -375,7 +359,6 @@
                         </div>
                     </div>
 
-                    <!-- Email Notice -->
                     <div
                         class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-5 sm:p-6 rounded-2xl border border-purple-400/20">
                         <div class="flex items-start gap-3 sm:gap-4">
@@ -402,7 +385,6 @@
                 </div>
             </div>
 
-            <!-- Contact & Home -->
             <div class="space-y-4 animate-fadeInUp stagger-2">
                 <div class="glass-card p-5 sm:p-6 rounded-2xl text-center">
                     <p class="text-base sm:text-lg text-gray-300 flex items-center justify-center gap-2 flex-wrap">
