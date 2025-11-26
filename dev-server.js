@@ -155,7 +155,10 @@ const routes = [
     { path: '/.netlify/functions/send-test-email', handler: require('./functions/send-test-email').handler, method: 'post' },
 
     { path: '/preview-email', handler: require('./functions/preview-email').handler, method: 'get' },
-    { path: '/.netlify/functions/preview-email', handler: require('./functions/preview-email').handler, method: 'get' }
+    { path: '/.netlify/functions/preview-email', handler: require('./functions/preview-email').handler, method: 'get' },
+
+    { path: '/stripe-webhook', handler: require('./functions/stripe-webhook').handler, method: 'post' },
+    { path: '/.netlify/functions/stripe-webhook', handler: require('./functions/stripe-webhook').handler, method: 'post' }
 ];
 
 routes.forEach(route => {
