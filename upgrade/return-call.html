@@ -41,113 +41,84 @@
         <!-- Price Box -->
         <div class="bg-slate-800/50 rounded-xl p-6 mb-8 border border-slate-700">
             <div class="flex justify-between items-end mb-4">
-                <span class="text-gray-300">Return Call Special</span>
-                <div class="text-right">
-                    <span class="block text-sm text-gray-500 line-through">$20.00</span>
-                    <span class="text-2xl font-bold text-green-500">$10.00</span>
-                </div>
+
+                <!-- Submit Button -->
+                <button id="submit"
+                    class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 rounded-xl shadow-lg transform transition hover:scale-[1.02] flex items-center justify-center gap-2">
+                    <span id="button-text">Book Return Call for $10.00</span>
+                    <div id="spinner" class="hidden animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                </button>
             </div>
-            <ul class="space-y-2 text-sm text-gray-400">
-                <li class="flex items-center gap-2">
-                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                    <strong>Santa Remembers</strong> previous chats
-                </li>
-                <li class="flex items-center gap-2">
-                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                    <strong>Follow-up</strong> questions & magic
-                </li>
-                <li class="flex items-center gap-2">
-                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                    <strong>Recording Included</strong> (Free)
-                </li>
-                <li class="flex items-center gap-2">
-                    <i data-lucide="check" class="w-4 h-4 text-green-500"></i>
-                    <strong>Transcript Included</strong> (Free)
-                </li>
-            </ul>
-        </div>
 
-        <!-- Payment Element -->
-        <div id="payment-element" class="mb-6"></div>
-        <div id="error-message" class="text-red-400 text-sm mb-4 hidden"></div>
+            <script>
+                lucide.createIcons();
+                const stripe = Stripe('pk_test_51SVKGLLLG2IkIMjNRGtLSTgFOKHA262pTUQZxtrDko025pTqT3eqQ5o3IVThdo1Em18mtHn8OB4vbZYPgW1sgsA200melmouPY');
 
-        <!-- Submit Button -->
-        <button id="submit"
-            class="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-bold py-4 rounded-xl shadow-lg transform transition hover:scale-[1.02] flex items-center justify-center gap-2">
-            <span id="button-text">Book Return Call for $10.00</span>
-            <div id="spinner" class="hidden animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
-        </button>
-    </div>
+                const params = new URLSearchParams(window.location.search);
+                const originalOrderId = params.get('order');
 
-    <script>
-        lucide.createIcons();
-        const stripe = Stripe('pk_test_51SVKGLLLG2IkIMjNRGtLSTgFOKHA262pTUQZxtrDko025pTqT3eqQ5o3IVThdo1Em18mtHn8OB4vbZYPgW1sgsA200melmouPY');
-
-        const params = new URLSearchParams(window.location.search);
-        const originalOrderId = params.get('order');
-
-        if (!originalOrderId) {
-            document.body.innerHTML = '<div class="text-white text-center p-10">Missing order ID. Please use the link from your email.</div>';
-        }
-
-        async function initialize() {
-            const response = await fetch('/.netlify/functions/create-upgrade-payment', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ originalOrderId, upgradeType: 'return_call' }),
-            });
-
-            const { clientSecret, error } = await response.json();
-
-            if (error) {
-                document.getElementById('error-message').textContent = error;
-                document.getElementById('error-message').classList.remove('hidden');
-                return;
-            }
-
-            const elements = stripe.elements({
-                clientSecret,
-                appearance: {
-                    theme: 'night',
-                    variables: { colorPrimary: '#16A34A' }
+                if (!originalOrderId) {
+                    document.body.innerHTML = '<div class="text-white text-center p-10">Missing order ID. Please use the link from your email.</div>';
                 }
-            });
 
-            const paymentElement = elements.create('payment');
-            paymentElement.mount('#payment-element');
+                async function initialize() {
+                    const response = await fetch('/.netlify/functions/create-upgrade-payment', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ originalOrderId, upgradeType: 'return_call' }),
+                    });
 
-            document.getElementById('submit').addEventListener('click', async () => {
-                setLoading(true);
+                    const { clientSecret, error } = await response.json();
 
-                const { error } = await stripe.confirmPayment({
-                    elements,
-                    confirmParams: {
-                        return_url: window.location.origin + '/success.html',
-                    },
-                });
+                    if (error) {
+                        document.getElementById('error-message').textContent = error;
+                        document.getElementById('error-message').classList.remove('hidden');
+                        return;
+                    }
 
-                if (error) {
-                    document.getElementById('error-message').textContent = error.message;
-                    document.getElementById('error-message').classList.remove('hidden');
-                    setLoading(false);
+                    const elements = stripe.elements({
+                        clientSecret,
+                        appearance: {
+                            theme: 'night',
+                            variables: { colorPrimary: '#16A34A' }
+                        }
+                    });
+
+                    const paymentElement = elements.create('payment');
+                    paymentElement.mount('#payment-element');
+
+                    document.getElementById('submit').addEventListener('click', async () => {
+                        setLoading(true);
+
+                        const { error } = await stripe.confirmPayment({
+                            elements,
+                            confirmParams: {
+                                return_url: window.location.origin + '/success.html',
+                            },
+                        });
+
+                        if (error) {
+                            document.getElementById('error-message').textContent = error.message;
+                            document.getElementById('error-message').classList.remove('hidden');
+                            setLoading(false);
+                        }
+                    });
                 }
-            });
-        }
 
-        function setLoading(isLoading) {
-            if (isLoading) {
-                document.getElementById('submit').disabled = true;
-                document.getElementById('button-text').classList.add('hidden');
-                document.getElementById('spinner').classList.remove('hidden');
-            } else {
-                document.getElementById('submit').disabled = false;
-                document.getElementById('button-text').classList.remove('hidden');
-                document.getElementById('spinner').classList.add('hidden');
-            }
-        }
+                function setLoading(isLoading) {
+                    if (isLoading) {
+                        document.getElementById('submit').disabled = true;
+                        document.getElementById('button-text').classList.add('hidden');
+                        document.getElementById('spinner').classList.remove('hidden');
+                    } else {
+                        document.getElementById('submit').disabled = false;
+                        document.getElementById('button-text').classList.remove('hidden');
+                        document.getElementById('spinner').classList.add('hidden');
+                    }
+                }
 
-        if (originalOrderId) initialize();
-    </script>
+                if (originalOrderId) initialize();
+            </script>
 </body>
 
 </html>

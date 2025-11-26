@@ -31,14 +31,21 @@ exports.handler = async (event, context) => {
         await connectToDatabase(process.env.MONGODB_URI);
 
         let originalOrder;
-        if (mongoose.Types.ObjectId.isValid(originalOrderId)) {
-            originalOrder = await Order.findById(originalOrderId);
-        } else {
-            // Try finding by accessCode if it's not a valid ObjectId
-            originalOrder = await Order.findOne({ accessCode: originalOrderId });
+        const trimmedId = originalOrderId.trim();
+
+        if (mongoose.Types.ObjectId.isValid(trimmedId)) {
+            originalOrder = await Order.findById(trimmedId);
+        }
+
+        // If not found by ID (or invalid ID), try accessCode (case-insensitive)
+        if (!originalOrder) {
+            originalOrder = await Order.findOne({
+                accessCode: { $regex: new RegExp(`^${trimmedId}$`, 'i') }
+            });
         }
 
         if (!originalOrder) {
+            console.log(`Order not found for ID/AccessCode: ${trimmedId}`);
             return { statusCode: 404, body: JSON.stringify({ error: 'Original order not found' }) };
         }
 
@@ -55,12 +62,6 @@ exports.handler = async (event, context) => {
         }
 
         // Create a NEW order for the upgrade
-        // We link it to the original order via metadata or a new field if we wanted, 
-        // but for now we just clone the child info and parent info.
-        // Ideally, we might want to update the EXISTING order, but creating a new one is cleaner for payment tracking.
-        // However, for "upgrades" like recording, we probably want to update the existing order's permissions.
-        // For simplicity and robustness, we'll create a new order record that references the upgrade.
-
         const newOrder = new Order({
             parentEmail: originalOrder.parentEmail,
             parentPhone: originalOrder.parentPhone,
@@ -70,7 +71,6 @@ exports.handler = async (event, context) => {
             currency: 'usd',
             fulfillmentStatus: 'PENDING_PAYMENT',
             stripeCustomerId: originalOrder.stripeCustomerId, // Reuse customer if possible
-            // Store reference to original order in a flexible way if needed, or just rely on email
         });
 
         await newOrder.save();
@@ -82,11 +82,11 @@ exports.handler = async (event, context) => {
             automatic_payment_methods: { enabled: true },
             metadata: {
                 order_id: newOrder._id.toString(),
-                original_order_id: originalOrderId,
+                original_order_id: trimmedId,
                 upgrade_type: upgradeType,
                 parent_email: originalOrder.parentEmail
             },
-            description: `Upgrade: ${upgradeType} for Order ${originalOrderId}`
+            description: `Upgrade: ${upgradeType} for Order ${trimmedId}`
         });
 
         // Update order with PI ID
