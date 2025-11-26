@@ -61,16 +61,13 @@ exports.handler = async (event, context) => {
         let orderId = null;
         let order = null;
 
-        // --- STEP A: Look for Order ID passed through Dynamic Variables (The Bulletproof Link) ---
+        // --- STEP A: Look for Order ID passed through Dynamic Variables (Primary Method) ---
         if (payload.conversation_initiation_client_data && 
             payload.conversation_initiation_client_data.dynamic_variables &&
             payload.conversation_initiation_client_data.dynamic_variables.order_id) {
             
             orderId = payload.conversation_initiation_client_data.dynamic_variables.order_id;
             console.log(`🎯 Found Pass-Through Order ID: ${orderId}`);
-        }
-
-        if (orderId) {
             order = await Order.findById(orderId);
         }
 
@@ -80,7 +77,27 @@ exports.handler = async (event, context) => {
             if (order) console.log(`✅ Found order via conversation_id: ${order._id}`);
         }
 
-        // --- STEP C: Fallback to Phone Number (Only works if numbers match) ---
+        // --- STEP C: Retry Loop (The Race Condition Fix) ---
+        // If we have a conversation_id but no order, wait and try again.
+        // This handles cases where post_call_audio arrives before post_call_transcription has saved the ID.
+        if (!order && conversation_id) {
+            console.log("⚠️ Order not found immediately. Entering retry loop for concurrent webhooks...");
+            
+            for (let i = 0; i < 3; i++) {
+                // Wait 2 seconds
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                
+                console.log(`🔄 Retry attempt ${i + 1}/3 for conversation_id: ${conversation_id}`);
+                order = await Order.findOne({ conversationId: conversation_id });
+                
+                if (order) {
+                    console.log(`✅ Found order on retry ${i + 1}!`);
+                    break;
+                }
+            }
+        }
+
+        // --- STEP D: Last Resort - Phone Number ---
         if (!order) {
             let customerPhone = null;
             if (payload.metadata && payload.metadata.phone_call) {
@@ -118,7 +135,7 @@ exports.handler = async (event, context) => {
         }
 
         if (!order) {
-            console.error('❌ FINAL ERROR: Could not identify order. Data saved to logs only.');
+            console.error('❌ FINAL ERROR: Could not identify order after retries. Data saved to logs only.');
             return successResponse;
         }
 
@@ -140,7 +157,6 @@ exports.handler = async (event, context) => {
             }
         }
         
-        // Update duration
         let duration_secs = payload.duration_secs;
         if (!duration_secs && payload.metadata) {
             duration_secs = payload.metadata.call_duration_secs;
@@ -152,7 +168,7 @@ exports.handler = async (event, context) => {
 
         // 4. Send the Email (Only for Bundles and only if we have audio)
         if (order.packageId === 'bundle') {
-            // Logic: If this is an audio payload OR we already have audio saved
+            // We check if we have audio NOW, or if it was already saved
             const hasAudio = audio_url || order.audioUrl;
             
             if (hasAudio) {
