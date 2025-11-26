@@ -7,6 +7,9 @@
     <title>Payment Successful - CallSanta.us</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
@@ -15,153 +18,413 @@
                         santa: {
                             red: '#D42426',
                             gold: '#C5A059',
+                            green: '#0F5132',
                         }
+                    },
+                    fontFamily: {
+                        'outfit': ['Outfit', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .stagger-1 {
+            animation-delay: 0.1s;
+            opacity: 0;
+        }
+
+        .stagger-2 {
+            animation-delay: 0.2s;
+            opacity: 0;
+        }
+
+        .stagger-3 {
+            animation-delay: 0.3s;
+            opacity: 0;
+        }
+
+        .stagger-4 {
+            animation-delay: 0.4s;
+            opacity: 0;
+        }
+
+        .snowflake {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 1.5em;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh);
+            }
+        }
+    </style>
 </head>
 
-<body class="bg-slate-950 text-white min-h-screen flex items-center justify-center p-6">
-    <div class="max-w-2xl mx-auto text-center space-y-6">
-        <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto animate-pulse">
-            <i data-lucide="check" class="w-12 h-12 text-white"></i>
+<body
+    class="bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 text-white min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+
+    <!-- Snowflakes Background -->
+    <div id="snowflakes-container"></div>
+
+    <div class="max-w-3xl mx-auto text-center space-y-8 relative z-10">
+        <!-- Success Icon -->
+        <div
+            class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto shadow-2xl shadow-green-500/50 animate-fadeIn">
+            <i data-lucide="check" class="w-14 h-14 text-white"></i>
         </div>
 
-        <h1 class="text-5xl font-bold text-white">Payment Successful!</h1>
+        <!-- Main Heading -->
+        <div class="animate-fadeIn stagger-1">
+            <h1 class="text-5xl md:text-6xl font-bold text-white mb-3">🎄 Payment Successful! 🎄</h1>
+            <p class="text-xl md:text-2xl text-gray-300">
+                <span id="greeting-message">Thank you for your purchase!</span>
+            </p>
+        </div>
 
-        <p class="text-xl text-gray-300">
-            <span id="greeting-message">Thank you for your purchase!</span> Santa is preparing your personalized
-            experience.
-        </p>
+        <!-- CALL PACKAGE SUCCESS -->
+        <div id="call-success-container" class="hidden animate-fadeIn stagger-2">
+            <div
+                class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-8 md:p-10 rounded-3xl border-2 border-santa-gold/30 shadow-2xl backdrop-blur-sm space-y-6">
 
-        <!-- CONTAINER FOR CALL/CODE INSTRUCTIONS -->
-        <div id="call-fulfillment-container"
-            class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl space-y-6">
+                <div class="flex items-center justify-center gap-3 mb-4">
+                    <i data-lucide="phone-call" class="w-8 h-8 text-santa-gold"></i>
+                    <h2 class="text-3xl font-bold text-santa-gold">Your Live Call is Ready!</h2>
+                </div>
 
-            <h2 id="fulfillment-header" class="text-2xl font-semibold mb-4 text-santa-gold"></h2>
+                <!-- Access Code Display -->
+                <div
+                    class="bg-gradient-to-br from-santa-red/20 to-red-900/20 p-8 rounded-2xl border-2 border-santa-red shadow-xl">
+                    <p class="text-sm text-gray-400 uppercase tracking-widest mb-2">Your Private Access Code</p>
+                    <p id="access-code-display"
+                        class="text-7xl md:text-8xl font-mono font-bold text-santa-red tracking-wider">
+                        ----
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-white/10">
+                        <p class="text-gray-300 mb-2">📞 Santa's Hotline:</p>
+                        <p id="hotline-number" class="text-2xl md:text-3xl font-bold text-white">+1 (438) 795-1562</p>
+                    </div>
+                </div>
 
-            <!-- --- ACCESS CODE DISPLAY (Visible for Bundle/Call) --- -->
-            <div id="code-display-block" class="bg-slate-800/80 p-6 rounded-xl mb-4 border-2 border-santa-red hidden">
-                <p class="text-sm text-gray-400 uppercase tracking-widest">Your Private Call Code:</p>
-                <p id="access-code-display" class="text-6xl font-mono font-bold text-santa-red animate-pulse-slow">
-                    Loading...
+                <!-- Instructions -->
+                <div class="text-left space-y-4 bg-slate-800/50 p-6 rounded-xl border border-white/5">
+                    <h3 class="text-xl font-semibold text-santa-gold flex items-center gap-2">
+                        <i data-lucide="list-checks" class="w-5 h-5"></i>
+                        How to Connect with Santa:
+                    </h3>
+                    <ol class="space-y-3 text-gray-300 text-lg">
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">1</span>
+                            <span><span class="font-semibold text-white">Find a quiet spot</span> with your child and
+                                hand them the phone.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">2</span>
+                            <span>Dial the Santa Hotline: <span class="font-bold text-white">+1 (438)
+                                    795-1562</span></span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">3</span>
+                            <span>Enter your <span class="font-bold text-white">4-digit Access Code</span> when prompted
+                                by Santa's Helper.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">4</span>
+                            <span class="font-semibold text-santa-gold">Experience the magic! ✨</span>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Overage Policy -->
+                <div id="overage-policy"
+                    class="text-sm text-gray-300 bg-slate-900/50 p-4 rounded-lg border border-white/5">
+                    <!-- Policy details loaded here by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- VIDEO PACKAGE SUCCESS -->
+        <div id="video-success-container" class="hidden animate-fadeIn stagger-2">
+            <div
+                class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-8 md:p-10 rounded-3xl border-2 border-purple-500/30 shadow-2xl backdrop-blur-sm space-y-6">
+
+                <div class="flex items-center justify-center gap-3 mb-4">
+                    <i data-lucide="video" class="w-8 h-8 text-purple-400"></i>
+                    <h2 class="text-3xl font-bold text-purple-400">Your Santa Video is On Its Way!</h2>
+                </div>
+
+                <!-- Video Icon -->
+                <div
+                    class="w-32 h-32 mx-auto bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-2xl flex items-center justify-center border-2 border-purple-400/30">
+                    <i data-lucide="sparkles" class="w-16 h-16 text-purple-400"></i>
+                </div>
+
+                <!-- Important Notice -->
+                <div
+                    class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-6 rounded-xl border border-purple-400/20">
+                    <div class="flex items-start gap-3 mb-4">
+                        <i data-lucide="mail" class="w-6 h-6 text-purple-400 flex-shrink-0 mt-1"></i>
+                        <div class="text-left">
+                            <h3 class="text-xl font-semibold text-purple-300 mb-2">Video Delivery Information</h3>
+                            <p class="text-gray-300 leading-relaxed">
+                                Your personalized Santa video will be <span class="font-bold text-white">sent to your
+                                    email within 24 hours</span>.
+                                Our elves are working hard to create something truly magical for you!
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 text-sm text-gray-400 bg-slate-900/50 p-3 rounded-lg">
+                        <i data-lucide="inbox" class="w-4 h-4"></i>
+                        <span>Check your inbox at: <span id="video-email-display"
+                                class="font-semibold text-white ml-1"></span></span>
+                    </div>
+                </div>
+
+                <!-- What to Expect -->
+                <div class="text-left space-y-3 bg-slate-800/50 p-6 rounded-xl border border-white/5">
+                    <h3 class="text-lg font-semibold text-purple-300 flex items-center gap-2">
+                        <i data-lucide="info" class="w-5 h-5"></i>
+                        What to Expect:
+                    </h3>
+                    <ul class="space-y-2 text-gray-300">
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
+                            <span>A personalized video message from Santa himself</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
+                            <span>High-quality video you can download and keep forever</span>
+                        </li>
+                        <li class="flex items-start gap-2">
+                            <i data-lucide="check-circle" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
+                            <span>Delivery within 24 hours to your email inbox</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- BUNDLE PACKAGE SUCCESS -->
+        <div id="bundle-success-container" class="hidden animate-fadeIn stagger-2">
+            <div
+                class="bg-gradient-to-br from-slate-900/90 to-slate-800/90 p-8 md:p-10 rounded-3xl border-2 border-santa-gold/30 shadow-2xl backdrop-blur-sm space-y-6">
+
+                <div class="flex items-center justify-center gap-3 mb-4">
+                    <i data-lucide="gift" class="w-8 h-8 text-santa-gold"></i>
+                    <h2 class="text-3xl font-bold text-santa-gold">The Complete Santa Experience!</h2>
+                </div>
+
+                <!-- Access Code Display -->
+                <div
+                    class="bg-gradient-to-br from-santa-red/20 to-red-900/20 p-8 rounded-2xl border-2 border-santa-red shadow-xl">
+                    <p class="text-sm text-gray-400 uppercase tracking-widest mb-2">Your Private Access Code</p>
+                    <p id="bundle-access-code-display"
+                        class="text-7xl md:text-8xl font-mono font-bold text-santa-red tracking-wider">
+                        ----
+                    </p>
+                    <div class="mt-6 pt-6 border-t border-white/10">
+                        <p class="text-gray-300 mb-2">📞 Santa's Hotline:</p>
+                        <p id="bundle-hotline-number" class="text-2xl md:text-3xl font-bold text-white">+1 (438)
+                            795-1562</p>
+                    </div>
+                </div>
+
+                <!-- Call Instructions -->
+                <div class="text-left space-y-4 bg-slate-800/50 p-6 rounded-xl border border-white/5">
+                    <h3 class="text-xl font-semibold text-santa-gold flex items-center gap-2">
+                        <i data-lucide="phone-call" class="w-5 h-5"></i>
+                        Call Santa Now - Unlimited Time!
+                    </h3>
+                    <ol class="space-y-3 text-gray-300 text-lg">
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">1</span>
+                            <span><span class="font-semibold text-white">Find a quiet spot</span> with your child and
+                                hand them the phone.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">2</span>
+                            <span>Dial the Santa Hotline: <span class="font-bold text-white">+1 (438)
+                                    795-1562</span></span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">3</span>
+                            <span>Enter your <span class="font-bold text-white">4-digit Access Code</span> when
+                                prompted.</span>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <span
+                                class="flex-shrink-0 w-8 h-8 bg-santa-red rounded-full flex items-center justify-center font-bold text-white">4</span>
+                            <span class="font-semibold text-santa-gold">Enjoy unlimited talk time with Santa! ✨</span>
+                        </li>
+                    </ol>
+                </div>
+
+                <!-- Bundle Benefits -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- SMS Follow-ups -->
+                    <div
+                        class="bg-gradient-to-br from-blue-900/20 to-indigo-900/20 p-5 rounded-xl border border-blue-400/20">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="message-square-more" class="w-6 h-6 text-blue-400 flex-shrink-0 mt-1"></i>
+                            <div class="text-left">
+                                <h4 class="text-lg font-semibold text-blue-300 mb-2">Personalized SMS Messages</h4>
+                                <p class="text-sm text-gray-300 leading-relaxed">
+                                    Your child will receive <span class="font-bold text-white">personalized text
+                                        messages from Santa</span> leading up to Christmas, keeping the magic alive!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Call Recording & Transcript -->
+                    <div
+                        class="bg-gradient-to-br from-emerald-900/20 to-teal-900/20 p-5 rounded-xl border border-emerald-400/20">
+                        <div class="flex items-start gap-3">
+                            <i data-lucide="mic" class="w-6 h-6 text-emerald-400 flex-shrink-0 mt-1"></i>
+                            <div class="text-left">
+                                <h4 class="text-lg font-semibold text-emerald-300 mb-2">Audio Keepsake</h4>
+                                <p class="text-sm text-gray-300 leading-relaxed">
+                                    <span class="font-bold text-white">Call recording & transcript</span> will be sent
+                                    to your email within 24 hours. Relive the magic anytime!
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Delivery Notice -->
+                <div
+                    class="bg-gradient-to-r from-purple-900/30 to-pink-900/30 p-6 rounded-xl border border-purple-400/20">
+                    <div class="flex items-start gap-3">
+                        <i data-lucide="mail" class="w-6 h-6 text-purple-400 flex-shrink-0 mt-1"></i>
+                        <div class="text-left flex-1">
+                            <h3 class="text-xl font-semibold text-purple-300 mb-2">
+                                <i data-lucide="sparkles" class="w-5 h-5 inline mr-1"></i>
+                                What's Coming to Your Email
+                            </h3>
+                            <ul class="space-y-2 text-gray-300 text-sm mb-3">
+                                <li class="flex items-start gap-2">
+                                    <i data-lucide="check-circle"
+                                        class="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                    <span><span class="font-bold text-white">Call recording</span> - Download and listen
+                                        to the magical conversation</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i data-lucide="check-circle"
+                                        class="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                    <span><span class="font-bold text-white">Full transcript</span> - Read every word
+                                        Santa said</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <i data-lucide="check-circle"
+                                        class="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5"></i>
+                                    <span><span class="font-bold text-white">Delivery within 24 hours</span> to your
+                                        inbox</span>
+                                </li>
+                            </ul>
+                            <div class="flex items-center gap-2 text-sm text-gray-400 bg-slate-900/50 p-3 rounded-lg">
+                                <i data-lucide="inbox" class="w-4 h-4"></i>
+                                <span>Check your inbox at: <span id="bundle-email-display"
+                                        class="font-semibold text-white ml-1"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="animate-fadeIn stagger-3">
+            <div class="bg-slate-900/50 border border-white/10 rounded-xl p-5 backdrop-blur-sm">
+                <p class="text-gray-300 flex items-center justify-center gap-2 flex-wrap">
+                    <i data-lucide="help-circle" class="w-5 h-5 text-santa-gold"></i>
+                    <span>Questions? Contact us at:</span>
+                    <a href="mailto:info@callsanta.us"
+                        class="font-semibold text-santa-gold hover:text-santa-red transition-colors">
+                        info@callsanta.us
+                    </a>
                 </p>
-                <p class="text-sm text-gray-400 mt-3">Call the Santa Hotline at: <span id="hotline-number"
-                        class="font-bold text-white">(555) 555-SANTA</span></p>
-            </div>
-
-            <!-- --- INSTRUCTIONS LIST (Changes based on package) --- -->
-            <ol id="instructions-list" class="text-left space-y-3 text-gray-300 text-lg"></ol>
-
-            <div id="overage-policy" class="text-sm text-gray-300 mb-6">
-                <!-- Policy details loaded here by JS -->
             </div>
         </div>
 
-        <!-- VIDEO ONLY INSTRUCTIONS -->
-        <div id="video-only-block" class="bg-slate-900 p-8 rounded-2xl border border-white/10 shadow-2xl hidden">
-            <h2 class="text-2xl font-semibold text-santa-gold mb-4">Your Video Keepsake is Generating!</h2>
-
-            <!-- Progress Bar Container -->
-            <div class="w-full bg-slate-800 rounded-full h-6 mb-4 overflow-hidden border border-white/10 relative">
-                <!-- "Sugar Cane" Color Bar (Light Green/Yellowish) -->
-                <div id="video-progress-bar"
-                    class="bg-[#F9FFF3] h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_15px_rgba(249,255,243,0.5)]"
-                    style="width: 5%"></div>
-            </div>
-
-            <p id="video-status-text" class="text-lg text-gray-300 animate-pulse">Santa is checking his list twice...
-            </p>
-            <p class="text-sm text-gray-500 mt-2">Please stay on this page. This usually takes about 1 minute.</p>
+        <!-- Return Home Button -->
+        <div class="animate-fadeIn stagger-4">
+            <a href="/"
+                class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-santa-red to-red-700 hover:from-red-700 hover:to-santa-red rounded-xl font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105">
+                <i data-lucide="home" class="w-5 h-5"></i>
+                Return to Home
+            </a>
         </div>
-
-        <div id="email-notice" class="bg-santa-red/10 border border-santa-red/30 rounded-xl p-4 mt-6 hidden">
-            <p class="text-sm text-gray-300">
-                <i data-lucide="check-circle" class="w-4 h-4 inline mr-2"></i>
-                <span id="email-notice-text">Your order is confirmed.</span>
-            </p>
-        </div>
-
-        <a href="/"
-            class="inline-block mt-8 px-8 py-4 bg-santa-red hover:bg-red-700 rounded-xl font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl">
-            Return to Home
-        </a>
     </div>
 
     <script>
+        // Initialize Lucide icons
         lucide.createIcons();
+
+        // Create snowflakes
+        function createSnowflakes() {
+            const container = document.getElementById('snowflakes-container');
+            const snowflakeCount = 20;
+
+            for (let i = 0; i < snowflakeCount; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.className = 'snowflake';
+                snowflake.innerHTML = '❄';
+                snowflake.style.left = Math.random() * 100 + '%';
+                snowflake.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                snowflake.style.animationDelay = Math.random() * 5 + 's';
+                container.appendChild(snowflake);
+            }
+        }
+        createSnowflakes();
 
         // --- CONFIGURATION ---
         const GET_ORDER_DETAILS_URL = '/.netlify/functions/get-order-details';
-        // NOTE: Replace the number below with the actual Twilio number you purchased
         const TWILIO_PHONE_NUMBER = "+1 (438) 795-1562";
-
-        // --- INSTRUCTION SETS ---
-        const INSTRUCTIONS_CALL = `
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">1.</span>
-                <span><span class="font-bold">Find a quiet spot</span> with your child and hand them the phone.</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">2.</span>
-                <span>Dial the Santa Hotline number: <span class="font-bold">${TWILIO_PHONE_NUMBER}</span>.</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">3.</span>
-                <span>Enter the <span class="font-bold">4-digit Access Code</span> when prompted by Santa's Helper.</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">4.</span>
-                <span>Experience the magic!</span>
-            </li>
-        `;
-        const INSTRUCTIONS_VIDEO = `
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">1.</span>
-                <span>Your personalized video is now rendering at the North Pole.</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">2.</span>
-                <span><strong>Please wait here</strong> (approx. 1 minute). The video will pop up automatically!</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">3.</span>
-                <span>Gather your family, dim the lights, and hit play!</span>
-            </li>
-        `;
 
         // --- MAIN FETCH FUNCTION ---
         async function fetchOrderDetails() {
             const urlParams = new URLSearchParams(window.location.search);
             const paymentIntentId = urlParams.get('payment_intent');
 
-            const fulfillmentHeader = document.getElementById('fulfillment-header');
-            const codeDisplayBlock = document.getElementById('code-display-block');
-            const codeDisplay = document.getElementById('access-code-display');
-            const overagePolicy = document.getElementById('overage-policy');
-            const instructionsList = document.getElementById('instructions-list');
-            const greetingMessage = document.getElementById('greeting-message');
-            const videoOnlyBlock = document.getElementById('video-only-block');
-            const emailDisplay = document.getElementById('email-display');
-            const emailListDisplay = document.getElementById('email-list-display');
-            const callFulfillmentContainer = document.getElementById('call-fulfillment-container');
-            const hotlineNumberDisplay = document.getElementById('hotline-number');
-            const emailNotice = document.getElementById('email-notice');
-            const emailNoticeText = document.getElementById('email-notice-text');
-
-            // Set the phone number display immediately
-            if (hotlineNumberDisplay) hotlineNumberDisplay.innerText = TWILIO_PHONE_NUMBER;
-
             if (!paymentIntentId) {
-                if (fulfillmentHeader) fulfillmentHeader.innerText = "Error: Payment ID Missing.";
-                if (codeDisplay) codeDisplay.innerText = "ERROR";
+                console.error('No payment intent ID found');
+                showFallbackMessage();
                 return;
             }
 
             try {
-                // Try to fetch details from the backend using the Payment Intent ID
+                // Try to fetch details from the backend
                 const response = await fetch(`${GET_ORDER_DETAILS_URL}?payment_intent_id=${paymentIntentId}`);
 
                 // If backend function doesn't exist (404), fall back to localStorage
@@ -172,20 +435,7 @@
                         const data = JSON.parse(orderData);
                         displayOrderDetails(data);
                     } else {
-                        if (fulfillmentHeader) fulfillmentHeader.innerText = "Order Details Unavailable";
-                        if (codeDisplay) codeDisplay.innerText = "Check your email for access code";
-                        if (instructionsList) instructionsList.innerHTML = `
-                            <li class="flex items-start gap-3">
-                                <span class="text-santa-red font-bold">•</span>
-                                <span>Your order was successful! Check your email for your access code.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="text-santa-red font-bold">•</span>
-                                <span>Call <span class="font-bold">${TWILIO_PHONE_NUMBER}</span> and enter your 4-digit code.</span>
-                            </li>
-                        `;
-                        if (codeDisplayBlock) codeDisplayBlock.classList.remove('hidden');
-                        if (callFulfillmentContainer) callFulfillmentContainer.classList.remove('hidden');
+                        showFallbackMessage();
                     }
                     return;
                 }
@@ -193,9 +443,8 @@
                 const data = await response.json();
 
                 if (data.error || !data.packageId) {
-                    if (fulfillmentHeader) fulfillmentHeader.innerText = "Error: Order not found.";
-                    if (codeDisplay) codeDisplay.innerText = "ERROR";
                     console.error("Order lookup failed:", data.error);
+                    showFallbackMessage();
                     return;
                 }
 
@@ -209,336 +458,109 @@
                     const data = JSON.parse(orderData);
                     displayOrderDetails(data);
                 } else {
-                    if (codeDisplay) codeDisplay.innerText = "Error loading details. Check your email.";
+                    showFallbackMessage();
                 }
             }
         }
 
         function displayOrderDetails(data) {
-            const fulfillmentHeader = document.getElementById('fulfillment-header');
-            const codeDisplayBlock = document.getElementById('code-display-block');
-            const codeDisplay = document.getElementById('access-code-display');
-            const overagePolicy = document.getElementById('overage-policy');
-            const instructionsList = document.getElementById('instructions-list');
             const greetingMessage = document.getElementById('greeting-message');
-            const videoOnlyBlock = document.getElementById('video-only-block');
-            const emailDisplay = document.getElementById('email-display');
-            const callFulfillmentContainer = document.getElementById('call-fulfillment-container');
-            const emailNotice = document.getElementById('email-notice');
-            const emailNoticeText = document.getElementById('email-notice-text');
+            const callContainer = document.getElementById('call-success-container');
+            const videoContainer = document.getElementById('video-success-container');
+            const bundleContainer = document.getElementById('bundle-success-container');
 
-            // --- UPDATE GREETING AND EMAIL ---
-            if (greetingMessage) greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
-            // Only set emailDisplay if it exists (it's in the static HTML of video-only-block)
-            if (emailDisplay) emailDisplay.innerText = data.parentEmail;
-
-            // --- CONDITIONAL FULFILLMENT LOGIC ---
-            const isCallPackage = (data.packageId === 'bundle' || data.packageId === 'call');
-            const isVideoPackage = (data.packageId === 'bundle' || data.packageId === 'video');
-
-            // Case 1 & 2: Call or Bundle
-            if (isCallPackage) {
-                // Show Call-specific block and Code
-                if (codeDisplayBlock) codeDisplayBlock.classList.remove('hidden');
-                if (callFulfillmentContainer) callFulfillmentContainer.classList.remove('hidden');
-                if (videoOnlyBlock) videoOnlyBlock.classList.add('hidden');
-
-                if (instructionsList) instructionsList.innerHTML = INSTRUCTIONS_CALL;
-                if (codeDisplay) codeDisplay.innerText = data.accessCode;
-                if (fulfillmentHeader) fulfillmentHeader.innerText = "Your Live Call Access Code";
-
-                // Overage Policy
-                if (overagePolicy) {
-                    if (data.overageOption === 'overage_accepted') {
-                        overagePolicy.innerHTML = '<strong>Important:</strong> Your call may exceed 5 minutes. You agreed to pay $1.00 USD per minute for time over 5 minutes.';
-                    } else {
-                        overagePolicy.innerHTML = '<strong>Policy:</strong> Your call will automatically disconnect after 5 minutes to prevent extra charges.';
-                    }
-                }
-
-                // If it's a Bundle, we also note the video is coming
-                if (data.packageId === 'bundle') {
-                    if (fulfillmentHeader) fulfillmentHeader.innerText = "Bundle Access: Call Now, Video Arrives Soon";
-                    if (emailNotice) emailNotice.classList.remove('hidden');
-                    if (emailNoticeText) emailNoticeText.innerText = 'Your confirmation email and video link will be sent to your inbox.';
-                }
-
+            // Update greeting
+            if (greetingMessage && data.childName) {
+                greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
             }
 
-            // Case 3: Video Only (Must check !isCallPackage to prevent bundle overwriting this)
-            if (isVideoPackage && !isCallPackage) {
-                // Hide Call-specific block and show Video only block
-                if (callFulfillmentContainer) callFulfillmentContainer.classList.add('hidden');
-                if (videoOnlyBlock) videoOnlyBlock.classList.remove('hidden');
-                if (fulfillmentHeader) fulfillmentHeader.innerText = "Your Video Keepsake is Generating!";
+            // Hide all containers first
+            callContainer.classList.add('hidden');
+            videoContainer.classList.add('hidden');
+            bundleContainer.classList.add('hidden');
 
-                // Inject the email directly into the string
-                const instructionsWithEmail = INSTRUCTIONS_VIDEO.replace('<span id="email-list-display"></span>', `<span class="font-bold">${data.parentEmail}</span>`);
-                if (instructionsList) instructionsList.innerHTML = instructionsWithEmail;
+            // Display appropriate container based on package type
+            if (data.packageId === 'call') {
+                displayCallSuccess(data);
+            } else if (data.packageId === 'video') {
+                displayVideoSuccess(data);
+            } else if (data.packageId === 'bundle') {
+                displayBundleSuccess(data);
+            }
+        }
 
-                if (overagePolicy) overagePolicy.innerHTML = ''; // Clear policy as it's video only
-                if (emailNotice) emailNotice.classList.remove('hidden');
-                if (emailNoticeText) emailNoticeText.innerText = 'Your video link will be sent to your inbox shortly.';
+        function displayCallSuccess(data) {
+            const container = document.getElementById('call-success-container');
+            const accessCodeDisplay = document.getElementById('access-code-display');
+            const overagePolicy = document.getElementById('overage-policy');
+
+            container.classList.remove('hidden');
+
+            if (accessCodeDisplay && data.accessCode) {
+                accessCodeDisplay.innerText = data.accessCode;
             }
 
-            // --- VIDEO POLLING (For Bundle & Video) ---
-            if (isVideoPackage) {
-                // Show video block if not already shown (for Bundle)
-                if (isCallPackage) {
-                    if (videoOnlyBlock) {
-                        videoOnlyBlock.classList.remove('hidden');
-                        // Adjust text for bundle
-                        const vHeader = videoOnlyBlock.querySelector('h2');
-                        if (vHeader) vHeader.innerText = "Bonus: Your Santa Video is Generating!";
-                        // We want to target the description paragraph, not the status text. 
-                        // The status text has id="video-status-text".
-                        // Let's just append a note or leave the default text which is "Santa is checking his list..."
-                        // --- INSTRUCTION SETS ---
-                        const INSTRUCTIONS_CALL = `
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">1.</span>
-                <span><span class="font-bold">Find a quiet spot</span> with your child and hand them the phone.</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">2.</span>
-                <span>Dial the Santa Hotline number: <span class="font-bold">${TWILIO_PHONE_NUMBER}</span>.</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">3.</span>
-                <span>Enter the <span class="font-bold">4-digit Access Code</span> when prompted by Santa's Helper.</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">4.</span>
-                <span>Experience the magic!</span>
-            </li>
-        `;
-                        const INSTRUCTIONS_VIDEO = `
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">1.</span>
-                <span>Your personalized video is now rendering at the North Pole.</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">2.</span>
-                <span><strong>Please wait here</strong> (approx. 1 minute). The video will pop up automatically!</span>
-            </li>
-            <li class="flex items-start gap-3">
-                <span class="text-santa-red font-bold">3.</span>
-                <span>Gather your family, dim the lights, and hit play!</span>
-            </li>
-        `;
+            // Display overage policy
+            if (overagePolicy) {
+                if (data.overageOption === 'unlimited') {
+                    overagePolicy.innerHTML = `
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="infinity" class="w-5 h-5 text-green-400 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <strong class="text-white">Unlimited Talk Time:</strong> You selected unlimited call time. Talk as long as you'd like with no time limits!
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    overagePolicy.innerHTML = `
+                        <div class="flex items-start gap-2">
+                            <i data-lucide="info" class="w-5 h-5 text-blue-400 flex-shrink-0 mt-0.5"></i>
+                            <div>
+                                <strong class="text-white">Policy:</strong> Your call will automatically disconnect after 5 minutes to prevent extra charges.
+                            </div>
+                        </div>
+                    `;
+                }
+                lucide.createIcons();
+            }
+        }
 
-                        // --- MAIN FETCH FUNCTION ---
-                        async function fetchOrderDetails() {
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const paymentIntentId = urlParams.get('payment_intent');
+        function displayVideoSuccess(data) {
+            const container = document.getElementById('video-success-container');
+            const emailDisplay = document.getElementById('video-email-display');
 
-                            const fulfillmentHeader = document.getElementById('fulfillment-header');
-                            const codeDisplayBlock = document.getElementById('code-display-block');
-                            const codeDisplay = document.getElementById('access-code-display');
-                            const overagePolicy = document.getElementById('overage-policy');
-                            const instructionsList = document.getElementById('instructions-list');
-                            const greetingMessage = document.getElementById('greeting-message');
-                            const videoOnlyBlock = document.getElementById('video-only-block');
-                            const emailDisplay = document.getElementById('email-display');
-                            const emailListDisplay = document.getElementById('email-list-display');
-                            const callFulfillmentContainer = document.getElementById('call-fulfillment-container');
-                            const hotlineNumberDisplay = document.getElementById('hotline-number');
-                            const emailNotice = document.getElementById('email-notice');
-                            const emailNoticeText = document.getElementById('email-notice-text');
+            container.classList.remove('hidden');
 
-                            // Set the phone number display immediately
-                            if (hotlineNumberDisplay) hotlineNumberDisplay.innerText = TWILIO_PHONE_NUMBER;
+            if (emailDisplay && data.parentEmail) {
+                emailDisplay.innerText = data.parentEmail;
+            }
+        }
 
-                            if (!paymentIntentId) {
-                                if (fulfillmentHeader) fulfillmentHeader.innerText = "Error: Payment ID Missing.";
-                                if (codeDisplay) codeDisplay.innerText = "ERROR";
-                                return;
-                            }
+        function displayBundleSuccess(data) {
+            const container = document.getElementById('bundle-success-container');
+            const accessCodeDisplay = document.getElementById('bundle-access-code-display');
+            const emailDisplay = document.getElementById('bundle-email-display');
 
-                            try {
-                                // Try to fetch details from the backend using the Payment Intent ID
-                                const response = await fetch(`${GET_ORDER_DETAILS_URL}?payment_intent_id=${paymentIntentId}`);
+            container.classList.remove('hidden');
 
-                                // If backend function doesn't exist (404), fall back to localStorage
-                                if (!response.ok) {
-                                    console.log('Backend function not available, using localStorage fallback');
-                                    const orderData = localStorage.getItem('lastOrderData');
-                                    if (orderData) {
-                                        const data = JSON.parse(orderData);
-                                        displayOrderDetails(data);
-                                    } else {
-                                        if (fulfillmentHeader) fulfillmentHeader.innerText = "Order Details Unavailable";
-                                        if (codeDisplay) codeDisplay.innerText = "Check your email for access code";
-                                        if (instructionsList) instructionsList.innerHTML = `
-                            <li class="flex items-start gap-3">
-                                <span class="text-santa-red font-bold">•</span>
-                                <span>Your order was successful! Check your email for your access code.</span>
-                            </li>
-                            <li class="flex items-start gap-3">
-                                <span class="text-santa-red font-bold">•</span>
-                                <span>Call <span class="font-bold">${TWILIO_PHONE_NUMBER}</span> and enter your 4-digit code.</span>
-                            </li>
-                        `;
-                                        if (codeDisplayBlock) codeDisplayBlock.classList.remove('hidden');
-                                        if (callFulfillmentContainer) callFulfillmentContainer.classList.remove('hidden');
-                                    }
-                                    return;
-                                }
+            if (accessCodeDisplay && data.accessCode) {
+                accessCodeDisplay.innerText = data.accessCode;
+            }
 
-                                const data = await response.json();
+            if (emailDisplay && data.parentEmail) {
+                emailDisplay.innerText = data.parentEmail;
+            }
+        }
 
-                                if (data.error || !data.packageId) {
-                                    if (fulfillmentHeader) fulfillmentHeader.innerText = "Error: Order not found.";
-                                    if (codeDisplay) codeDisplay.innerText = "ERROR";
-                                    console.error("Order lookup failed:", data.error);
-                                    return;
-                                }
+        function showFallbackMessage() {
+            const greetingMessage = document.getElementById('greeting-message');
+            if (greetingMessage) {
+                greetingMessage.innerHTML = 'Your order was successful! Check your email for details.';
+            }
+        }
 
-                                displayOrderDetails(data);
-
-                            } catch (e) {
-                                console.error("Network or parsing error:", e);
-                                // Fallback to localStorage
-                                const orderData = localStorage.getItem('lastOrderData');
-                                if (orderData) {
-                                    const data = JSON.parse(orderData);
-                                    displayOrderDetails(data);
-                                } else {
-                                    if (codeDisplay) codeDisplay.innerText = "Error loading details. Check your email.";
-                                }
-                            }
-                        }
-
-                        function displayOrderDetails(data) {
-                            const fulfillmentHeader = document.getElementById('fulfillment-header');
-                            const codeDisplayBlock = document.getElementById('code-display-block');
-                            const codeDisplay = document.getElementById('access-code-display');
-                            const overagePolicy = document.getElementById('overage-policy');
-                            const instructionsList = document.getElementById('instructions-list');
-                            const greetingMessage = document.getElementById('greeting-message');
-                            const videoOnlyBlock = document.getElementById('video-only-block');
-                            const emailDisplay = document.getElementById('email-display');
-                            const callFulfillmentContainer = document.getElementById('call-fulfillment-container');
-                            const emailNotice = document.getElementById('email-notice');
-                            const emailNoticeText = document.getElementById('email-notice-text');
-
-                            // --- UPDATE GREETING AND EMAIL ---
-                            if (greetingMessage) greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
-                            // Only set emailDisplay if it exists (it's in the static HTML of video-only-block)
-                            if (emailDisplay) emailDisplay.innerText = data.parentEmail;
-
-                            // --- CONDITIONAL FULFILLMENT LOGIC ---
-                            const isCallPackage = (data.packageId === 'bundle' || data.packageId === 'call');
-                            const isVideoPackage = (data.packageId === 'bundle' || data.packageId === 'video');
-
-                            // Case 1 & 2: Call or Bundle
-                            if (isCallPackage) {
-                                // Show Call-specific block and Code
-                                if (codeDisplayBlock) codeDisplayBlock.classList.remove('hidden');
-                                if (callFulfillmentContainer) callFulfillmentContainer.classList.remove('hidden');
-                                if (videoOnlyBlock) videoOnlyBlock.classList.add('hidden');
-
-                                if (instructionsList) instructionsList.innerHTML = INSTRUCTIONS_CALL;
-                                if (codeDisplay) codeDisplay.innerText = data.accessCode;
-                                if (fulfillmentHeader) fulfillmentHeader.innerText = "Your Live Call Access Code";
-
-                                // Overage Policy
-                                if (overagePolicy) {
-                                    if (data.overageOption === 'overage_accepted') {
-                                        overagePolicy.innerHTML = '<strong>Important:</strong> Your call may exceed 5 minutes. You agreed to pay $1.00 USD per minute for time over 5 minutes.';
-                                    } else {
-                                        overagePolicy.innerHTML = '<strong>Policy:</strong> Your call will automatically disconnect after 5 minutes to prevent extra charges.';
-                                    }
-                                }
-
-                                // If it's a Bundle, we also note the video is coming
-                                if (data.packageId === 'bundle') {
-                                    if (fulfillmentHeader) fulfillmentHeader.innerText = "Bundle Access: Call Now, Video Arrives Soon";
-                                    if (emailNotice) emailNotice.classList.remove('hidden');
-                                    if (emailNoticeText) emailNoticeText.innerText = 'Your confirmation email and video link will be sent to your inbox.';
-                                }
-
-                            }
-
-                            // Case 3: Video Only (Must check !isCallPackage to prevent bundle overwriting this)
-                            if (isVideoPackage && !isCallPackage) {
-                                // Hide Call-specific block and show Video only block
-                                if (callFulfillmentContainer) callFulfillmentContainer.classList.add('hidden');
-                                if (videoOnlyBlock) videoOnlyBlock.classList.remove('hidden');
-                                if (fulfillmentHeader) fulfillmentHeader.innerText = "Your Video Keepsake is Generating!";
-
-                                // Inject the email directly into the string
-                                const instructionsWithEmail = INSTRUCTIONS_VIDEO.replace('<span id="email-list-display"></span>', `<span class="font-bold">${data.parentEmail}</span>`);
-                                if (instructionsList) instructionsList.innerHTML = instructionsWithEmail;
-
-                                if (overagePolicy) overagePolicy.innerHTML = ''; // Clear policy as it's video only
-                                if (emailNotice) emailNotice.classList.remove('hidden');
-                                if (emailNoticeText) emailNoticeText.innerText = 'Your video link will be sent to your inbox shortly.';
-                            }
-
-                            // --- VIDEO POLLING (For Bundle & Video) ---
-                            if (isVideoPackage) {
-                                // Show video block if not already shown (for Bundle)
-                                if (isCallPackage) {
-                                    if (videoOnlyBlock) {
-                                        videoOnlyBlock.classList.remove('hidden');
-                                        // Adjust text for bundle
-                                        const vHeader = videoOnlyBlock.querySelector('h2');
-                                        if (vHeader) vHeader.innerText = "Bonus: Your Santa Video is Generating!";
-                                        // We want to target the description paragraph, not the status text. 
-                                        // The status text has id="video-status-text".
-                                        // Let's just append a note or leave the default text which is "Santa is checking his list..."
-                                    }
-                                }
-
-                                startVideoPolling(data.order_id || getOrderIdFromUrl());
-                            }
-                        }
-
-                        function getOrderIdFromUrl() {
-                            return null;
-                        }
-
-                        async function startVideoPolling(orderId) {
-                            if (!orderId) {
-                                console.warn("No order ID available for confirmation email.");
-                                return;
-                            }
-
-                            const videoBlock = document.getElementById('video-only-block');
-                            if (!videoBlock) return;
-
-                            const statusHeader = videoBlock.querySelector('h2');
-                            const statusText = document.getElementById('video-status-text');
-                            const progressBar = document.getElementById('video-progress-bar');
-
-                            // Hide progress bar as it's no longer generating automatically
-                            if (progressBar && progressBar.parentElement) {
-                                progressBar.parentElement.style.display = 'none';
-                            }
-
-                            // Update UI immediately
-                            if (statusHeader) statusHeader.innerText = "Order Confirmed!";
-                            if (statusText) {
-                                statusText.innerText = "Santa has received your request. Your video is being created manually and will be emailed to you soon.";
-                                statusText.classList.remove('animate-pulse');
-                            }
-
-                            // Trigger Confirmation Email
-                            try {
-                                const response = await fetch('/.netlify/functions/send-confirmation-email', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({ order_id: orderId })
-                                });
-                                const data = await response.json();
-                                console.log("Email confirmation status:", data);
-                            } catch (e) {
-                                console.error("Error sending confirmation email:", e);
-                            }
-                        }
-
-                        document.addEventListener('DOMContentLoaded', fetchOrderDetails);
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', fetchOrderDetails);
     </script>
 </body>
 
