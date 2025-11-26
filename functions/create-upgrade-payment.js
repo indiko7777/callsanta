@@ -30,7 +30,14 @@ exports.handler = async (event, context) => {
 
         await connectToDatabase(process.env.MONGODB_URI);
 
-        const originalOrder = await Order.findById(originalOrderId);
+        let originalOrder;
+        if (mongoose.Types.ObjectId.isValid(originalOrderId)) {
+            originalOrder = await Order.findById(originalOrderId);
+        } else {
+            // Try finding by accessCode if it's not a valid ObjectId
+            originalOrder = await Order.findOne({ accessCode: originalOrderId });
+        }
+
         if (!originalOrder) {
             return { statusCode: 404, body: JSON.stringify({ error: 'Original order not found' }) };
         }
