@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Order = require('./models/order');
 const sgMail = require('@sendgrid/mail');
+const { generateEmailTemplate } = require('./email-templates');
 
 sgMail.setApiKey(process.env.sendgrid_API);
 
@@ -16,6 +17,7 @@ const connectToDatabase = async (uri) => {
     return db;
 };
 
+// --- MAIN HANDLER ---
 exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
 
@@ -23,46 +25,94 @@ exports.handler = async (event, context) => {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    const { order_id } = JSON.parse(event.body || '{}');
+    const { order_id, email_type, test_data } = JSON.parse(event.body || '{}');
 
-    if (!order_id) {
-        return { statusCode: 400, body: JSON.stringify({ error: 'Missing order_id' }) };
+    if (!order_id && !test_data) {
+        return { statusCode: 400, body: JSON.stringify({ error: 'Missing order_id or test_data' }) };
     }
 
     try {
         await connectToDatabase(process.env.MONGODB_URI);
-        const order = await Order.findById(order_id);
 
-        if (!order) {
-            return { statusCode: 404, body: JSON.stringify({ error: 'Order not found' }) };
+        let emailData;
+        let order;
+
+        // Use test data if provided, otherwise fetch from database
+        if (test_data) {
+            emailData = test_data;
+        } else {
+            order = await Order.findById(order_id);
+            if (!order) {
+                return { statusCode: 404, body: JSON.stringify({ error: 'Order not found' }) };
+            }
+
+            // Prepare email data from order
+            const childName = order.children && order.children[0] ? order.children[0].name : 'your child';
+            const parentName = order.parentEmail ? order.parentEmail.split('@')[0] : '';
+
+            emailData = {
+                orderId: order._id.toString().slice(-8).toUpperCase(),
+                childName: childName,
+                parentName: parentName,
+                parentEmail: order.parentEmail,
+                accessCode: order.accessCode,
+                twilioNumber: process.env.TWILIO_PHONE_NUMBER || '+1 (438) 795-1562',
+                videoUrl: order.videoUrl,
+                audioUrl: order.audioUrl,
+                callDuration: order.callDuration,
+                conversationTopic: 'your conversation' // Can be enhanced with AI later
+            };
         }
 
-        // Send Confirmation Email
+        // Determine email type based on package and context
+        let emailType = email_type;
+        if (!emailType && order) {
+            if (order.packageId === 'call') {
+                emailType = 'live_call_confirmation';
+            } else if (order.packageId === 'video') {
+                emailType = order.videoUrl ? 'video_delivery' : 'video_order_confirmation';
+            } else if (order.packageId === 'bundle') {
+                // Bundle has TWO emails:
+                // 1. Initial confirmation (bundle_call_confirmation)
+                // 2. Post-call with recording (bundle_post_call)
+                emailType = order.audioUrl ? 'bundle_post_call' : 'bundle_call_confirmation';
+            }
+        }
+
+        const template = generateEmailTemplate(emailType, emailData);
+
+        if (!template) {
+            return { statusCode: 400, body: JSON.stringify({ error: 'Invalid email type' }) };
+        }
+
         const msg = {
-            to: order.parentEmail,
+            to: emailData.parentEmail,
             from: 'santa@callsanta.us',
-            subject: `Santa has received your order for ${order.childName || 'your child'}!`,
-            text: `Ho ho ho! We have received your order. Santa's elves are now working on your personalized video. It will be emailed to you shortly.`,
-            html: `
-                <div style="font-family: sans-serif; text-align: center; color: #333; max-width: 600px; margin: 0 auto;">
-                    <h1 style="color: #D42426;">Order Confirmed! 🎅</h1>
-                    <p>Ho ho ho! Thank you for your order.</p>
-                    <p>We have received your request for a personalized video for <strong>${order.children && order.children[0] ? order.children[0].name : 'your child'}</strong>.</p>
-                    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
-                        <p style="margin: 0; color: #555;"><strong>What happens next?</strong></p>
-                        <p>Santa's elves are manually crafting your video with care. You will receive another email with the download link as soon as it is ready.</p>
-                    </div>
-                    <p>Merry Christmas!</p>
-                </div>
-            `,
+            subject: template.subject,
+            text: template.text,
+            html: template.html,
         };
 
         await sgMail.send(msg);
-        console.log(`Confirmation email sent to ${order.parentEmail}`);
+        console.log(`Email sent to ${emailData.parentEmail} - Type: ${emailType}`);
+
+        // Track email in database if not test data
+        if (order && !test_data) {
+            order.emailsSent.push({
+                emailType: emailType,
+                sentAt: new Date(),
+                recipient: emailData.parentEmail
+            });
+            await order.save();
+        }
 
         return {
             statusCode: 200,
-            body: JSON.stringify({ status: 'email_sent', message: 'Confirmation email sent successfully.' })
+            body: JSON.stringify({
+                status: 'email_sent',
+                message: 'Email sent successfully.',
+                emailType: emailType
+            })
         };
 
     } catch (error) {

@@ -118,6 +118,11 @@ app.get('/', (req, res) => {
     });
 });
 
+// Serve test-email.html
+app.get('/test-email', (req, res) => {
+    res.sendFile(path.join(__dirname, 'test-email.html'));
+});
+
 // 2. Serve Static Files (Audio, CSS, JS)
 app.use(express.static(path.join(__dirname)));
 
@@ -138,7 +143,19 @@ const routes = [
     { path: '/.netlify/functions/get-order-details', handler: getOrderDetails, method: 'get' },
 
     { path: '/send-confirmation-email', handler: require('./functions/send-confirmation-email').handler, method: 'post' },
-    { path: '/.netlify/functions/send-confirmation-email', handler: require('./functions/send-confirmation-email').handler, method: 'post' }
+    { path: '/.netlify/functions/send-confirmation-email', handler: require('./functions/send-confirmation-email').handler, method: 'post' },
+
+    { path: '/fulfill-video', handler: require('./functions/fulfill-video').handler, method: 'post' },
+    { path: '/.netlify/functions/fulfill-video', handler: require('./functions/fulfill-video').handler, method: 'post' },
+
+    { path: '/save-call-data', handler: require('./functions/save-call-data').handler, method: 'post' },
+    { path: '/.netlify/functions/save-call-data', handler: require('./functions/save-call-data').handler, method: 'post' },
+
+    { path: '/send-test-email', handler: require('./functions/send-test-email').handler, method: 'post' },
+    { path: '/.netlify/functions/send-test-email', handler: require('./functions/send-test-email').handler, method: 'post' },
+
+    { path: '/preview-email', handler: require('./functions/preview-email').handler, method: 'get' },
+    { path: '/.netlify/functions/preview-email', handler: require('./functions/preview-email').handler, method: 'get' }
 ];
 
 routes.forEach(route => {

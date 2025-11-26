@@ -29,7 +29,20 @@ const OrderSchema = new mongoose.Schema({
     videoUrl: { type: String },
     didId: { type: String }, // D-ID Talk ID for polling (legacy)
     heygenVideoId: { type: String }, // HeyGen Video ID for polling
-    errorMessage: { type: String } // Error message if video generation fails
+    errorMessage: { type: String }, // Error message if video generation fails
+
+    // Call Data (from ElevenLabs)
+    conversationId: { type: String }, // ElevenLabs conversation ID
+    audioUrl: { type: String }, // Call recording URL from ElevenLabs
+    transcript: { type: String }, // Full conversation transcript
+    callDuration: { type: Number }, // Duration in seconds
+
+    // Email Tracking
+    emailsSent: [{
+        emailType: { type: String, required: true }, // 'confirmation', 'video_delivery', 'post_call'
+        sentAt: { type: Date, default: Date.now },
+        recipient: { type: String, required: true }
+    }]
 }, { timestamps: true });
 
 // TTL Index: Automatically delete orders that are still 'PENDING_PAYMENT' after 1 hour (3600 seconds)
