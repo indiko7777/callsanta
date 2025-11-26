@@ -14,8 +14,9 @@
         body {
             font-family: 'Inter', sans-serif;
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            position: relative;
+            min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
         }
 
         body::before {
@@ -25,6 +26,8 @@
             left: 0;
             right: 0;
             bottom: 0;
+            width: 100vw;
+            height: 100vh;
             background-image:
                 radial-gradient(circle at 20% 50%, rgba(239, 68, 68, 0.05) 0%, transparent 50%),
                 radial-gradient(circle at 80% 80%, rgba(34, 197, 94, 0.05) 0%, transparent 50%),
@@ -244,6 +247,44 @@
             background: #fbbf24;
             border-radius: 2px;
         }
+
+        /* Sticky floating CTA button */
+        .sticky-cta {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1000;
+            animation: floatPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes floatPulse {
+
+            0%,
+            100% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .sticky-cta.hidden {
+            display: none;
+        }
+
+        /* Ensure grid items are equal height on desktop */
+        @media (min-width: 1024px) {
+            .media-grid {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+
+            .media-grid>div {
+                height: 100%;
+            }
+        }
     </style>
 </head>
 
@@ -303,7 +344,7 @@
             </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
+        <div class="media-grid grid-cols-1 gap-6 lg:gap-8 mb-8">
 
             <!-- Audio Player Section -->
             <div id="audioSection" class="hidden">
@@ -425,14 +466,22 @@
                 </div>
 
                 <a href="/upgrade/return-call" id="returnCallBtn"
-                    class="shimmer-button inline-flex items-center justify-center gap-3 text-black font-bold text-lg py-5 px-10 rounded-full transition-all transform hover:scale-105">
-                    <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    class="shimmer-button inline-flex items-center justify-center gap-3 text-black font-bold text-base sm:text-lg py-4 px-8 sm:px-10 rounded-full transition-all transform hover:scale-105">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
                     <span>Book Return Call Now</span>
-                    <i data-lucide="arrow-right" class="w-6 h-6"></i>
+                    <i data-lucide="arrow-right" class="w-5 h-5"></i>
                 </a>
             </div>
         </div>
     </div>
+
+    <!-- Sticky Floating CTA Button -->
+    <button id="stickyCtaBtn"
+        class="sticky-cta hidden shimmer-button inline-flex items-center justify-center gap-2 text-black font-bold text-sm py-3 px-6 rounded-full transition-all shadow-2xl">
+        <i data-lucide="phone-call" class="w-4 h-4"></i>
+        <span class="hidden sm:inline">Book Return Call</span>
+        <span class="sm:hidden">Return Call</span>
+    </button>
 
     <script>
         // Create snowflakes
@@ -554,6 +603,7 @@
                 document.getElementById('loading').classList.add('hidden');
                 document.getElementById('content').classList.remove('hidden');
                 lucide.createIcons();
+                initStickyButton(); // Initialize sticky CTA button
 
             } catch (error) {
                 showError(error.message);
@@ -565,6 +615,34 @@
             document.getElementById('error').classList.remove('hidden');
             document.getElementById('errorMessage').textContent = msg;
             lucide.createIcons();
+        }
+
+        // Sticky CTA button logic
+        function initStickyButton() {
+            const stickyBtn = document.getElementById('stickyCtaBtn');
+            const upsellSection = document.querySelector('#content > div:last-child');
+
+            if (!stickyBtn || !upsellSection) return;
+
+            // Show/hide sticky button based on scroll position
+            function handleScroll() {
+                const upsellRect = upsellSection.getBoundingClientRect();
+                const isUpsellVisible = upsellRect.top < window.innerHeight && upsellRect.bottom > 0;
+
+                if (isUpsellVisible) {
+                    stickyBtn.classList.add('hidden');
+                } else {
+                    stickyBtn.classList.remove('hidden');
+                }
+            }
+
+            // Scroll to upsell section when clicked
+            stickyBtn.addEventListener('click', () => {
+                upsellSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+
+            window.addEventListener('scroll', handleScroll);
+            handleScroll(); // Initial check
         }
 
         window.addEventListener('DOMContentLoaded', loadMedia);
