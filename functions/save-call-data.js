@@ -71,22 +71,29 @@ exports.handler = async (event, context) => {
     console.log('✅ Webhook signature verified');
 
     try {
-        const payload = JSON.parse(event.body || '{}');
-        console.log('ElevenLabs Webhook Payload:', JSON.stringify(payload, null, 2));
+        const rawPayload = JSON.parse(event.body || '{}');
+        console.log('ElevenLabs Webhook Payload:', JSON.stringify(rawPayload, null, 2));
 
-        // Extract data from ElevenLabs webhook payload
-        // The exact structure may vary - adjust based on actual ElevenLabs webhook format
-        const {
-            conversation_id,
-            transcript,
-            audio_url,
-            duration_secs,
-            metadata,
-            custom_llm_extra_body
-        } = payload;
+        // Handle both flat and nested 'data' structures (ElevenLabs varies)
+        const payload = rawPayload.data ? rawPayload.data : rawPayload;
+        const isNested = !!rawPayload.data;
+
+        // Extract data with fallbacks for different payload structures
+        const conversation_id = payload.conversation_id;
+        
+        // Transcript can be in payload.transcript or payload.data.transcript
+        const transcript = payload.transcript;
+        
+        // Audio URL might not be present in 'post_call_transcription'
+        const audio_url = payload.audio_url;
+
+        // Duration is often in metadata
+        let duration_secs = payload.duration_secs;
+        if (!duration_secs && payload.metadata) {
+            duration_secs = payload.metadata.call_duration_secs;
+        }
 
         // Extract order ID from custom parameters
-        // ElevenLabs may return this in different places depending on configuration
         let orderId = null;
 
         // Helper to find key case-insensitively
@@ -97,8 +104,20 @@ exports.handler = async (event, context) => {
         };
 
         // 1. Try to find Order ID in metadata/extra_body
-        if (metadata) orderId = findKey(metadata, 'x-order-id');
-        if (!orderId && custom_llm_extra_body) orderId = findKey(custom_llm_extra_body, 'x-order-id');
+        // Check payload.metadata (flat) or payload.conversation_initiation_client_data (nested)
+        if (payload.metadata) orderId = findKey(payload.metadata, 'x-order-id');
+        
+        if (!orderId && payload.conversation_initiation_client_data) {
+            const clientData = payload.conversation_initiation_client_data;
+            if (clientData.custom_llm_extra_body) {
+                orderId = findKey(clientData.custom_llm_extra_body, 'x-order-id');
+            }
+        }
+        
+        if (!orderId && payload.custom_llm_extra_body) {
+             orderId = findKey(payload.custom_llm_extra_body, 'x-order-id');
+        }
+        
         if (!orderId) orderId = findKey(payload, 'x-order-id');
 
         // 2. Check SIP Headers/Query Params (often passed in metadata or query)
@@ -107,7 +126,18 @@ exports.handler = async (event, context) => {
 
         // 3. Fallback: Try to match by Phone Number (Caller ID)
         if (!orderId) {
-            let customerPhone = findKey(metadata, 'x-customer-phone') || findKey(queryParams, 'x-customer-phone') || payload.caller_id;
+            // Phone location varies: 
+            // Flat: payload.caller_id
+            // Nested: payload.phone_call.external_number
+            let customerPhone = findKey(payload, 'caller_id');
+            
+            if (!customerPhone && payload.phone_call) {
+                customerPhone = payload.phone_call.external_number;
+            }
+            
+            if (!customerPhone) {
+                 customerPhone = findKey(queryParams, 'x-customer-phone');
+            }
 
             if (customerPhone) {
                 console.log(`Looking up order by phone: ${customerPhone}`);
