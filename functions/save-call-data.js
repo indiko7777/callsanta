@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Order = require('./models/order');
+const crypto = require('crypto');
 
 // --- DATABASE CONNECTION ---
 let cachedDb = null;
@@ -11,6 +12,28 @@ const connectToDatabase = async (uri) => {
     });
     cachedDb = db;
     return db;
+};
+
+// --- WEBHOOK SIGNATURE VERIFICATION ---
+const verifyWebhookSignature = (payload, signature, secret) => {
+    if (!secret) {
+        console.warn('ELEVENLABS_WEBHOOK_SECRET not set - skipping signature verification');
+        return true; // Allow if no secret configured
+    }
+
+    if (!signature) {
+        console.error('No signature provided in webhook request');
+        return false;
+    }
+
+    const hmac = crypto.createHmac('sha256', secret);
+    hmac.update(payload);
+    const expectedSignature = hmac.digest('hex');
+
+    return crypto.timingSafeEqual(
+        Buffer.from(signature),
+        Buffer.from(expectedSignature)
+    );
 };
 
 // --- MAIN HANDLER ---
@@ -27,6 +50,20 @@ exports.handler = async (event, context) => {
         console.log('Invalid method for save-call-data webhook');
         return successResponse;
     }
+
+    // Verify webhook signature (HMAC)
+    const signature = event.headers['x-elevenlabs-signature'] || event.headers['X-ElevenLabs-Signature'];
+    const webhookSecret = process.env.ELEVENLABS_WEBHOOK_SECRET;
+
+    if (!verifyWebhookSignature(event.body, signature, webhookSecret)) {
+        console.error('Invalid webhook signature - rejecting request');
+        return {
+            statusCode: 401,
+            body: JSON.stringify({ error: 'Invalid signature' })
+        };
+    }
+
+    console.log('✅ Webhook signature verified');
 
     try {
         const payload = JSON.parse(event.body || '{}');
