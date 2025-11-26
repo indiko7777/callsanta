@@ -39,7 +39,6 @@ exports.handler = async (event, context) => {
 
     const signature = event.headers['x-elevenlabs-signature'] || event.headers['X-ElevenLabs-Signature'];
     
-    // We verify but don't block on failure to ensure we can debug during setup
     if (!verifyWebhookSignature(event.body, signature, process.env.ELEVENLABS_WEBHOOK_SECRET)) {
         console.error('⚠️ Invalid or missing webhook signature (proceeding for debug)');
     }
@@ -51,7 +50,17 @@ exports.handler = async (event, context) => {
         // 1. Extract Key Information
         const conversation_id = payload.conversation_id;
         const transcript = payload.transcript;
-        const audio_url = payload.audio_url;
+        
+        // --- CRITICAL FIX: Handle 'full_audio' (Base64) vs 'audio_url' ---
+        // ElevenLabs post_call_audio sends 'full_audio' (base64 string), not 'audio_url'.
+        let audio_data = payload.audio_url;
+        
+        if (!audio_data && payload.full_audio) {
+            // Convert Base64 audio to a Data URI so it can be played/downloaded via email
+            audio_data = `data:audio/mp3;base64,${payload.full_audio}`;
+            console.log("NOTE: Converted Base64 'full_audio' to Data URI.");
+        }
+        // -----------------------------------------------------------------
         
         console.log(`Incoming Webhook for Conversation: ${conversation_id}, Type: ${rawPayload.type}`);
 
@@ -61,7 +70,7 @@ exports.handler = async (event, context) => {
         let orderId = null;
         let order = null;
 
-        // --- STEP A: Look for Order ID passed through Dynamic Variables (Primary Method) ---
+        // --- STEP A: Look for Order ID passed through Dynamic Variables ---
         if (payload.conversation_initiation_client_data && 
             payload.conversation_initiation_client_data.dynamic_variables &&
             payload.conversation_initiation_client_data.dynamic_variables.order_id) {
@@ -77,21 +86,15 @@ exports.handler = async (event, context) => {
             if (order) console.log(`✅ Found order via conversation_id: ${order._id}`);
         }
 
-        // --- STEP C: Retry Loop (The Race Condition Fix) ---
-        // If we have a conversation_id but no order, wait and try again.
-        // This handles cases where post_call_audio arrives before post_call_transcription has saved the ID.
+        // --- STEP C: Retry Loop (Race Condition Protection) ---
         if (!order && conversation_id) {
-            console.log("⚠️ Order not found immediately. Entering retry loop for concurrent webhooks...");
-            
+            console.log("⚠️ Order not found immediately. Entering retry loop...");
             for (let i = 0; i < 3; i++) {
-                // Wait 2 seconds
                 await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                console.log(`🔄 Retry attempt ${i + 1}/3 for conversation_id: ${conversation_id}`);
+                console.log(`🔄 Retry ${i + 1}/3...`);
                 order = await Order.findOne({ conversationId: conversation_id });
-                
                 if (order) {
-                    console.log(`✅ Found order on retry ${i + 1}!`);
+                    console.log(`✅ Found order on retry!`);
                     break;
                 }
             }
@@ -135,7 +138,7 @@ exports.handler = async (event, context) => {
         }
 
         if (!order) {
-            console.error('❌ FINAL ERROR: Could not identify order after retries. Data saved to logs only.');
+            console.error('❌ FINAL ERROR: Could not identify order. Data saved to logs only.');
             return successResponse;
         }
 
@@ -143,10 +146,13 @@ exports.handler = async (event, context) => {
         if (conversation_id && !order.conversationId) {
             order.conversationId = conversation_id;
         }
-        if (audio_url) {
-            order.audioUrl = audio_url;
-            console.log("🎙️ Audio URL saved.");
+        
+        // Save the audio data (Data URI)
+        if (audio_data) {
+            order.audioUrl = audio_data;
+            console.log("🎙️ Audio Content saved to Order.");
         }
+        
         if (transcript) {
             if (Array.isArray(transcript)) {
                 order.transcript = transcript
@@ -166,10 +172,10 @@ exports.handler = async (event, context) => {
         order.fulfillmentStatus = 'CALL_COMPLETED';
         await order.save();
 
-        // 4. Send the Email (Only for Bundles and only if we have audio)
+        // 4. Send the Email
         if (order.packageId === 'bundle') {
-            // We check if we have audio NOW, or if it was already saved
-            const hasAudio = audio_url || order.audioUrl;
+            // Check if we have audio data available now (either from this payload or DB)
+            const hasAudio = audio_data || order.audioUrl;
             
             if (hasAudio) {
                 console.log('📧 Triggering bundle post-call email...');
@@ -182,7 +188,7 @@ exports.handler = async (event, context) => {
                     })
                 }, context);
             } else {
-                console.log("⏳ Waiting for Audio URL before sending email (received transcription only).");
+                console.log("⏳ Waiting for Audio Data before sending email (received transcription only).");
             }
         }
 
