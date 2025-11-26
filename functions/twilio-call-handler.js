@@ -154,7 +154,7 @@ exports.handler = async (event, context) => {
     dial.sip({
         username: 'santa',
         password: 'Tenguiz10'
-    }, sipUri + `?X-Access-Code=${order.accessCode}&X-Order-Id=${order._id}`);
+    }, sipUri + `?X-Access-Code=${order.accessCode}&X-Order-Id=${order._id}&X-Customer-Phone=${encodeURIComponent(event.From)}`);
 
     // Fallback if the call fails or ends abruptly
     twiml.say("Ho ho ho! The connection to the North Pole was lost. Merry Christmas!");

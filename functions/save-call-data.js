@@ -84,24 +84,49 @@ exports.handler = async (event, context) => {
         // ElevenLabs may return this in different places depending on configuration
         let orderId = null;
 
-        // Try to find order ID from various possible locations
-        if (metadata && metadata['X-Order-Id']) {
-            orderId = metadata['X-Order-Id'];
-        } else if (custom_llm_extra_body && custom_llm_extra_body['X-Order-Id']) {
-            orderId = custom_llm_extra_body['X-Order-Id'];
-        } else if (payload['X-Order-Id']) {
-            orderId = payload['X-Order-Id'];
-        }
+        // Helper to find key case-insensitively
+        const findKey = (obj, key) => {
+            if (!obj) return null;
+            const found = Object.keys(obj).find(k => k.toLowerCase() === key.toLowerCase());
+            return found ? obj[found] : null;
+        };
 
-        // Also check query parameters from SIP URI
+        // 1. Try to find Order ID in metadata/extra_body
+        if (metadata) orderId = findKey(metadata, 'x-order-id');
+        if (!orderId && custom_llm_extra_body) orderId = findKey(custom_llm_extra_body, 'x-order-id');
+        if (!orderId) orderId = findKey(payload, 'x-order-id');
+
+        // 2. Check SIP Headers/Query Params (often passed in metadata or query)
         const queryParams = event.queryStringParameters || {};
-        if (!orderId && queryParams['X-Order-Id']) {
-            orderId = queryParams['X-Order-Id'];
+        if (!orderId) orderId = findKey(queryParams, 'x-order-id');
+
+        // 3. Fallback: Try to match by Phone Number (Caller ID)
+        if (!orderId) {
+            let customerPhone = findKey(metadata, 'x-customer-phone') || findKey(queryParams, 'x-customer-phone') || payload.caller_id;
+
+            if (customerPhone) {
+                console.log(`Looking up order by phone: ${customerPhone}`);
+                // Normalize phone (remove + if needed, or fuzzy match)
+                // For now, exact match or ends with
+                await connectToDatabase(process.env.MONGODB_URI);
+
+                // Find most recent order for this phone that started a call
+                const phoneOrder = await Order.findOne({
+                    parentPhone: customerPhone,
+                    fulfillmentStatus: 'FULFILLED_CALL_STARTED'
+                }).sort({ updatedAt: -1 });
+
+                if (phoneOrder) {
+                    orderId = phoneOrder._id;
+                    console.log(`Found order ${orderId} via phone number match`);
+                }
+            }
         }
 
         if (!orderId) {
             console.error('No order ID found in ElevenLabs webhook payload');
             console.error('Payload keys:', Object.keys(payload));
+            if (metadata) console.error('Metadata keys:', Object.keys(metadata));
             return successResponse; // Still return 200 to prevent retries
         }
 
