@@ -98,10 +98,25 @@ exports.handler = async (event, context) => {
 
         const nplTime = new Date().toLocaleTimeString('en-US', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
 
+        // Format names for natural greeting: "Alice", "Alice and Bob", "Alice, Bob, and Charlie"
+        const names = children.map(c => c.name);
+        let greetingNames = "";
+        if (names.length === 0) {
+            greetingNames = "my friend";
+        } else if (names.length === 1) {
+            greetingNames = names[0];
+        } else if (names.length === 2) {
+            greetingNames = `${names[0]} and ${names[1]}`;
+        } else {
+            const last = names.pop();
+            greetingNames = `${names.join(', ')}, and ${last}`;
+        }
+
         // Response format for ElevenLabs Tool (direct data) AND Initiation Webhook (dynamic_variables)
         const toolResponseData = {
             child_count: children.length > 0 ? children.length : 1,
             children_context: childrenContext,
+            greeting_names: greetingNames, // New variable for First Message
             npl_time: nplTime,
             call_overage_option: order.overageOption || 'auto_disconnect',
             days_until_christmas: daysUntilChristmas,
