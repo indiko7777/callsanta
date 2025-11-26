@@ -61,7 +61,20 @@ exports.handler = async (event, context) => {
             return { statusCode: 400, body: JSON.stringify({ error: 'Invalid upgrade type' }) };
         }
 
-        // Create a NEW order for the upgrade
+        // Create Stripe PaymentIntent FIRST (before creating the order)
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amount,
+            currency: 'usd',
+            automatic_payment_methods: { enabled: true },
+            metadata: {
+                original_order_id: trimmedId,
+                upgrade_type: upgradeType,
+                parent_email: originalOrder.parentEmail
+            },
+            description: `Upgrade: ${upgradeType} for Order ${trimmedId}`
+        });
+
+        // Create a NEW order for the upgrade with the Payment Intent ID
         const newOrder = new Order({
             parentEmail: originalOrder.parentEmail,
             parentPhone: originalOrder.parentPhone,
@@ -70,28 +83,21 @@ exports.handler = async (event, context) => {
             amountPaid: amount,
             currency: 'usd',
             fulfillmentStatus: 'PENDING_PAYMENT',
-            stripeCustomerId: originalOrder.stripeCustomerId, // Reuse customer if possible
+            stripeCustomerId: originalOrder.stripeCustomerId,
+            stripePaymentIntentId: paymentIntent.id // Include PI ID from the start
         });
 
         await newOrder.save();
 
-        // Create Stripe PaymentIntent
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount: amount,
-            currency: 'usd',
-            automatic_payment_methods: { enabled: true },
+        // Update Payment Intent metadata with the new order ID
+        await stripe.paymentIntents.update(paymentIntent.id, {
             metadata: {
                 order_id: newOrder._id.toString(),
                 original_order_id: trimmedId,
                 upgrade_type: upgradeType,
                 parent_email: originalOrder.parentEmail
-            },
-            description: `Upgrade: ${upgradeType} for Order ${trimmedId}`
+            }
         });
-
-        // Update order with PI ID
-        newOrder.stripePaymentIntentId = paymentIntent.id;
-        await newOrder.save();
 
         return {
             statusCode: 200,
