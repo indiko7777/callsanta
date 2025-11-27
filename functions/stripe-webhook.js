@@ -74,16 +74,55 @@ exports.handler = async (event, context) => {
 
                 console.log('Order status updated to PAYMENT_COMPLETED');
 
+                // Check if this is an upgrade order
+                if (order.upgradeType && order.originalOrderId) {
+                    console.log(`Processing ${order.upgradeType} upgrade for original order:`, order.originalOrderId);
+
+                    const originalOrder = await Order.findById(order.originalOrderId);
+
+                    if (originalOrder) {
+                        // Update original order with upgrade flags
+                        if (order.upgradeType === 'recording') {
+                            originalOrder.hasRecordingUpgrade = true;
+                        } else if (order.upgradeType === 'bundle') {
+                            originalOrder.hasBundleUpgrade = true;
+                            // Generate new access code for return call
+                            originalOrder.returnCallAccessCode = Math.floor(1000 + Math.random() * 9000).toString();
+                            originalOrder.overageOption = 'unlimited'; // Bundle includes unlimited time
+                        } else if (order.upgradeType === 'return_call') {
+                            originalOrder.hasReturnCallUpgrade = true;
+                            // Generate new access code for return call
+                            originalOrder.returnCallAccessCode = Math.floor(1000 + Math.random() * 9000).toString();
+                            originalOrder.overageOption = 'unlimited'; // Return call is unlimited
+                        }
+
+                        await originalOrder.save();
+                        console.log('Original order updated with upgrade flags');
+                    }
+                }
+
                 // Send confirmation email based on package type
                 const emailFunction = require('./send-confirmation-email');
 
                 let emailType;
-                if (order.packageId === 'call') {
-                    emailType = 'live_call_confirmation';
-                } else if (order.packageId === 'video') {
-                    emailType = 'video_order_confirmation';
-                } else if (order.packageId === 'bundle') {
-                    emailType = 'bundle_call_confirmation';
+                if (order.upgradeType) {
+                    // Upgrade order emails
+                    if (order.upgradeType === 'recording') {
+                        emailType = 'recording_upgrade_confirmation';
+                    } else if (order.upgradeType === 'bundle') {
+                        emailType = 'bundle_upgrade_confirmation';
+                    } else if (order.upgradeType === 'return_call') {
+                        emailType = 'return_call_upgrade_confirmation';
+                    }
+                } else {
+                    // Regular order emails
+                    if (order.packageId === 'call') {
+                        emailType = 'live_call_confirmation';
+                    } else if (order.packageId === 'video') {
+                        emailType = 'video_order_confirmation';
+                    } else if (order.packageId === 'bundle') {
+                        emailType = 'bundle_call_confirmation';
+                    }
                 }
 
                 if (emailType) {

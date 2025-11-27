@@ -38,17 +38,22 @@ exports.handler = async (event, context) => {
 
         let order;
 
-        // 1. Try to find by Access Code (Reliable for Tool use)
+        // 1. Try to find by Access Code (first check regular access code)
         if (access_code) {
             order = await Order.findOne({ accessCode: access_code });
+
+            // 2. If not found, check if it's a return call access code
+            if (!order) {
+                order = await Order.findOne({ returnCallAccessCode: access_code });
+            }
         }
 
-        // 2. Try to find by Order ID
+        // 3. Try to find by Order ID
         if (!order && order_id) {
             order = await Order.findById(order_id);
         }
 
-        // 3. Fallback: Find by active call status
+        // 4. Fallback: Find by active call status
         if (!order && caller_id) {
             const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
             order = await Order.findOne({
@@ -64,7 +69,7 @@ exports.handler = async (event, context) => {
 
         console.log("Found Order for Context:", order._id);
 
-        // Try to link conversation ID if present (Optimization, not hard dependency anymore)
+        // Try to link conversation ID if present
         if (conversation_id && !order.conversationId) {
             order.conversationId = conversation_id;
             await order.save();
@@ -110,7 +115,7 @@ exports.handler = async (event, context) => {
 
         const toolResponseData = {
             // --- CRITICAL: Pass order_id back to ElevenLabs to hold onto ---
-            order_id: order._id.toString(), 
+            order_id: order._id.toString(),
             // --------------------------------------------------------------
             child_count: children.length > 0 ? children.length : 1,
             children_context: childrenContext,
@@ -121,12 +126,29 @@ exports.handler = async (event, context) => {
             summary: `You are calling ${children.length > 0 ? children.length : 1} child(ren). ${childrenContext}. Current NPL time is ${nplTime}. ${daysUntilChristmas} days until Christmas. Call overage option: ${order.overageOption || 'auto_disconnect'}.`
         };
 
+        // Check if this is a return call
+        const isReturnCall = order.returnCallAccessCode && order.returnCallAccessCode === access_code;
+
+        if (isReturnCall) {
+            console.log('This is a RETURN CALL - adding previous call context');
+            toolResponseData.is_return_call = true;
+            toolResponseData.previous_call_transcript = order.transcript || 'No previous transcript available';
+            toolResponseData.previous_call_duration = order.callDuration || 0;
+            toolResponseData.previous_wishes = children.map(c => c.wish).join(', ');
+            toolResponseData.previous_good_deeds = children.map(c => c.deed).join(', ');
+            toolResponseData.call_date = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'recently';
+            toolResponseData.agent_id = order.returnCallAgentId || 'agent_4101kb0yxw0zf15t6r2by1g684nb';
+        } else {
+            toolResponseData.is_return_call = false;
+            toolResponseData.agent_id = process.env.ELEVENLABS_AGENT_ID;
+        }
+
         return {
             statusCode: 200,
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                ...toolResponseData, 
-                dynamic_variables: toolResponseData 
+                ...toolResponseData,
+                dynamic_variables: toolResponseData
             })
         };
 

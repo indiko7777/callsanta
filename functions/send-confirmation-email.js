@@ -62,6 +62,16 @@ exports.handler = async (event, context) => {
                 callDuration: order.callDuration,
                 conversationTopic: 'your conversation' // Can be enhanced with AI later
             };
+
+            // For upgrade emails, fetch the return call access code from the original order
+            if (email_type && email_type.includes('upgrade') && order.originalOrderId) {
+                const originalOrder = await Order.findById(order.originalOrderId);
+                if (originalOrder) {
+                    emailData.returnCallAccessCode = originalOrder.returnCallAccessCode;
+                    emailData.accessCode = originalOrder.accessCode; // Use original access code for media links
+                    emailData.twilioReturnNumber = process.env.TWILIO_RETURN_CALL_NUMBER || process.env.TWILIO_PHONE_NUMBER;
+                }
+            }
         }
 
         // Determine email type based on package and context

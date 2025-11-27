@@ -217,6 +217,112 @@ const generateEmailTemplate = (emailType, data) => {
                         </div>
                     </div>
                     <div style="${styles.footer}">
+                    </div>
+                </div>
+            `
+        },
+
+        // Template D: Recording Upgrade Confirmation
+        recording_upgrade_confirmation: {
+            subject: `Your Call Recording is Ready!`,
+            text: `Your recording is now available for download.`,
+            html: `
+                <div style="${styles.container}">
+                    <div style="${styles.header}">
+                        <div style="${styles.headerOverlay}">
+                            <h1 style="${styles.headerTitle}">Purchase Complete!</h1>
+                        </div>
+                    </div>
+                    <div style="${styles.body}">
+                        <p>Hello ${data.parentName || 'Parent'},</p>
+                        <p>Great news! Your call recording for ${data.childName} is now ready to download.</p>
+                        
+                        <div style="${styles.highlightBox}">
+                            <h3 style="margin-top: 0;">Access Your Recording</h3>
+                            <a href="${baseUrl}/media?order=${data.accessCode}&code=${data.accessCode}" style="${styles.button}">Listen & Download</a>
+                        </div>
+
+                        <p>You can listen to the recording online or download it to keep forever!</p>
+                    </div>
+                    <div style="${styles.footer}">
+                        <p>&copy; ${new Date().getFullYear()} CallSanta.us. All rights reserved.</p>
+                    </div>
+                </div>
+            `
+        },
+
+        // Template E: Bundle Upgrade Confirmation
+        bundle_upgrade_confirmation: {
+            subject: `Your Return Call with Santa is Ready!`,
+            text: `Your return call access code is ${data.returnCallAccessCode}. Call ${data.twilioReturnNumber || data.twilioNumber}`,
+            html: `
+                <div style="${styles.container}">
+                    <div style="${styles.header}">
+                        <div style="${styles.headerOverlay}">
+                            <h1 style="${styles.headerTitle}">Santa is Ready for Round 2!</h1>
+                        </div>
+                    </div>
+                    <div style="${styles.body}">
+                        <p>Hello ${data.parentName || 'Parent'},</p>
+                        <p>Exciting news! Santa is ready to talk to ${data.childName} again, and this time he'll remember everything from your last conversation!</p>
+                        
+                        <div style="${styles.highlightBox}">
+                            <p style="margin: 0; color: #666; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Your New Access Code</p>
+                            <span style="${styles.accessCode}">${data.returnCallAccessCode}</span>
+                            <p style="margin: 10px 0 0; font-size: 14px;">Call Santa at: <strong>${data.twilioReturnNumber || data.twilioNumber}</strong></p>
+                        </div>
+
+                        <div style="background-color: #f0fdf4; border: 1px solid #dcfce7; border-radius: 8px; padding: 15px; margin-top: 20px;">
+                            <p style="margin: 0; color: #166534; font-size: 14px;">
+                                <strong>✨ Special Feature:</strong> Santa will remember your previous conversation, including the wishes and good deeds ${data.childName} mentioned!
+                            </p>
+                        </div>
+
+                        <p style="margin-top: 20px;"><strong>What's Included:</strong></p>
+                        <ul style="padding-left: 20px;">
+                            <li>Unlimited call time - no 5-minute limit!</li>
+                            <li>Call recording (MP3)</li>
+                            <li>Full transcript</li>
+                            <li>Santa remembers the previous conversation</li>
+                        </ul>
+                    </div>
+                    <div style="${styles.footer}">
+                        <p>&copy; ${new Date().getFullYear()} CallSanta.us. All rights reserved.</p>
+                    </div>
+                </div>
+            `
+        },
+
+        // Template F: Return Call Upgrade Confirmation
+        return_call_upgrade_confirmation: {
+            subject: `Santa is Ready to Talk Again!`,
+            text: `Your return call access code is ${data.returnCallAccessCode}. Call ${data.twilioReturnNumber || data.twilioNumber}`,
+            html: `
+                <div style="${styles.container}">
+                    <div style="${styles.header}">
+                        <div style="${styles.headerOverlay}">
+                            <h1 style="${styles.headerTitle}">Santa Returns!</h1>
+                        </div>
+                    </div>
+                    <div style="${styles.body}">
+                        <p>Hello ${data.parentName || 'Parent'},</p>
+                        <p>Santa can't wait to talk to ${data.childName} again! He's been reviewing the notes from your last conversation.</p>
+                        
+                        <div style="${styles.highlightBox}">
+                            <p style="margin: 0; color: #666; font-size: 14px; text-transform: uppercase; letter-spacing: 1px;">Your Return Call Code</p>
+                            <span style="${styles.accessCode}">${data.returnCallAccessCode}</span>
+                            <p style="margin: 10px 0 0; font-size: 14px;">Call Santa at: <strong>${data.twilioReturnNumber || data.twilioNumber}</strong></p>
+                        </div>
+
+                        <div style="background-color: #f0fdf4; border: 1px solid #dcfce7; border-radius: 8px; padding: 15px; margin-top: 20px;">
+                            <p style="margin: 0; color: #166534; font-size: 14px;">
+                                <strong>✨ Unlimited Time:</strong> Take as long as you need - there's no time limit on this call!
+                            </p>
+                        </div>
+
+                        <p style="margin-top: 20px;">Santa will reference your previous conversation and ask follow-up questions about the wishes and good deeds ${data.childName} mentioned!</p>
+                    </div>
+                    <div style="${styles.footer}">
                         <p>&copy; ${new Date().getFullYear()} CallSanta.us. All rights reserved.</p>
                     </div>
                 </div>

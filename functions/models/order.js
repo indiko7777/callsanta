@@ -42,7 +42,21 @@ const OrderSchema = new mongoose.Schema({
         emailType: { type: String, required: true }, // 'confirmation', 'video_delivery', 'post_call'
         sentAt: { type: Date, default: Date.now },
         recipient: { type: String, required: true }
-    }]
+    }],
+
+    // Upgrade Tracking
+    hasRecordingUpgrade: { type: Boolean, default: false },
+    hasBundleUpgrade: { type: Boolean, default: false },
+    hasReturnCallUpgrade: { type: Boolean, default: false },
+
+    // Return Call Specific
+    returnCallAccessCode: { type: String, sparse: true }, // New access code for return call
+    returnCallUsed: { type: Boolean, default: false },
+    returnCallAgentId: { type: String, default: 'agent_4101kb0yxw0zf15t6r2by1g684nb' },
+
+    // Reference to original order (for upgrade orders)
+    originalOrderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Order' },
+    upgradeType: { type: String, enum: ['bundle', 'recording', 'return_call'] }
 }, { timestamps: true });
 
 // TTL Index: Automatically delete orders that are still 'PENDING_PAYMENT' after 1 hour (3600 seconds)

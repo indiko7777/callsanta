@@ -84,7 +84,9 @@ exports.handler = async (event, context) => {
             currency: 'usd',
             fulfillmentStatus: 'PENDING_PAYMENT',
             stripeCustomerId: originalOrder.stripeCustomerId,
-            stripePaymentIntentId: paymentIntent.id // Include PI ID from the start
+            stripePaymentIntentId: paymentIntent.id, // Include PI ID from the start
+            originalOrderId: originalOrder._id, // Reference to original order
+            upgradeType: upgradeType // Track upgrade type
         });
 
         await newOrder.save();
