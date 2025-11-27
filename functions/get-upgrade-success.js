@@ -20,27 +20,40 @@ exports.handler = async (event, context) => {
         return { statusCode: 405, body: 'Method Not Allowed' };
     }
 
-    const { orderId } = event.queryStringParameters || {};
+    const { orderId, payment_intent_id } = event.queryStringParameters || {};
 
-    if (!orderId) {
+    if (!orderId && !payment_intent_id) {
         return {
             statusCode: 400,
-            body: JSON.stringify({ error: 'Missing orderId' })
+            body: JSON.stringify({ error: 'Missing orderId or payment_intent_id' })
         };
     }
 
     try {
         await connectToDatabase(process.env.MONGODB_URI);
 
-        // Find the upgrade order
-        const upgradeOrder = await Order.findById(orderId);
+        let upgradeOrder;
+
+        // Find by payment intent ID or order ID
+        if (payment_intent_id) {
+            upgradeOrder = await Order.findOne({ stripePaymentIntentId: payment_intent_id });
+        } else {
+            upgradeOrder = await Order.findById(orderId);
+        }
 
         if (!upgradeOrder) {
             return { statusCode: 404, body: JSON.stringify({ error: 'Order not found' }) };
         }
 
+        // Check if this is an upgrade order
         if (!upgradeOrder.upgradeType) {
-            return { statusCode: 400, body: JSON.stringify({ error: 'Not an upgrade order' }) };
+            return {
+                statusCode: 200,
+                body: JSON.stringify({
+                    isUpgrade: false,
+                    message: 'Not an upgrade order'
+                })
+            };
         }
 
         // Fetch the original order
@@ -52,6 +65,7 @@ exports.handler = async (event, context) => {
 
         // Build response based on upgrade type
         const responseData = {
+            isUpgrade: true,
             upgradeType: upgradeOrder.upgradeType,
             childName: originalOrder.children && originalOrder.children[0] ? originalOrder.children[0].name : 'Child',
             parentEmail: upgradeOrder.parentEmail,
@@ -71,7 +85,8 @@ exports.handler = async (event, context) => {
                 audioUrl: originalOrder.audioUrl,
                 transcript: originalOrder.transcript,
                 callDuration: originalOrder.callDuration,
-                createdAt: originalOrder.createdAt
+                createdAt: originalOrder.createdAt,
+                accessCode: originalOrder.accessCode
             };
         }
 
@@ -88,7 +103,7 @@ exports.handler = async (event, context) => {
         console.error('GET UPGRADE SUCCESS ERROR:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Internal server error' })
+            body: JSON.stringify({ error: 'Internal server error', details: error.message })
         };
     }
 };
