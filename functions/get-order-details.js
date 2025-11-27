@@ -56,7 +56,9 @@ exports.handler = async (event, context) => {
                 accessCode: order.accessCode,
                 overageOption: order.overageOption,
                 fulfillmentStatus: order.fulfillmentStatus,
-                order_id: order._id // Return ID for video polling
+                order_id: order._id, // Return ID for video polling
+                amountPaid: order.amountPaid,
+                currency: order.currency || 'USD'
             }),
         };
 

@@ -2,6 +2,15 @@
 <html lang="en" class="scroll-smooth">
 
 <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-E2XNQGLFBX"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'G-E2XNQGLFBX');
+    </script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -1632,52 +1641,279 @@
                         <i data-lucide="shield" class="w-3 h-3"></i>
                         <span class="tracking-wider">SECURE PAYMENT • POWERED BY STRIPE</span>
                     </div>
-                </form>
-            </div>
-        </div>
+                    <div
+                        class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-center md:text-left">
+                        <div>
+                            <span class="text-xl font-serif text-white font-bold">CallSanta.us</span>
+                            <p class="text-gray-500 text-sm mt-1">&copy; 2024. Bringing magic home.</p>
+                        </div>
+                        <div class="flex gap-6 text-sm text-gray-400">
+                            <a href="#" class="hover:text-white transition">Privacy Policy</a>
+                            <a href="#" class="hover:text-white transition">Terms of Service</a>
+                            <a href="#" class="hover:text-white transition">Contact</a>
+                        </div>
+                    </div>
+                    </footer>
 
-        <script>
-            // Initialize Lucide icons
-            lucide.createIcons();
+                    <div id="payment-modal-overlay" class="modal-overlay"></div>
+                    <div id="payment-modal" class="modal-container">
+                        <div class="modal-content">
 
-            const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SVKGLLLG2IkIMjNRGtLSTgFOKHA262pTUQZxtrDko025pTqT3eqQ5o3IVThdo1Em18mtHn8OB4vbZYPgW1sgsA200melmouPY'; // Replaced by dev-server.js
-            const CREATE_PAYMENT_INTENT_URL = '/.netlify/functions/create-payment-intent';
+                            <div id="modal-header" class="p-6 border-b border-white/10">
+                                <div class="flex items-center justify-between mb-3">
+                                    <div class="flex items-center gap-3">
+                                        <div
+                                            class="w-10 h-10 rounded-full bg-gradient-to-br from-santa-red to-red-700 flex items-center justify-center shadow-lg">
+                                            <i data-lucide="heart" class="w-5 h-5 text-white fill-white"></i>
+                                        </div>
+                                        <h2 id="modal-main-title" class="text-2xl font-serif font-bold text-white">
+                                            Secure This Priceless
+                                            Memory</h2>
+                                    </div>
+                                    <button onclick="closePaymentModal()"
+                                        class="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg">
+                                        <i data-lucide="x" class="w-6 h-6"></i>
+                                    </button>
+                                </div>
+                                <p id="modal-main-description" class="text-gray-300 text-sm leading-relaxed">
+                                    <span class="text-santa-gold font-semibold">Memories over toys.</span> This
+                                    Christmas moment is
+                                    irreplaceable. Choose the experience that will remind your child they are seen,
+                                    loved, and truly on
+                                    the Nice List.
+                                </p>
+                                <div class="text-xs text-gray-400 mt-2">
+                                    Personalizing for: <span id="modal-child-summary"
+                                        class="font-semibold text-white"></span>
+                                </div>
+                            </div>
 
-            const packages = {
-                bundle: { price: 2000, name: "Starry Night Bundle" },
-                call: { price: 1000, name: "Winter Warmth" },
-                video: { price: 3500, name: "Joyful Jingle" }
-            };
+                            <div id="modal-selection-view" class="p-6 space-y-6">
+                                <div class="space-y-4">
+                                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                        <i data-lucide="gift" class="w-5 h-5 text-santa-gold"></i>
+                                        Select Your Keepsake Experience
+                                    </h3>
 
-            let stripe;
-            let elements;
-            let modalSelectionView = document.getElementById('modal-selection-view');
-            let modalPaymentView = document.getElementById('modal-payment-view');
-            let modalPaymentMessage = document.getElementById('modal-payment-message');
-            let modalSubmitBtn = document.getElementById('modal-submit-btn');
+                                    <label class="package-option block cursor-pointer relative group">
+                                        <input type="radio" name="package_id" value="bundle" data-price="2000"
+                                            class="hidden" checked>
+                                        <div class="ribbon-best-value">Best Value</div>
+                                        <div
+                                            class="p-5 rounded-xl border-2 border-white/20 bg-gradient-to-br from-slate-800/90 to-slate-900/90 shadow-2xl transition-all duration-300 hover:shadow-santa-red/30 hover:scale-[1.01]">
+                                            <div class="flex items-start justify-between mb-3">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2 mb-2">
+                                                        <i data-lucide="sparkles" class="w-5 h-5 text-santa-gold"></i>
+                                                        <span class="text-xl font-bold text-white">Starry Night
+                                                            Bundle</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-300 leading-relaxed mb-2">
+                                                        The Complete, Unforgettable Magic. Personal Call + SMS + Audio
+                                                        Keepsake.
+                                                    </p>
+                                                    <div class="flex items-center gap-2 text-xs text-santa-goldlight">
+                                                        <i data-lucide="check-circle" class="w-4 h-4"></i>
+                                                        <span>Most Popular Choice</span>
+                                                    </div>
+                                                </div>
+                                                <div class="text-right ml-4">
+                                                    <div class="text-3xl font-serif font-bold text-santa-gold">$20</div>
+                                                    <div class="text-xs text-gray-400 line-through">$35</div>
+                                                </div>
+                                            </div>
+                                            <div class="pt-3 border-t border-white/10">
+                                                <p class="text-xs text-gray-400 italic">
+                                                    "The ultimate Santa experience—unlimited talk time and magical
+                                                    messages."
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </label>
 
-            // --- Multi-Child Logic ---
-            let currentChildCount = 1;
+                                    <label class="package-option block cursor-pointer group">
+                                        <input type="radio" name="package_id" value="call" data-price="1000"
+                                            class="hidden">
+                                        <div
+                                            class="p-5 rounded-xl border-2 border-white/20 bg-slate-900/70 transition-all duration-300 hover:border-white/40 hover:bg-slate-900/90">
+                                            <div class="flex items-start justify-between">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2 mb-2">
+                                                        <i data-lucide="phone" class="w-5 h-5 text-white"></i>
+                                                        <span class="text-lg font-bold text-white">Winter Warmth</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-400">
+                                                        The Authentic Live Connection. Up to 5 Minutes Heart-to-Heart
+                                                        Voice Call.
+                                                    </p>
+                                                </div>
+                                                <div class="text-2xl font-serif font-bold text-white ml-4">$10</div>
+                                            </div>
+                                        </div>
+                                    </label>
 
-            function updateChildCount(count) {
-                currentChildCount = count;
-                renderChildInputs();
-            }
+                                    <label class="package-option block cursor-pointer group">
+                                        <input type="radio" name="package_id" value="video" data-price="3500"
+                                            class="hidden">
+                                        <div
+                                            class="p-5 rounded-xl border-2 border-white/20 bg-slate-900/70 transition-all duration-300 hover:border-white/40 hover:bg-slate-900/90">
+                                            <div class="flex items-start justify-between">
+                                                <div class="flex-1">
+                                                    <div class="flex items-center gap-2 mb-2">
+                                                        <i data-lucide="video" class="w-5 h-5 text-white"></i>
+                                                        <span class="text-lg font-bold text-white">Joyful Jingle</span>
+                                                    </div>
+                                                    <p class="text-sm text-gray-400">
+                                                        A Cherished Visual Keepsake. Personalized HD Video Message.
+                                                    </p>
+                                                </div>
+                                                <div class="text-2xl font-serif font-bold text-white ml-4">$35</div>
+                                            </div>
+                                        </div>
+                                    </label>
+                                </div>
 
-            function renderChildInputs() {
-                const step1Container = document.getElementById('step-1-inputs');
-                const step2Container = document.getElementById('step-2-inputs');
-                const step3Container = document.getElementById('step-3-inputs');
+                                <div id="modal-overage-options"
+                                    class="p-4 rounded-xl bg-slate-900/70 border border-white/10">
+                                    <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                                        <i data-lucide="clock" class="w-4 h-4 text-santa-gold"></i>
+                                        Live Call Duration Policy (5 minutes included)
+                                    </h4>
+                                    <div class="space-y-2">
+                                        <label
+                                            class="overage-option block cursor-pointer p-3 rounded-lg border-2 border-white/20 bg-slate-800/50 transition-all duration-300 hover:border-white/40">
+                                            <input type="radio" name="overage_option" value="auto_disconnect"
+                                                class="hidden" checked>
+                                            <div class="flex items-start gap-3">
+                                                <div
+                                                    class="w-5 h-5 rounded-full border-2 border-white/40 flex items-center justify-center mt-0.5 flex-shrink-0">
+                                                    <div
+                                                        class="w-2.5 h-2.5 rounded-full bg-santa-red hidden radio-indicator">
+                                                    </div>
+                                                </div>
+                                                <div class="flex-1">
+                                                    <span class="text-white font-semibold block text-sm">Auto-end after
+                                                        5 minutes</span>
+                                                    <span class="text-xs text-gray-400">The call will automatically
+                                                        disconnect after 5
+                                                        minutes, guaranteeing no extra charge.</span>
+                                                </div>
+                                            </div>
+                                        </label>
 
-                step1Container.innerHTML = '';
-                step2Container.innerHTML = '';
-                step3Container.innerHTML = '';
+                                        <label
+                                            class="overage-option block cursor-pointer p-3 rounded-lg border-2 border-white/20 bg-slate-800/50 transition-all duration-300 hover:border-white/40">
+                                            <input type="radio" name="overage_option" value="unlimited" class="hidden">
+                                            <div class="flex items-start gap-3">
+                                                <div
+                                                    class="w-5 h-5 rounded-full border-2 border-white/40 flex items-center justify-center mt-0.5 flex-shrink-0">
+                                                </div>
+                                                <span id="modal-final-price"
+                                                    class="text-3xl font-serif font-bold text-santa-red">$20</span>
+                                            </div>
 
-                for (let i = 1; i <= currentChildCount; i++) {
-                    const suffix = currentChildCount > 1 ? ` ${i}` : '';
+                                            <div class="flex items-start gap-2 text-sm text-gray-400">
+                                                <input type="checkbox" id="modal-legal-consent" required
+                                                    class="mt-1 accent-santa-red">
+                                                <label for="modal-legal-consent" id="modal-legal-label">
+                                                    I confirm I am 18+ and the parent/guardian, and I agree to the <a
+                                                        href="#" class="text-santa-gold hover:underline">Terms of
+                                                        Service</a> and <a href="#"
+                                                        class="text-santa-gold hover:underline">Privacy Policy</a>.
+                                                </label>
+                                            </div>
 
-                    // Step 1: Name
-                    step1Container.innerHTML += `
+                                            <button type="button" onclick="handleModalPayment()" id="modal-submit-btn"
+                                                class="w-full py-4 bg-gradient-to-r from-santa-red to-red-700 hover:from-red-700 hover:to-santa-dark text-white rounded-xl font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-3 group">
+                                                <span id="modal-button-text">Secure Your Magic ($20)</span>
+                                                <i data-lucide="lock"
+                                                    class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                                            </button>
+                                    </div>
+                                </div>
+
+                                <form id="modal-payment-view" class="p-6 space-y-4 hidden" onsubmit="return false;">
+
+                                    <div
+                                        class="flex justify-between items-center p-4 rounded-xl bg-slate-900/90 border border-white/10">
+                                        <span class="text-lg font-bold text-white">Total:</span>
+                                        <span id="modal-final-price-stripe"
+                                            class="text-3xl font-serif font-bold text-santa-red">$20</span>
+                                    </div>
+
+                                    <div id="modal-payment-element" class="min-h-[100px]">
+                                        <div class="text-center text-gray-500 py-6">Loading secure payment form...</div>
+                                    </div>
+
+                                    <div id="modal-payment-message"
+                                        class="hidden text-center text-sm text-red-400 font-medium"></div>
+
+                                    <button type="submit" id="final-pay-button"
+                                        class="w-full py-4 bg-gradient-to-r from-santa-red to-red-700 hover:from-red-700 hover:to-santa-dark text-white rounded-xl font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-3 group">
+                                        <span id="final-pay-button-text">Pay Now ($20)</span>
+                                        <i data-lucide="check-circle"
+                                            class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                                    </button>
+                                    <div
+                                        class="text-center text-xs text-gray-500 flex items-center justify-center gap-2 pt-4">
+                                        <i data-lucide="shield" class="w-3 h-3"></i>
+                                        <span class="tracking-wider">SECURE PAYMENT • POWERED BY STRIPE</span>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <script>
+                            // Initialize Lucide icons
+                            lucide.createIcons();
+
+                            // GA4: View Item List
+                            gtag('event', 'view_item_list', {
+                                items: [
+                                    { item_id: 'call', item_name: 'Winter Warmth', price: 10.00, item_category: 'Live Call' },
+                                    { item_id: 'bundle', item_name: 'Starry Night Bundle', price: 20.00, item_category: 'Bundle' },
+                                    { item_id: 'video', item_name: 'Joyful Jingle', price: 35.00, item_category: 'Video' }
+                                ]
+                            });
+
+                            const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SVKGLLLG2IkIMjNRGtLSTgFOKHA262pTUQZxtrDko025pTqT3eqQ5o3IVThdo1Em18mtHn8OB4vbZYPgW1sgsA200melmouPY'; // Replaced by dev-server.js
+                            const CREATE_PAYMENT_INTENT_URL = '/.netlify/functions/create-payment-intent';
+
+                            const packages = {
+                                bundle: { price: 2000, name: "Starry Night Bundle" },
+                                call: { price: 1000, name: "Winter Warmth" },
+                                video: { price: 3500, name: "Joyful Jingle" }
+                            };
+
+                            let stripe;
+                            let elements;
+                            let modalSelectionView = document.getElementById('modal-selection-view');
+                            let modalPaymentView = document.getElementById('modal-payment-view');
+                            let modalPaymentMessage = document.getElementById('modal-payment-message');
+                            let modalSubmitBtn = document.getElementById('modal-submit-btn');
+
+                            // --- Multi-Child Logic ---
+                            let currentChildCount = 1;
+
+                            function updateChildCount(count) {
+                                currentChildCount = count;
+                                renderChildInputs();
+                            }
+
+                            function renderChildInputs() {
+                                const step1Container = document.getElementById('step-1-inputs');
+                                const step2Container = document.getElementById('step-2-inputs');
+                                const step3Container = document.getElementById('step-3-inputs');
+
+                                step1Container.innerHTML = '';
+                                step2Container.innerHTML = '';
+                                step3Container.innerHTML = '';
+
+                                for (let i = 1; i <= currentChildCount; i++) {
+                                    const suffix = currentChildCount > 1 ? ` ${i}` : '';
+
+                                    // Step 1: Name
+                                    step1Container.innerHTML += `
                     <div class="relative group">
                         <div class="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-santa-dark rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
                         <div class="relative flex items-center bg-slate-900/80 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl">
@@ -1693,8 +1929,8 @@
                     </div>
                 `;
 
-                    // Step 2: Wish
-                    step2Container.innerHTML += `
+                                    // Step 2: Wish
+                                    step2Container.innerHTML += `
                     <div>
                         <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Child${suffix} Wish</label>
                         <input id="form-child-wish-${i}" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
@@ -1703,8 +1939,8 @@
                     </div>
                 `;
 
-                    // Step 3: Deed
-                    step3Container.innerHTML += `
+                                    // Step 3: Deed
+                                    step3Container.innerHTML += `
                     <div>
                         <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Child${suffix} Good Deed</label>
                         <input id="form-child-deed-${i}" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
@@ -1712,370 +1948,114 @@
                             title="Please describe a deed/hobby (5+ characters).">
                     </div>
                 `;
-                }
-                lucide.createIcons();
-            }
+                                }
+                                lucide.createIcons();
+                                stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+                                const returnUrl = `${window.location.origin}/success.html`;
 
-            // Initialize inputs on load
-            renderChildInputs();
+                                const appearance = {
+                                    theme: 'night',
+                                    variables: {
+                                        colorPrimary: '#D42426',
+                                        colorText: '#F3F4F6',
+                                        colorBackground: '#101827',
+                                        colorDanger: '#EF4444',
+                                        fontFamily: 'Inter, sans-serif',
+                                    },
+                                    rules: {
+                                        '.Label': { color: '#C5A059' },
+                                        '.Input': {
+                                            backgroundColor: 'rgba(15, 23, 42, 0.9)', borderColor: 'rgba(255, 255, 255, 0.1)',
+                                            boxShadow: 'none'
+                                        },
+                                        '.Input--invalid': { boxShadow: '0 0 0 1px #EF4444' },
+                                    }
+                                };
 
-            function validateStep(step) {
-                let isValid = true;
+                                elements = stripe.elements({ appearance, clientSecret: secret });
 
-                if (step === 1) {
-                    for (let i = 1; i <= currentChildCount; i++) {
-                        const input = document.getElementById(`form-child-name-${i}`);
-                        if (!input.checkValidity()) {
-                            input.reportValidity();
-                            isValid = false;
-                            break;
-                        }
-                    }
-                    if (isValid) updateStepDisplay(2);
-                } else if (step === 2) {
-                    for (let i = 1; i <= currentChildCount; i++) {
-                        const input = document.getElementById(`form-child-wish-${i}`);
-                        if (!input.checkValidity()) {
-                            input.reportValidity();
-                            isValid = false;
-                            break;
-                        }
-                    }
-                    if (isValid) updateStepDisplay(3);
-                } else if (step === 3) {
-                    for (let i = 1; i <= currentChildCount; i++) {
-                        const input = document.getElementById(`form-child-deed-${i}`);
-                        if (!input.checkValidity()) {
-                            input.reportValidity();
-                            isValid = false;
-                            break;
-                        }
-                    }
-                    if (isValid) updateStepDisplay(4);
-                }
-                return isValid;
-            }
+                                const paymentElement = elements.create('payment', {
+                                    wallets: {
+                                        applePay: 'auto',
+                                        googlePay: 'auto'
+                                    },
+                                    paymentMethodPreference: 'automatic',
+                                });
 
-            function updateStepDisplay(step) {
-                document.querySelectorAll('.step-form').forEach(el => {
-                    el.classList.remove('active');
-                    el.style.opacity = '0';
-                    el.style.pointerEvents = 'none';
-                });
-                const nextStep = document.getElementById(`step-${step}`);
-                if (nextStep) {
-                    nextStep.classList.add('active');
-                    nextStep.style.opacity = '1';
-                    nextStep.style.pointerEvents = 'auto';
-                }
-            }
+                                // Clear the mounting container before mounting
+                                document.getElementById('modal-payment-element').innerHTML = '';
+                                paymentElement.mount('#modal-payment-element');
 
-            function openPaymentModal() {
-                const emailInput = document.getElementById('form-parent-email');
-                const phoneInput = document.getElementById('form-parent-phone');
+                                // Use a simple, one-time submit handler for the form
+                                const modalPaymentViewForm = document.getElementById('modal-payment-view');
+                                modalPaymentViewForm.onsubmit = async (e) => {
+                                    e.preventDefault();
 
-                if (!emailInput.checkValidity()) {
-                    emailInput.reportValidity();
-                    return;
-                }
-                if (!phoneInput.checkValidity()) {
-                    phoneInput.reportValidity();
-                    return;
-                }
+                                    const finalPayButton = document.getElementById('final-pay-button');
+                                    const finalPayButtonText = document.getElementById('final-pay-button-text');
 
-                // Summary for modal
-                const names = [];
-                for (let i = 1; i <= currentChildCount; i++) {
-                    names.push(document.getElementById(`form-child-name-${i}`).value);
-                }
-                document.getElementById('modal-child-summary').innerText = names.join(', ');
+                                    // Disable button during processing
+                                    finalPayButton.disabled = true;
+                                    finalPayButtonText.innerText = "Processing...";
+                                    modalPaymentMessage.innerText = 'Processing payment...';
+                                    modalPaymentMessage.classList.remove('hidden');
 
-                const modalOverlay = document.getElementById('payment-modal-overlay');
-                const modal = document.getElementById('payment-modal');
+                                    const { error } = await stripe.confirmPayment({
+                                        elements,
+                                        confirmParams: {
+                                            return_url: returnUrl,
+                                        },
+                                    });
 
-                modalOverlay.classList.add('active');
-                modal.classList.add('active');
+                                    // If an error occurs, re-enable the button
+                                    if (error) {
+                                        finalPayButton.disabled = false;
+                                        finalPayButtonText.innerText = "Error, Retry Payment";
+                                        modalPaymentMessage.innerText = error.message;
+                                        modalPaymentMessage.classList.remove('hidden');
+                                    }
+                                    // On success, Stripe handles the redirect via return_url
+                                };
 
-                // Reset state
-                modalSelectionView.classList.remove('hidden');
-                modalPaymentView.classList.add('hidden');
-                modalPaymentMessage.classList.add('hidden');
-                modalSubmitBtn.disabled = false;
+                                modalPaymentMessage.classList.add('hidden');
+                            }
 
-                // Initialize UI state
-                updateModalUIState();
-            }
+                            async function handleModalPayment() {
+                                if (!document.getElementById('modal-legal-consent').checked) {
+                                    modalPaymentMessage.innerText = "You must agree to the Terms of Service and Privacy Policy to proceed.";
+                                    modalPaymentMessage.classList.remove('hidden');
+                                    return;
+                                }
 
-            function closePaymentModal() {
-                const modalOverlay = document.getElementById('payment-modal-overlay');
-                const modal = document.getElementById('payment-modal');
-                modalOverlay.classList.remove('active');
-                modal.classList.remove('active');
-            }
+                                // 1. Temporarily disable button and show loading text
+                                modalSubmitBtn.disabled = true;
 
-            function updateModalUIState() {
-                const selectedPackage = document.querySelector('input[name="package_id"]:checked');
-                const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
-                const overageSection = document.getElementById('modal-overage-options');
-                const finalPriceDisplay = document.getElementById('modal-final-price');
-                const finalPriceStripe = document.getElementById('modal-final-price-stripe');
-                const modalButtonText = document.getElementById('modal-button-text');
-                const finalPayButtonText = document.getElementById('final-pay-button-text');
+                                // 2. Create Payment Intent
+                                const secret = await createPaymentIntent();
 
-                if (!selectedPackage) return;
+                                if (!secret) {
+                                    // If failed, re-enable button and remain on selection view (error message set by createPaymentIntent)
+                                    modalSubmitBtn.disabled = false;
+                                    return;
+                                }
 
-                const packageId = selectedPackage.value;
-                let price = parseInt(selectedPackage.dataset.price);
+                                // 3. Initialize Stripe (if successful)
+                                initializeStripe(secret);
 
-                // Logic:
-                // Bundle ($20): Includes unlimited. Hide overage options.
-                // Video ($35): No calls. Hide overage options.
-                // Call ($10): Show overage options.
-                //   - Auto-disconnect: +$0
-                //   - Unlimited: +$5
+                                // 4. UX improvement: Hide selection view, show payment view
+                                modalSelectionView.classList.add('hidden');
+                                modalPaymentView.classList.remove('hidden');
 
-                // Extra Children: +$7.50 (750 cents) per extra child
-                const extraChildren = Math.max(0, currentChildCount - 1);
-                const extraChildCost = extraChildren * 750;
-                price += extraChildCost;
+                                // Hide the loading message that createPaymentIntent started
+                                modalPaymentMessage.classList.add('hidden');
+                                // Focus on payment element container as a fallback or try to find an input inside
+                                // document.getElementById('modal-payment-element').focus();
 
-                if (packageId === 'bundle' || packageId === 'video') {
-                    overageSection.classList.add('hidden');
-                } else {
-                    overageSection.classList.remove('hidden');
-                }
+                                // 5. Re-enable the final pay button
+                                document.getElementById('final-pay-button').disabled = false;
+                            }
 
-                if (packageId === 'call' && selectedOverage && selectedOverage.value === 'unlimited') {
-                    price += 500; // Add $5
-                }
-
-                const extraLabel = document.getElementById('modal-extra-charge-label');
-                if (extraChildren > 0) {
-                    extraLabel.innerText = `(Includes +$${(extraChildCost / 100).toFixed(2)} for ${extraChildren} extra child${extraChildren > 1 ? 'ren' : ''})`;
-                    extraLabel.classList.remove('hidden');
-                } else {
-                    extraLabel.classList.add('hidden');
-                }
-
-                const formattedPrice = '$' + (price / 100).toFixed(2);
-                finalPriceDisplay.innerText = formattedPrice;
-                finalPriceStripe.innerText = formattedPrice;
-                modalButtonText.innerText = `Secure Your Magic (${formattedPrice})`;
-                finalPayButtonText.innerText = `Pay Now (${formattedPrice})`;
-            }
-
-            // Add event listeners for real-time updates
-            document.querySelectorAll('input[name="package_id"]').forEach(input => {
-                input.addEventListener('change', updateModalUIState);
-            });
-            document.querySelectorAll('input[name="overage_option"]').forEach(input => {
-                input.addEventListener('change', updateModalUIState);
-            });
-
-            // FAQ Toggle Functionality
-            document.querySelectorAll('.faq-toggle').forEach(button => {
-                button.addEventListener('click', function () {
-                    const faqItem = this.closest('.faq-item');
-                    const faqContent = faqItem.querySelector('.faq-content');
-                    const isActive = faqContent.classList.contains('active');
-
-                    // Toggle the active state
-                    if (isActive) {
-                        faqContent.classList.remove('active');
-                        this.classList.remove('active');
-                    } else {
-                        faqContent.classList.add('active');
-                        this.classList.add('active');
-                    }
-                });
-            });
-
-
-            async function createPaymentIntent() {
-                // Collect Children Data
-                const children = [];
-                for (let i = 1; i <= currentChildCount; i++) {
-                    children.push({
-                        name: document.getElementById(`form-child-name-${i}`).value,
-                        wish: document.getElementById(`form-child-wish-${i}`).value,
-                        deed: document.getElementById(`form-child-deed-${i}`).value
-                    });
-                }
-
-                const parentEmail = document.getElementById('form-parent-email').value;
-                const parentPhone = document.getElementById('form-parent-phone').value;
-                const selectedPackage = document.querySelector('input[name="package_id"]:checked');
-                const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
-
-                if (!selectedPackage) {
-                    modalPaymentMessage.innerText = "Please select a package.";
-                    modalPaymentMessage.classList.remove('hidden');
-                    return null;
-                }
-
-                let overageOption = 'auto_disconnect';
-                if (selectedPackage.value === 'bundle') {
-                    overageOption = 'unlimited';
-                } else if (selectedPackage.value === 'call' && selectedOverage) {
-                    overageOption = selectedOverage.value;
-                }
-
-                const personalizationData = {
-                    children: children,
-                    parent_email: parentEmail,
-                    parent_phone: parentPhone,
-                    package_id: selectedPackage.value,
-                    overage_option: overageOption
-                };
-
-                // Try multiple endpoints if needed, or just the main one
-                const urls = [CREATE_PAYMENT_INTENT_URL];
-
-                for (const url of urls) {
-                    try {
-                        const response = await fetch(url, {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(personalizationData),
-                        });
-
-                        const bodyText = await response.text();
-                        let data = null;
-                        try { data = bodyText ? JSON.parse(bodyText) : {}; } catch (e) { /* not JSON */ }
-
-                        if (response.status === 404) { continue; }
-
-                        if (!response.ok || data.error || !data.clientSecret) {
-                            const errMsg = (data && data.error) ? data.error : bodyText || `HTTP ${response.status}`;
-                            console.error(`Payment Intent failed on ${url}:`, errMsg);
-                            modalPaymentMessage.innerText = `Error: Could not start payment. Check backend configuration (Status ${response.status}).`;
-                            return null;
-                        }
-
-                        return data.clientSecret;
-
-                    } catch (err) {
-                        console.error(`Network failed on ${url}:`, err);
-                        modalPaymentMessage.innerText = "Network Error: Could not connect to payment processor. Please check your connection.";
-                        return null;
-                    }
-                }
-
-                modalPaymentMessage.innerText = "Fatal Error: Payment initialization failed across all routes. Check server logs.";
-                return null;
-            }
-
-            function initializeStripe(secret) {
-                if (stripe && elements) {
-                    return;
-                }
-
-                stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-                const returnUrl = `${window.location.origin}/success.html`;
-
-                const appearance = {
-                    theme: 'night',
-                    variables: {
-                        colorPrimary: '#D42426',
-                        colorText: '#F3F4F6',
-                        colorBackground: '#101827',
-                        colorDanger: '#EF4444',
-                        fontFamily: 'Inter, sans-serif',
-                    },
-                    rules: {
-                        '.Label': { color: '#C5A059' },
-                        '.Input': {
-                            backgroundColor: 'rgba(15, 23, 42, 0.9)', borderColor: 'rgba(255, 255, 255, 0.1)',
-                            boxShadow: 'none'
-                        },
-                        '.Input--invalid': { boxShadow: '0 0 0 1px #EF4444' },
-                    }
-                };
-
-                elements = stripe.elements({ appearance, clientSecret: secret });
-
-                const paymentElement = elements.create('payment', {
-                    wallets: {
-                        applePay: 'auto',
-                        googlePay: 'auto'
-                    },
-                    paymentMethodPreference: 'automatic',
-                });
-
-                // Clear the mounting container before mounting
-                document.getElementById('modal-payment-element').innerHTML = '';
-                paymentElement.mount('#modal-payment-element');
-
-                // Use a simple, one-time submit handler for the form
-                const modalPaymentViewForm = document.getElementById('modal-payment-view');
-                modalPaymentViewForm.onsubmit = async (e) => {
-                    e.preventDefault();
-
-                    const finalPayButton = document.getElementById('final-pay-button');
-                    const finalPayButtonText = document.getElementById('final-pay-button-text');
-
-                    // Disable button during processing
-                    finalPayButton.disabled = true;
-                    finalPayButtonText.innerText = "Processing...";
-                    modalPaymentMessage.innerText = 'Processing payment...';
-                    modalPaymentMessage.classList.remove('hidden');
-
-                    const { error } = await stripe.confirmPayment({
-                        elements,
-                        confirmParams: {
-                            return_url: returnUrl,
-                        },
-                    });
-
-                    // If an error occurs, re-enable the button
-                    if (error) {
-                        finalPayButton.disabled = false;
-                        finalPayButtonText.innerText = "Error, Retry Payment";
-                        modalPaymentMessage.innerText = error.message;
-                        modalPaymentMessage.classList.remove('hidden');
-                    }
-                    // On success, Stripe handles the redirect via return_url
-                };
-
-                modalPaymentMessage.classList.add('hidden');
-            }
-
-            async function handleModalPayment() {
-                if (!document.getElementById('modal-legal-consent').checked) {
-                    modalPaymentMessage.innerText = "You must agree to the Terms of Service and Privacy Policy to proceed.";
-                    modalPaymentMessage.classList.remove('hidden');
-                    return;
-                }
-
-                // 1. Temporarily disable button and show loading text
-                modalSubmitBtn.disabled = true;
-
-                // 2. Create Payment Intent
-                const secret = await createPaymentIntent();
-
-                if (!secret) {
-                    // If failed, re-enable button and remain on selection view (error message set by createPaymentIntent)
-                    modalSubmitBtn.disabled = false;
-                    return;
-                }
-
-                // 3. Initialize Stripe (if successful)
-                initializeStripe(secret);
-
-                // 4. UX improvement: Hide selection view, show payment view
-                modalSelectionView.classList.add('hidden');
-                modalPaymentView.classList.remove('hidden');
-
-                // Hide the loading message that createPaymentIntent started
-                modalPaymentMessage.classList.add('hidden');
-                // Focus on payment element container as a fallback or try to find an input inside
-                // document.getElementById('modal-payment-element').focus();
-
-                // 5. Re-enable the final pay button
-                document.getElementById('final-pay-button').disabled = false;
-            }
-
-        </script>
+                        </script>
 </body>
 
 </html>

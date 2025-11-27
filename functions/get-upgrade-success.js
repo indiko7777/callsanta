@@ -69,7 +69,10 @@ exports.handler = async (event, context) => {
             upgradeType: upgradeOrder.upgradeType,
             childName: originalOrder.children && originalOrder.children[0] ? originalOrder.children[0].name : 'Child',
             parentEmail: upgradeOrder.parentEmail,
-            packageId: upgradeOrder.packageId
+            packageId: upgradeOrder.packageId,
+            amountPaid: upgradeOrder.amountPaid,
+            currency: upgradeOrder.currency || 'USD',
+            order_id: upgradeOrder._id.toString()
         };
 
         // For bundle and return_call upgrades, include new access code
