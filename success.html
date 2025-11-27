@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Successful</title>
+    <title>Order Success</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <link
@@ -13,17 +13,17 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%)
         }
 
         .font-christmas {
-            font-family: 'Mountains of Christmas', cursive;
+            font-family: 'Mountains of Christmas', cursive
         }
 
         .glass-card {
             background: rgba(15, 23, 42, 0.7);
             backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.1)
         }
 
         .festive-border {
@@ -31,31 +31,31 @@
             background: linear-gradient(135deg, #dc2626, #eab308, #22c55e, #dc2626);
             border-radius: 24px;
             background-size: 200% 200%;
-            animation: gradientShift 3s ease infinite;
+            animation: gradientShift 3s ease infinite
         }
 
         @keyframes gradientShift {
 
             0%,
             100% {
-                background-position: 0% 50%;
+                background-position: 0% 50%
             }
 
             50% {
-                background-position: 100% 50%;
+                background-position: 100% 50%
             }
         }
 
         .festive-border-inner {
             background: rgba(15, 23, 42, 0.95);
             border-radius: 21px;
-            padding: 24px;
+            padding: 24px
         }
 
         .vintage-paper {
             background: linear-gradient(to bottom, #f4e8d0 0%, #f0e4cc 100%);
             box-shadow: inset 0 0 50px rgba(139, 69, 19, 0.1);
-            border: 2px solid #d4a574;
+            border: 2px solid #d4a574
         }
 
         .message-santa {
@@ -64,7 +64,7 @@
             border-radius: 18px 18px 18px 4px;
             padding: 12px 16px;
             margin-bottom: 12px;
-            max-width: 80%;
+            max-width: 80%
         }
 
         .message-child {
@@ -74,14 +74,14 @@
             padding: 12px 16px;
             margin-bottom: 12px;
             margin-left: auto;
-            max-width: 80%;
+            max-width: 80%
         }
 
         .candy-cane {
             width: 60px;
             height: 60px;
             background: repeating-linear-gradient(45deg, #dc2626, #dc2626 10px, white 10px, white 20px);
-            border-radius: 50%;
+            border-radius: 50%
         }
     </style>
 </head>
@@ -91,193 +91,202 @@
         <div class="animate-spin rounded-full h-20 w-20 border-t-4 border-red-500 mx-auto mb-4"></div>
         <p class="text-2xl font-christmas text-white">Loading...</p>
     </div>
-
-    <div id="error" class="hidden max-w-md glass-card rounded-2xl p-8 text-center">
-        <i data-lucide="alert-circle" class="w-16 h-16 text-red-400 mx-auto mb-4"></i>
+    <div id="error" class="hidden max-w-md glass-card rounded-2xl p-8 text-center"><i data-lucide="alert-circle"
+            class="w-16 h-16 text-red-400 mx-auto mb-4"></i>
         <h2 class="text-3xl font-christmas text-white mb-2">Oops!</h2>
-        <p id="errorMessage" class="text-gray-300 mb-6"></p>
-        <a href="/" class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full">Return
-            Home</a>
+        <p id="errorMessage" class="text-gray-300 mb-6"></p><a href="/"
+            class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-full">Return Home</a>
     </div>
 
+    <!-- Recording Success (Keep the Magic Forever) - PERFECT, DON'T CHANGE -->
     <div id="recording-success" class="hidden max-w-4xl w-full">
-        <div class="glass-card rounded-3xl p-8 text-center mb-8">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 text-center mb-8">
             <div class="candy-cane mx-auto mb-4"></div>
-            <h1 class="text-5xl font-christmas text-white mb-3">Purchase Complete!</h1>
-            <p class="text-xl text-green-300">Your call recording is ready</p>
+            <h1 class="text-4xl sm:text-5xl font-christmas text-white mb-3">Purchase Complete!</h1>
+            <p class="text-lg sm:text-xl text-green-300">Your call recording is ready</p>
         </div>
         <div class="festive-border mb-8">
             <div class="festive-border-inner">
                 <div class="flex items-center gap-4 mb-6">
-                    <div class="bg-red-600 p-3 rounded-2xl"><i data-lucide="mic" class="w-7 h-7 text-white"></i></div>
+                    <div class="bg-red-600 p-3 rounded-2xl"><i data-lucide="mic"
+                            class="w-6 h-6 sm:w-7 sm:h-7 text-white"></i></div>
                     <div>
-                        <h2 class="text-2xl font-christmas text-white">Your Call Recording</h2>
+                        <h2 class="text-xl sm:text-2xl font-christmas text-white">Your Call Recording</h2>
                         <p id="rec-duration" class="text-sm text-gray-400">Duration: 0:00</p>
                     </div>
-                </div>
-                <audio id="rec-audio" controls class="w-full mb-4"></audio>
-                <a id="rec-download" href="#" download
-                    class="inline-flex items-center gap-2 bg-red-900/30 hover:bg-red-900/50 text-red-300 py-3 px-6 rounded-xl border border-red-500/30 w-full justify-center">
-                    <i data-lucide="download" class="w-5 h-5"></i><span>Download Recording (MP3)</span>
-                </a>
+                </div><audio id="rec-audio" controls class="w-full mb-4"></audio><a id="rec-download" href="#" download
+                    class="inline-flex items-center gap-2 bg-red-900/30 hover:bg-red-900/50 text-red-300 py-3 px-6 rounded-xl border border-red-500/30 w-full justify-center text-sm sm:text-base"><i
+                        data-lucide="download" class="w-4 h-4 sm:w-5 sm:h-5"></i><span>Download Recording
+                        (MP3)</span></a>
             </div>
         </div>
-        <div class="vintage-paper rounded-3xl p-8 mb-8">
+        <div class="vintage-paper rounded-3xl p-6 sm:p-8 mb-8">
             <div class="flex items-center gap-4 mb-6 pb-4 border-b-2 border-amber-900/30">
                 <div class="bg-amber-800 p-3 rounded-2xl"><i data-lucide="scroll-text"
-                        class="w-7 h-7 text-amber-100"></i></div>
+                        class="w-6 h-6 sm:w-7 sm:h-7 text-amber-100"></i></div>
                 <div>
-                    <h3 class="text-2xl font-christmas text-amber-900">The Conversation</h3>
-                    <p class="text-sm text-amber-800 italic">Every magical word preserved</p>
+                    <h3 class="text-xl sm:text-2xl font-christmas text-amber-900">The Conversation</h3>
+                    <p class="text-xs sm:text-sm text-amber-800 italic">Every magical word preserved</p>
                 </div>
             </div>
             <div id="rec-transcript" class="space-y-3 max-h-[400px] overflow-y-auto"></div>
         </div>
-        <div class="glass-card rounded-3xl p-8 text-center">
-            <div class="bg-yellow-500 p-4 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center"><i
-                    data-lucide="phone-call" class="w-10 h-10 text-white"></i></div>
-            <h3 class="text-3xl font-christmas text-white mb-3">Want Santa to Call Again?</h3>
-            <p class="text-gray-300 text-lg mb-6">Book a return call where Santa remembers everything!</p>
+        <div class="glass-card rounded-3xl p-6 sm:p-8 text-center">
+            <div
+                class="bg-yellow-500 p-4 rounded-full w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 flex items-center justify-center">
+                <i data-lucide="phone-call" class="w-8 h-8 sm:w-10 sm:h-10 text-white"></i></div>
+            <h3 class="text-2xl sm:text-3xl font-christmas text-white mb-3">Want Santa to Call Again?</h3>
+            <p class="text-base sm:text-lg text-gray-300 mb-6">Book a return call where Santa remembers everything!</p>
             <a id="rec-upsell" href="#"
-                class="inline-flex items-center gap-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold text-lg py-4 px-8 rounded-full">
-                <i data-lucide="sparkles" class="w-6 h-6"></i><span>Book Return Call - $10</span>
-            </a>
+                class="inline-flex items-center gap-3 bg-yellow-500 hover:bg-yellow-600 text-black font-bold text-base sm:text-lg py-3 sm:py-4 px-6 sm:px-8 rounded-full"><i
+                    data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6"></i><span>Book Return Call - $10</span></a>
         </div>
     </div>
 
-    <div id="return-call-success" class="hidden max-w-5xl w-full">
-        <div class="glass-card rounded-3xl p-8 text-center mb-8">
-            <div class="bg-yellow-500 p-4 rounded-full w-20 h-20 mx-auto mb-4 flex items-center justify-center"><i
-                    data-lucide="sparkles" class="w-12 h-12 text-white"></i></div>
-            <h1 class="text-5xl font-christmas text-white mb-3">Your Return Call is Ready!</h1>
-            <p class="text-xl text-green-300">Santa can't wait to talk again!</p>
-        </div>
-        <div class="glass-card rounded-3xl p-10 mb-8">
+    <!-- Return Call Success (No previous audio/transcript) -->
+    <div id="return-call-success" class="hidden max-w-4xl w-full">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 text-center mb-8">
             <div
-                class="bg-gradient-to-br from-red-900/30 to-green-900/30 p-8 rounded-2xl border-2 border-yellow-500/50">
-                <p class="text-sm text-gray-300 uppercase tracking-widest mb-3 text-center">Your New Access Code</p>
-                <p id="ret-code" class="text-8xl font-mono font-black text-yellow-400 text-center mb-6">----</p>
+                class="bg-yellow-500 p-4 rounded-full w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 flex items-center justify-center">
+                <i data-lucide="sparkles" class="w-10 h-10 sm:w-12 sm:h-12 text-white"></i></div>
+            <h1 class="text-4xl sm:text-5xl font-christmas text-white mb-3">Your Return Call is Ready!</h1>
+            <p class="text-lg sm:text-xl text-green-300">Santa can't wait to talk again!</p>
+        </div>
+        <div class="glass-card rounded-3xl p-6 sm:p-10 mb-8">
+            <div
+                class="bg-gradient-to-br from-red-900/30 to-green-900/30 p-6 sm:p-8 rounded-2xl border-2 border-yellow-500/50">
+                <p class="text-xs sm:text-sm text-gray-300 uppercase tracking-widest mb-3 text-center">Your New Access
+                    Code</p>
+                <p id="ret-code"
+                    class="text-6xl sm:text-7xl md:text-8xl font-mono font-black text-yellow-400 text-center mb-6">----
+                </p>
                 <div class="pt-6 border-t border-white/20 text-center">
-                    <p class="text-base text-gray-300 mb-2">Call Santa at:</p>
-                    <p id="ret-phone" class="text-4xl font-bold text-white">+1 (XXX) XXX-XXXX</p>
+                    <p class="text-sm sm:text-base text-gray-300 mb-2">Call Santa at:</p>
+                    <p id="ret-phone" class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3">+1 (XXX)
+                        XXX-XXXX</p>
+                    <div
+                        class="inline-flex items-center gap-2 bg-yellow-500/20 border border-yellow-500/50 rounded-lg px-3 py-2">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-yellow-400 flex-shrink-0"></i>
+                        <p class="text-xs sm:text-sm text-yellow-300 font-semibold">Make sure to dial Santa's NEW phone
+                            number!</p>
+                    </div>
                 </div>
             </div>
             <div class="mt-6 bg-green-900/20 border border-green-500/30 rounded-xl p-4">
-                <p class="text-green-300 text-center"><strong>✨ Special:</strong> Santa will remember your previous
-                    conversation!</p>
+                <p class="text-sm sm:text-base text-green-300 text-center"><strong>✨ Special:</strong> Santa will
+                    remember your previous conversation!</p>
             </div>
         </div>
-        <h2 class="text-3xl font-christmas text-white text-center mb-6">Your Previous Call with Santa</h2>
-        <div class="grid lg:grid-cols-2 gap-6 mb-8">
+        <div class="glass-card rounded-3xl p-6 sm:p-8">
+            <h3 class="text-xl sm:text-2xl font-christmas text-yellow-400 mb-4 text-center">How to Make Your Return Call
+            </h3>
+            <ol class="space-y-4">
+                <li class="flex items-start gap-3 sm:gap-4"><span
+                        class="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm sm:text-base">1</span><span
+                        class="text-base sm:text-lg text-gray-200 pt-1">Dial the NEW number above (not your original
+                        number)</span></li>
+                <li class="flex items-start gap-3 sm:gap-4"><span
+                        class="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm sm:text-base">2</span><span
+                        class="text-base sm:text-lg text-gray-200 pt-1">Enter your new 4-digit access code</span></li>
+                <li class="flex items-start gap-3 sm:gap-4"><span
+                        class="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm sm:text-base">3</span><span
+                        class="text-base sm:text-lg text-yellow-400 font-semibold pt-1">Enjoy unlimited talk time with
+                        Santa!</span></li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Bundle Success (Shows previous audio/transcript + 5-minute limit) -->
+    <div id="bundle-success" class="hidden max-w-5xl w-full">
+        <div class="glass-card rounded-3xl p-6 sm:p-8 text-center mb-8">
+            <div
+                class="bg-yellow-500 p-4 rounded-full w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 flex items-center justify-center">
+                <i data-lucide="gift" class="w-10 h-10 sm:w-12 sm:h-12 text-white"></i></div>
+            <h1 class="text-4xl sm:text-5xl font-christmas text-white mb-3">Ultimate Bundle Activated!</h1>
+            <p class="text-lg sm:text-xl text-green-300">Everything you need for the perfect Santa experience</p>
+        </div>
+        <div class="glass-card rounded-3xl p-6 sm:p-10 mb-8">
+            <div
+                class="bg-gradient-to-br from-red-900/30 to-green-900/30 p-6 sm:p-8 rounded-2xl border-2 border-yellow-500/50">
+                <p class="text-xs sm:text-sm text-gray-300 uppercase tracking-widest mb-3 text-center">Your New Access
+                    Code</p>
+                <p id="bundle-code"
+                    class="text-6xl sm:text-7xl md:text-8xl font-mono font-black text-yellow-400 text-center mb-6">----
+                </p>
+                <div class="pt-6 border-t border-white/20 text-center">
+                    <p class="text-sm sm:text-base text-gray-300 mb-2">Call Santa at:</p>
+                    <p id="bundle-phone" class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3">+1 (XXX)
+                        XXX-XXXX</p>
+                    <div
+                        class="inline-flex items-center gap-2 bg-yellow-500/20 border border-yellow-500/50 rounded-lg px-3 py-2">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-yellow-400 flex-shrink-0"></i>
+                        <p class="text-xs sm:text-sm text-yellow-300 font-semibold">Make sure to dial Santa's NEW phone
+                            number!</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 bg-blue-900/20 border border-blue-500/30 rounded-xl p-4">
+                <p class="text-sm sm:text-base text-blue-300 text-center"><strong>⏱️ 5-Minute Call:</strong> Your next
+                    call with Santa will be up to 5 minutes long</p>
+            </div>
+            <div class="mt-4 bg-green-900/20 border border-green-500/30 rounded-xl p-4">
+                <p class="text-sm sm:text-base text-green-300 text-center"><strong>✨ Santa Remembers:</strong> He'll
+                    reference your previous conversation!</p>
+            </div>
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-christmas text-white text-center mb-6">Your Previous Call with Santa</h2>
+        <div class="max-w-2xl mx-auto mb-8">
             <div class="festive-border">
                 <div class="festive-border-inner">
                     <div class="flex items-center gap-4 mb-4">
                         <div class="bg-red-600 p-3 rounded-2xl"><i data-lucide="mic" class="w-6 h-6 text-white"></i>
                         </div>
                         <div>
-                            <h3 class="text-xl font-christmas text-white">Recording</h3>
-                            <p id="ret-duration" class="text-sm text-gray-400">Duration: 0:00</p>
+                            <h3 class="text-lg sm:text-xl font-christmas text-white">Recording</h3>
+                            <p id="bundle-duration" class="text-sm text-gray-400">Duration: 0:00</p>
                         </div>
-                    </div>
-                    <audio id="ret-audio" controls class="w-full mb-4"></audio>
-                    <a id="ret-download" href="#" download
-                        class="inline-flex items-center gap-2 bg-red-900/30 hover:bg-red-900/50 text-red-300 py-2 px-4 rounded-xl border border-red-500/30 w-full justify-center text-sm">
-                        <i data-lucide="download" class="w-4 h-4"></i><span>Download</span>
-                    </a>
+                    </div><audio id="bundle-audio" controls class="w-full mb-4"></audio><a id="bundle-download" href="#"
+                        download
+                        class="inline-flex items-center gap-2 bg-red-900/30 hover:bg-red-900/50 text-red-300 py-2 px-4 rounded-xl border border-red-500/30 w-full justify-center text-sm"><i
+                            data-lucide="download" class="w-4 h-4"></i><span>Download</span></a>
                 </div>
             </div>
         </div>
-        <div class="vintage-paper rounded-3xl p-8 mb-8">
+        <div class="vintage-paper rounded-3xl p-6 sm:p-8 mb-8">
             <div class="flex items-center gap-4 mb-6 pb-4 border-b-2 border-amber-900/30">
                 <div class="bg-amber-800 p-3 rounded-2xl"><i data-lucide="scroll-text"
-                        class="w-7 h-7 text-amber-100"></i></div>
+                        class="w-6 h-6 sm:w-7 sm:h-7 text-amber-100"></i></div>
                 <div>
-                    <h3 class="text-2xl font-christmas text-amber-900">The Conversation</h3>
-                    <p class="text-sm text-amber-800 italic">Every magical word preserved</p>
+                    <h3 class="text-xl sm:text-2xl font-christmas text-amber-900">The Conversation</h3>
+                    <p class="text-xs sm:text-sm text-amber-800 italic">Every magical word preserved</p>
                 </div>
             </div>
-            <div id="ret-transcript" class="space-y-3 max-h-[400px] overflow-y-auto"></div>
+            <div id="bundle-transcript" class="space-y-3 max-h-[400px] overflow-y-auto"></div>
         </div>
-        <div class="glass-card rounded-3xl p-8">
-            <h3 class="text-2xl font-christmas text-yellow-400 mb-4 text-center">How to Make Your Return Call</h3>
+        <div class="glass-card rounded-3xl p-6 sm:p-8">
+            <h3 class="text-xl sm:text-2xl font-christmas text-yellow-400 mb-4 text-center">How to Make Your Next Call
+            </h3>
             <ol class="space-y-4">
-                <li class="flex items-start gap-4"><span
-                        class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0">1</span><span
-                        class="text-lg text-gray-200 pt-1">Dial the number above</span></li>
-                <li class="flex items-start gap-4"><span
-                        class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0">2</span><span
-                        class="text-lg text-gray-200 pt-1">Enter your new 4-digit access code</span></li>
-                <li class="flex items-start gap-4"><span
-                        class="w-10 h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0">3</span><span
-                        class="text-lg text-yellow-400 font-semibold pt-1">Enjoy unlimited talk time with Santa!</span>
-                </li>
+                <li class="flex items-start gap-3 sm:gap-4"><span
+                        class="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm sm:text-base">1</span><span
+                        class="text-base sm:text-lg text-gray-200 pt-1">Dial the NEW number above</span></li>
+                <li class="flex items-start gap-3 sm:gap-4"><span
+                        class="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm sm:text-base">2</span><span
+                        class="text-base sm:text-lg text-gray-200 pt-1">Enter your new 4-digit access code</span></li>
+                <li class="flex items-start gap-3 sm:gap-4"><span
+                        class="w-8 h-8 sm:w-10 sm:h-10 bg-red-600 rounded-full flex items-center justify-center font-bold text-white flex-shrink-0 text-sm sm:text-base">3</span><span
+                        class="text-base sm:text-lg text-yellow-400 font-semibold pt-1">Enjoy up to 5 minutes with
+                        Santa!</span></li>
             </ol>
         </div>
     </div>
 
     <script>
         lucide.createIcons();
-        async function loadOrder() {
-            const params = new URLSearchParams(window.location.search);
-            const paymentIntent = params.get('payment_intent');
-            if (!paymentIntent) { showError('No payment information found'); return; }
-            try {
-                const res = await fetch(`/.netlify/functions/get-upgrade-success?payment_intent_id=${paymentIntent}`);
-                const data = await res.json();
-                if (data.isUpgrade) { showUpgrade(data); } else { window.location.href = '/success-original.html?payment_intent=' + paymentIntent; }
-                document.getElementById('loading').classList.add('hidden');
-            } catch (error) { console.error(error); showError('Failed to load order: ' + error.message); }
-        }
-        function showUpgrade(data) {
-            const { upgradeType, originalCall, newAccessCode, twilioNumber } = data;
-            if (upgradeType === 'recording') {
-                document.getElementById('recording-success').classList.remove('hidden');
-                if (originalCall?.audioUrl) {
-                    document.getElementById('rec-audio').src = originalCall.audioUrl;
-                    document.getElementById('rec-download').href = originalCall.audioUrl;
-                    if (originalCall.callDuration) {
-                        const min = Math.floor(originalCall.callDuration / 60);
-                        const sec = originalCall.callDuration % 60;
-                        document.getElementById('rec-duration').textContent = `Duration: ${min}:${sec.toString().padStart(2, '0')}`;
-                    }
-                }
-                if (originalCall?.transcript) { showTranscript('rec-transcript', originalCall.transcript); }
-                if (originalCall?.accessCode) { document.getElementById('rec-upsell').href = `/upgrade/return-call?order=${originalCall.accessCode}`; }
-            } else if (upgradeType === 'bundle' || upgradeType === 'return_call') {
-                document.getElementById('return-call-success').classList.remove('hidden');
-                document.getElementById('ret-code').textContent = newAccessCode || '----';
-                document.getElementById('ret-phone').textContent = twilioNumber || '+1 (XXX) XXX-XXXX';
-                if (originalCall?.audioUrl) {
-                    document.getElementById('ret-audio').src = originalCall.audioUrl;
-                    document.getElementById('ret-download').href = originalCall.audioUrl;
-                    if (originalCall.callDuration) {
-                        const min = Math.floor(originalCall.callDuration / 60);
-                        const sec = originalCall.callDuration % 60;
-                        document.getElementById('ret-duration').textContent = `Duration: ${min}:${sec.toString().padStart(2, '0')}`;
-                    }
-                }
-                if (originalCall?.transcript) { showTranscript('ret-transcript', originalCall.transcript); }
-            }
-            lucide.createIcons();
-        }
-        function showTranscript(elementId, transcript) {
-            const div = document.getElementById(elementId);
-            const lines = transcript.split('\n');
-            div.innerHTML = lines.map(line => {
-                if (!line.trim()) return '';
-                const santa = line.match(/^(Santa|AI|Assistant):\s*(.+)/i);
-                const child = line.match(/^(Child|User|Kid|[A-Z][a-z]+):\s*(.+)/i);
-                if (santa) { return `<div class="message-santa"><strong>🎅 Santa:</strong> ${santa[2]}</div>`; }
-                else if (child) { return `<div class="message-child"><strong>${child[1]}:</strong> ${child[2]}</div>`; }
-                else { return `<div class="message-child">${line}</div>`; }
-            }).join('');
-        }
-        function showError(msg) {
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('error').classList.remove('hidden');
-            document.getElementById('errorMessage').textContent = msg;
-            lucide.createIcons();
-        }
+        async function loadOrder() { const params = new URLSearchParams(window.location.search); const paymentIntent = params.get('payment_intent'); if (!paymentIntent) { showError('No payment information found'); return } try { const res = await fetch(`/.netlify/functions/get-upgrade-success?payment_intent_id=${paymentIntent}`); const data = await res.json(); if (data.isUpgrade) { showUpgrade(data) } else { window.location.href = '/success-original.html?payment_intent=' + paymentIntent } document.getElementById('loading').classList.add('hidden') } catch (error) { console.error(error); showError('Failed to load order: ' + error.message) } }
+        function showUpgrade(data) { const { upgradeType, originalCall, newAccessCode, twilioNumber } = data; if (upgradeType === 'recording') { document.getElementById('recording-success').classList.remove('hidden'); if (originalCall?.audioUrl) { document.getElementById('rec-audio').src = originalCall.audioUrl; document.getElementById('rec-download').href = originalCall.audioUrl; if (originalCall.callDuration) { const min = Math.floor(originalCall.callDuration / 60); const sec = originalCall.callDuration % 60; document.getElementById('rec-duration').textContent = `Duration: ${min}:${sec.toString().padStart(2, '0')}` } } if (originalCall?.transcript) { showTranscript('rec-transcript', originalCall.transcript) } if (originalCall?.accessCode) { document.getElementById('rec-upsell').href = `/upgrade/return-call?order=${originalCall.accessCode}` } } else if (upgradeType === 'return_call') { document.getElementById('return-call-success').classList.remove('hidden'); document.getElementById('ret-code').textContent = newAccessCode || '----'; document.getElementById('ret-phone').textContent = twilioNumber || '+1 (XXX) XXX-XXXX' } else if (upgradeType === 'bundle') { document.getElementById('bundle-success').classList.remove('hidden'); document.getElementById('bundle-code').textContent = newAccessCode || '----'; document.getElementById('bundle-phone').textContent = twilioNumber || '+1 (XXX) XXX-XXXX'; if (originalCall?.audioUrl) { document.getElementById('bundle-audio').src = originalCall.audioUrl; document.getElementById('bundle-download').href = originalCall.audioUrl; if (originalCall.callDuration) { const min = Math.floor(originalCall.callDuration / 60); const sec = originalCall.callDuration % 60; document.getElementById('bundle-duration').textContent = `Duration: ${min}:${sec.toString().padStart(2, '0')}` } } if (originalCall?.transcript) { showTranscript('bundle-transcript', originalCall.transcript) } } lucide.createIcons() }
+        function showTranscript(elementId, transcript) { const div = document.getElementById(elementId); const lines = transcript.split('\n'); div.innerHTML = lines.map(line => { if (!line.trim()) return ''; const santa = line.match(/^(Santa|AI|Assistant):\s*(.+)/i); const child = line.match(/^(Child|User|Kid|[A-Z][a-z]+):\s*(.+)/i); if (santa) { return `<div class="message-santa"><strong>🎅 Santa:</strong> ${santa[2]}</div>` } else if (child) { return `<div class="message-child"><strong>${child[1]}:</strong> ${child[2]}</div>` } else { return `<div class="message-child">${line}</div>` } }).join('') }
+        function showError(msg) { document.getElementById('loading').classList.add('hidden'); document.getElementById('error').classList.remove('hidden'); document.getElementById('errorMessage').textContent = msg; lucide.createIcons() }
         window.addEventListener('DOMContentLoaded', loadOrder);
     </script>
 </body>
