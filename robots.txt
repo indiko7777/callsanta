@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://callsanta.us/sitemap.xml
