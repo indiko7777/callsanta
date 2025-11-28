@@ -36,7 +36,7 @@
         !function (f, b, e, v, n, t, s) {
             if (f.fbq) return; n = f.fbq = function () {
                 n.callMethod ?
-                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
             };
             if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
             n.queue = []; t = b.createElement(e); t.async = !0;
@@ -738,6 +738,7 @@
                 }
             }
         }
+
         function displayUpgradeSuccess(data) {
             const { upgradeType, originalCall, newAccessCode, twilioNumber } = data;
 
@@ -802,6 +803,30 @@
             callContainer.classList.add('hidden');
             videoContainer.classList.add('hidden');
             bundleContainer.classList.add('hidden');
+
+            if (data.packageId === 'call') {
+                displayCallSuccess(data);
+            } else if (data.packageId === 'video') {
+                displayVideoSuccess(data);
+            } else if (data.packageId === 'bundle') {
+                displayBundleSuccess(data);
+            }
+
+            // Track Purchase Event
+            if (typeof fbq === 'function') {
+                fbq('track', 'Purchase', {
+                    value: data.amountPaid || 0,
+                    currency: data.currency || 'USD',
+                    content_name: data.packageId,
+                    content_ids: [data.packageId],
+                    content_type: 'product'
+                });
+            }
+        }
+
+        function displayCallSuccess(data) {
+            const container = document.getElementById('call-success-container');
+            const accessCodeDisplay = document.getElementById('access-code-display');
             const overagePolicy = document.getElementById('overage-policy');
 
             container.classList.remove('hidden');
