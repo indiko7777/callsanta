@@ -41,8 +41,7 @@ exports.handler = async (event, context) => {
         await connectToDatabase(process.env.MONGODB_URI);
 
         const body = JSON.parse(event.body);
-        const { package_id, parent_email, parent_phone, children, overage_option } = body;
-
+       const { package_id, parent_email, parent_phone, children, overage_option, promo_code } = body;
         let amount = PRODUCT_PRICES[package_id];
 
         if (!amount) {
