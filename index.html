@@ -10,6 +10,25 @@
         gtag('js', new Date());
         gtag('config', 'G-E2XNQGLFBX');
     </script>
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            };
+            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
+            n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s)
+        }(window, document, 'script',
+            'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '1520088889101309');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+            src="https://www.facebook.com/tr?id=1520088889101309&ev=PageView&noscript=1" /></noscript>
+    <!-- End Facebook Pixel Code -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -20,14 +39,14 @@
         content="call santa, santa video call, personalized santa message, santa phone call app, live santa call, christmas magic, santa claus hotline">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://callsanta.us/">
-<link rel="icon" type="image/png" href="https://callsanta.us/images/favicon.png">
+    <link rel="icon" type="image/png" href="https://callsanta.us/images/favicon.png">
     <link rel="apple-touch-icon" href="https://callsanta.us/images/favicon.png">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://callsanta.us/">
     <meta property="og:title" content="Call Santa - The Most Magical Call of the Year">
     <meta property="og:description"
         content="Watch your child's eyes light up! Get a personalized live call from Santa that knows their name, age, and gift wish.">
-  <meta property="og:image" content="https://callsanta.us/images/social-share-preview.png">
+    <meta property="og:image" content="https://callsanta.us/images/social-share-preview.png">
     <meta property="og:price:amount" content="10.00">
     <meta property="og:price:currency" content="USD">
 
@@ -1607,17 +1626,17 @@
                         </label>
                     </div>
                 </div>
-<div class="space-y-2">
-    <label class="text-sm font-semibold text-gray-400 ml-1">Promo Code</label>
-    <div class="flex gap-2">
-        <input id="promo-code-input" type="text" 
-            class="flex-1 glass-input p-3 text-sm rounded-lg uppercase tracking-wider placeholder-gray-600" 
-            placeholder="ENTER CODE" oninput="updateModalUIState()">
-    </div>
-    <div id="promo-message" class="text-xs text-green-400 hidden font-medium flex items-center gap-1">
-        <i data-lucide="check" class="w-3 h-3"></i> Code Applied!
-    </div>
-</div>
+                <div class="space-y-2">
+                    <label class="text-sm font-semibold text-gray-400 ml-1">Promo Code</label>
+                    <div class="flex gap-2">
+                        <input id="promo-code-input" type="text"
+                            class="flex-1 glass-input p-3 text-sm rounded-lg uppercase tracking-wider placeholder-gray-600"
+                            placeholder="ENTER CODE" oninput="updateModalUIState()">
+                    </div>
+                    <div id="promo-message" class="text-xs text-green-400 hidden font-medium flex items-center gap-1">
+                        <i data-lucide="check" class="w-3 h-3"></i> Code Applied!
+                    </div>
+                </div>
                 <div id="pre-stripe-commit-section" class="space-y-4">
                     <div
                         class="flex justify-between items-center p-4 rounded-xl bg-slate-900/90 border border-white/10">
@@ -1848,70 +1867,70 @@
             modal.classList.remove('active');
         }
 
-function updateModalUIState() {
-    const selectedPackage = document.querySelector('input[name="package_id"]:checked');
-    const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
-    const overageSection = document.getElementById('modal-overage-options');
-    const finalPriceDisplay = document.getElementById('modal-final-price');
-    const finalPriceStripe = document.getElementById('modal-final-price-stripe');
-    const modalButtonText = document.getElementById('modal-button-text');
-    const finalPayButtonText = document.getElementById('final-pay-button-text');
-    const promoInput = document.getElementById('promo-code-input'); // GET INPUT
-    const promoMessage = document.getElementById('promo-message'); // GET MESSAGE DIV
+        function updateModalUIState() {
+            const selectedPackage = document.querySelector('input[name="package_id"]:checked');
+            const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
+            const overageSection = document.getElementById('modal-overage-options');
+            const finalPriceDisplay = document.getElementById('modal-final-price');
+            const finalPriceStripe = document.getElementById('modal-final-price-stripe');
+            const modalButtonText = document.getElementById('modal-button-text');
+            const finalPayButtonText = document.getElementById('final-pay-button-text');
+            const promoInput = document.getElementById('promo-code-input'); // GET INPUT
+            const promoMessage = document.getElementById('promo-message'); // GET MESSAGE DIV
 
-    if (!selectedPackage) return;
+            if (!selectedPackage) return;
 
-    const packageId = selectedPackage.value;
-    let price = parseInt(selectedPackage.dataset.price);
+            const packageId = selectedPackage.value;
+            let price = parseInt(selectedPackage.dataset.price);
 
-    // Existing Extra Children Logic
-    const extraChildren = Math.max(0, currentChildCount - 1);
-    const extraChildCost = extraChildren * 750;
-    price += extraChildCost;
+            // Existing Extra Children Logic
+            const extraChildren = Math.max(0, currentChildCount - 1);
+            const extraChildCost = extraChildren * 750;
+            price += extraChildCost;
 
-    // Existing Overage Visibility Logic
-    if (packageId === 'bundle' || packageId === 'video') {
-        overageSection.classList.add('hidden');
-    } else {
-        overageSection.classList.remove('hidden');
-    }
+            // Existing Overage Visibility Logic
+            if (packageId === 'bundle' || packageId === 'video') {
+                overageSection.classList.add('hidden');
+            } else {
+                overageSection.classList.remove('hidden');
+            }
 
-    // Existing Overage Price Logic
-    if (packageId === 'call' && selectedOverage && selectedOverage.value === 'unlimited') {
-        price += 500; 
-    }
+            // Existing Overage Price Logic
+            if (packageId === 'call' && selectedOverage && selectedOverage.value === 'unlimited') {
+                price += 500;
+            }
 
-    // --- NEW PROMO CODE LOGIC ---
-    // Change 'TEST100' to whatever code you want to use
-    if (promoInput && promoInput.value.trim().toUpperCase() === 'TEST100') {
-        price = 0; 
-        promoMessage.classList.remove('hidden');
-    } else if (promoMessage) {
-        promoMessage.classList.add('hidden');
-    }
-    // ----------------------------
+            // --- NEW PROMO CODE LOGIC ---
+            // Change 'TEST100' to whatever code you want to use
+            if (promoInput && promoInput.value.trim().toUpperCase() === 'TEST100') {
+                price = 0;
+                promoMessage.classList.remove('hidden');
+            } else if (promoMessage) {
+                promoMessage.classList.add('hidden');
+            }
+            // ----------------------------
 
-    const extraLabel = document.getElementById('modal-extra-charge-label');
-    if (extraChildren > 0) {
-        extraLabel.innerText = `(Includes +$${(extraChildCost / 100).toFixed(2)} for ${extraChildren} extra child${extraChildren > 1 ? 'ren' : ''})`;
-        extraLabel.classList.remove('hidden');
-    } else {
-        extraLabel.classList.add('hidden');
-    }
+            const extraLabel = document.getElementById('modal-extra-charge-label');
+            if (extraChildren > 0) {
+                extraLabel.innerText = `(Includes +$${(extraChildCost / 100).toFixed(2)} for ${extraChildren} extra child${extraChildren > 1 ? 'ren' : ''})`;
+                extraLabel.classList.remove('hidden');
+            } else {
+                extraLabel.classList.add('hidden');
+            }
 
-    const formattedPrice = '$' + (price / 100).toFixed(2);
-    finalPriceDisplay.innerText = formattedPrice;
-    finalPriceStripe.innerText = formattedPrice;
-    
-    // Update button text based on whether it's free or not
-    if (price === 0) {
-        modalButtonText.innerText = `Complete Free Order`;
-        finalPayButtonText.innerText = `Complete Order`;
-    } else {
-        modalButtonText.innerText = `Secure Your Magic (${formattedPrice})`;
-        finalPayButtonText.innerText = `Pay Now (${formattedPrice})`;
-    }
-}
+            const formattedPrice = '$' + (price / 100).toFixed(2);
+            finalPriceDisplay.innerText = formattedPrice;
+            finalPriceStripe.innerText = formattedPrice;
+
+            // Update button text based on whether it's free or not
+            if (price === 0) {
+                modalButtonText.innerText = `Complete Free Order`;
+                finalPayButtonText.innerText = `Complete Order`;
+            } else {
+                modalButtonText.innerText = `Secure Your Magic (${formattedPrice})`;
+                finalPayButtonText.innerText = `Pay Now (${formattedPrice})`;
+            }
+        }
         // Add event listeners for real-time updates
         document.querySelectorAll('input[name="package_id"]').forEach(input => {
             input.addEventListener('change', updateModalUIState);
@@ -1939,85 +1958,85 @@ function updateModalUIState() {
         });
 
 
-async function createPaymentIntent() {
-    // Collect Children Data
-    const children = [];
-    for (let i = 1; i <= currentChildCount; i++) {
-        children.push({
-            name: document.getElementById(`form-child-name-${i}`).value,
-            wish: document.getElementById(`form-child-wish-${i}`).value,
-            deed: document.getElementById(`form-child-deed-${i}`).value
-        });
-    }
+        async function createPaymentIntent() {
+            // Collect Children Data
+            const children = [];
+            for (let i = 1; i <= currentChildCount; i++) {
+                children.push({
+                    name: document.getElementById(`form-child-name-${i}`).value,
+                    wish: document.getElementById(`form-child-wish-${i}`).value,
+                    deed: document.getElementById(`form-child-deed-${i}`).value
+                });
+            }
 
-    const parentEmail = document.getElementById('form-parent-email').value;
-    const parentPhone = document.getElementById('form-parent-phone').value;
-    const selectedPackage = document.querySelector('input[name="package_id"]:checked');
-    const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
-    
-    // --- FIX 1: Define promoCode ---
-    const promoInput = document.getElementById('promo-code-input');
-    const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : ''; 
-    // -------------------------------
+            const parentEmail = document.getElementById('form-parent-email').value;
+            const parentPhone = document.getElementById('form-parent-phone').value;
+            const selectedPackage = document.querySelector('input[name="package_id"]:checked');
+            const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
 
-    if (!selectedPackage) {
-        modalPaymentMessage.innerText = "Please select a package.";
-        modalPaymentMessage.classList.remove('hidden');
-        return null;
-    }
+            // --- FIX 1: Define promoCode ---
+            const promoInput = document.getElementById('promo-code-input');
+            const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : '';
+            // -------------------------------
 
-    let overageOption = 'auto_disconnect';
-    if (selectedPackage.value === 'bundle') {
-        overageOption = 'unlimited';
-    } else if (selectedPackage.value === 'call' && selectedOverage) {
-        overageOption = selectedOverage.value;
-    }
-
-    const personalizationData = {
-        children: children,
-        parent_email: parentEmail,
-        parent_phone: parentPhone,
-        package_id: selectedPackage.value,
-        overage_option: overageOption,
-        promo_code: promoCode // Send the code
-    };
-
-    const urls = [CREATE_PAYMENT_INTENT_URL];
-
-    for (const url of urls) {
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(personalizationData),
-            });
-
-            const bodyText = await response.text();
-            let data = null;
-            try { data = bodyText ? JSON.parse(bodyText) : {}; } catch (e) { /* not JSON */ }
-
-            if (response.status === 404) { continue; }
-
-            // --- FIX 2: Allow success if it is a freeOrder OR has clientSecret ---
-            if (!response.ok || data.error || (!data.clientSecret && !data.freeOrder)) {
-                const errMsg = (data && data.error) ? data.error : bodyText || `HTTP ${response.status}`;
-                console.error(`Payment Intent failed on ${url}:`, errMsg);
-                modalPaymentMessage.innerText = `Error: Could not start payment. Check backend configuration (Status ${response.status}).`;
+            if (!selectedPackage) {
+                modalPaymentMessage.innerText = "Please select a package.";
+                modalPaymentMessage.classList.remove('hidden');
                 return null;
             }
 
-            return data;
+            let overageOption = 'auto_disconnect';
+            if (selectedPackage.value === 'bundle') {
+                overageOption = 'unlimited';
+            } else if (selectedPackage.value === 'call' && selectedOverage) {
+                overageOption = selectedOverage.value;
+            }
 
-        } catch (err) {
-            console.error(`Network failed on ${url}:`, err);
-            modalPaymentMessage.innerText = "Network Error: Could not connect to payment processor. Please check your connection.";
+            const personalizationData = {
+                children: children,
+                parent_email: parentEmail,
+                parent_phone: parentPhone,
+                package_id: selectedPackage.value,
+                overage_option: overageOption,
+                promo_code: promoCode // Send the code
+            };
+
+            const urls = [CREATE_PAYMENT_INTENT_URL];
+
+            for (const url of urls) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(personalizationData),
+                    });
+
+                    const bodyText = await response.text();
+                    let data = null;
+                    try { data = bodyText ? JSON.parse(bodyText) : {}; } catch (e) { /* not JSON */ }
+
+                    if (response.status === 404) { continue; }
+
+                    // --- FIX 2: Allow success if it is a freeOrder OR has clientSecret ---
+                    if (!response.ok || data.error || (!data.clientSecret && !data.freeOrder)) {
+                        const errMsg = (data && data.error) ? data.error : bodyText || `HTTP ${response.status}`;
+                        console.error(`Payment Intent failed on ${url}:`, errMsg);
+                        modalPaymentMessage.innerText = `Error: Could not start payment. Check backend configuration (Status ${response.status}).`;
+                        return null;
+                    }
+
+                    return data;
+
+                } catch (err) {
+                    console.error(`Network failed on ${url}:`, err);
+                    modalPaymentMessage.innerText = "Network Error: Could not connect to payment processor. Please check your connection.";
+                    return null;
+                }
+            }
+
+            modalPaymentMessage.innerText = "Fatal Error: Payment initialization failed across all routes. Check server logs.";
             return null;
         }
-    }
-
-    modalPaymentMessage.innerText = "Fatal Error: Payment initialization failed across all routes. Check server logs.";
-    return null;
-}
         function initializeStripe(secret) {
             if (stripe && elements) {
                 return;
@@ -2093,38 +2112,38 @@ async function createPaymentIntent() {
             modalPaymentMessage.classList.add('hidden');
         }
 
-async function handleModalPayment() {
-    if (!document.getElementById('modal-legal-consent').checked) {
-        modalPaymentMessage.innerText = "You must agree to the Terms of Service and Privacy Policy to proceed.";
-        modalPaymentMessage.classList.remove('hidden');
-        return;
-    }
+        async function handleModalPayment() {
+            if (!document.getElementById('modal-legal-consent').checked) {
+                modalPaymentMessage.innerText = "You must agree to the Terms of Service and Privacy Policy to proceed.";
+                modalPaymentMessage.classList.remove('hidden');
+                return;
+            }
 
-    modalSubmitBtn.disabled = true;
+            modalSubmitBtn.disabled = true;
 
-    // 1. Call Backend
-    const responseData = await createPaymentIntent();
+            // 1. Call Backend
+            const responseData = await createPaymentIntent();
 
-    if (!responseData) {
-        modalSubmitBtn.disabled = false;
-        return;
-    }
+            if (!responseData) {
+                modalSubmitBtn.disabled = false;
+                return;
+            }
 
-    // 2. CHECK IF FREE ORDER (Bypass Stripe)
-    if (responseData.freeOrder && responseData.order_id) {
-        window.location.href = `/success.html?order_id=${responseData.order_id}`;
-        return;
-    }
+            // 2. CHECK IF FREE ORDER (Bypass Stripe)
+            if (responseData.freeOrder && responseData.order_id) {
+                window.location.href = `/success.html?order_id=${responseData.order_id}`;
+                return;
+            }
 
-    // 3. Normal Stripe Flow
-    if (responseData.clientSecret) {
-        initializeStripe(responseData.clientSecret);
-        modalSelectionView.classList.add('hidden');
-        modalPaymentView.classList.remove('hidden');
-        modalPaymentMessage.classList.add('hidden');
-        document.getElementById('final-pay-button').disabled = false;
-    }
-}
+            // 3. Normal Stripe Flow
+            if (responseData.clientSecret) {
+                initializeStripe(responseData.clientSecret);
+                modalSelectionView.classList.add('hidden');
+                modalPaymentView.classList.remove('hidden');
+                modalPaymentMessage.classList.add('hidden');
+                document.getElementById('final-pay-button').disabled = false;
+            }
+        }
     </script>
 </body>
 
