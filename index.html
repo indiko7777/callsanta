@@ -1950,11 +1950,14 @@ function updateModalUIState() {
                 });
             }
 
-            const parentEmail = document.getElementById('form-parent-email').value;
+const parentEmail = document.getElementById('form-parent-email').value;
             const parentPhone = document.getElementById('form-parent-phone').value;
             const selectedPackage = document.querySelector('input[name="package_id"]:checked');
             const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
-
+            
+            // --- ADD THIS LINE ---
+            const promoCode = document.getElementById('promo-code-input').value.trim().toUpperCase(); 
+            // ---------------------
             if (!selectedPackage) {
                 modalPaymentMessage.innerText = "Please select a package.";
                 modalPaymentMessage.classList.remove('hidden');
