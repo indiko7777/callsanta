@@ -116,7 +116,7 @@ exports.handler = async (event, context) => {
     }
 
     // Allow both PENDING_PAYMENT (legacy/testing) and PAYMENT_COMPLETED (production)
-    if (!order || (order.fulfillmentStatus !== 'PENDING_PAYMENT' && order.fulfillmentStatus !== 'PAYMENT_COMPLETED')) {
+    if (!order || order.fulfillmentStatus !== 'PAYMENT_COMPLETED') {
         console.log("Invalid Code or Status:", order ? order.fulfillmentStatus : "No Order");
         // Code is invalid OR has already been used
         twiml.play(AUDIO_INVALID_CODE);
@@ -162,7 +162,7 @@ exports.handler = async (event, context) => {
 
     // Mark the code as USED immediately to prevent replay
     // AND update the parentPhone to the actual calling number to ensure webhook matching works
-    await Order.updateOne({ _id: order._id }, { 
+    await Order.updateOne({ _id: order._id }, {
         fulfillmentStatus: 'FULFILLED_CALL_STARTED',
         parentPhone: callerPhone
     });

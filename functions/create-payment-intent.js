@@ -74,7 +74,7 @@ exports.handler = async (event, context) => {
                 stripeCustomerId: 'promo_user', 
                 stripePaymentIntentId: uniqueFreeId, // Uses unique ID now
                 accessCode: generateAccessCode(),
-                fulfillmentStatus: 'PAID', // Mark as paid immediately
+                fulfillmentStatus: 'PAYMENT_COMPLETED', // Mark as paid immediately
                 children: children,
                 parentEmail: parent_email,
                 parentPhone: parent_phone,
