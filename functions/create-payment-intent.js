@@ -41,7 +41,10 @@ exports.handler = async (event, context) => {
         await connectToDatabase(process.env.MONGODB_URI);
 
         const body = JSON.parse(event.body);
-       const { package_id, parent_email, parent_phone, children, overage_option, promo_code } = body;
+        
+        // --- FIX 1: Ensure promo_code is extracted ---
+        const { package_id, parent_email, parent_phone, children, overage_option, promo_code } = body;
+
         let amount = PRODUCT_PRICES[package_id];
 
         if (!amount) {
@@ -55,16 +58,21 @@ exports.handler = async (event, context) => {
         const extraChildPrice = 750; // $7.50 in cents
         const extraChildrenCount = Math.max(0, numChildren - 1);
         amount += extraChildrenCount * extraChildPrice;
-if (promo_code === 'TEST100') { // CHANGE 'TEST100' TO YOUR DESIRED CODE
+
+        // --- CHECK PROMO CODE ---
+        if (promo_code === 'TEST100') { 
             amount = 0;
         }
 
-        // 3. CHECK FOR FREE ORDER
+        // --- CHECK FOR FREE ORDER ---
         if (amount === 0) {
+            // --- FIX 2: Generate UNIQUE IDs for free orders to prevent E11000 error ---
+            const uniqueFreeId = `promo_free_${Date.now()}_${Math.floor(Math.random() * 10000)}`;
+            
             // Create DB Record immediately as PAID
             const newOrder = await Order.create({
-                stripeCustomerId: 'promo_user', // Placeholder
-                stripePaymentIntentId: 'promo_free', // Placeholder
+                stripeCustomerId: 'promo_user', 
+                stripePaymentIntentId: uniqueFreeId, // Uses unique ID now
                 accessCode: generateAccessCode(),
                 fulfillmentStatus: 'PAID', // Mark as paid immediately
                 children: children,
@@ -84,13 +92,13 @@ if (promo_code === 'TEST100') { // CHANGE 'TEST100' TO YOUR DESIRED CODE
                 }),
             };
         }
-        // 3. Overage option (legacy check, keeping just in case)
+
+        // 3. Overage option (only charge if not free)
         if (overage_option === 'unlimited' && package_id !== 'bundle') {
             amount += 500;
         }
 
         // --- A. CREATE STRIPE CUSTOMER ---
-        // Use the first child's name for the customer name or a generic one
         const firstChildName = (children && children[0] && children[0].name) ? children[0].name : 'Child';
         const customer = await stripe.customers.create({
             email: parent_email,
@@ -106,8 +114,6 @@ if (promo_code === 'TEST100') { // CHANGE 'TEST100' TO YOUR DESIRED CODE
             description: `CallSanta.us Purchase: ${package_id} (${numChildren} children)`,
             receipt_email: parent_email,
             automatic_payment_methods: { enabled: true },
-            // Store personalization data in PI metadata for Stripe Dashboard visibility
-            // Note: Metadata has a 500 char limit per key. We'll store a summary.
             metadata: {
                 child_count: numChildren,
                 parent_phone: parent_phone,
@@ -124,7 +130,7 @@ if (promo_code === 'TEST100') { // CHANGE 'TEST100' TO YOUR DESIRED CODE
             stripePaymentIntentId: paymentIntentCreated.id,
             accessCode: generateAccessCode(),
             fulfillmentStatus: 'PENDING_PAYMENT',
-            children: children, // Save the array of children
+            children: children, 
             parentEmail: parent_email,
             parentPhone: parent_phone,
             packageId: package_id,

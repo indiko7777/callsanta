@@ -1939,85 +1939,85 @@ function updateModalUIState() {
         });
 
 
-        async function createPaymentIntent() {
-            // Collect Children Data
-            const children = [];
-            for (let i = 1; i <= currentChildCount; i++) {
-                children.push({
-                    name: document.getElementById(`form-child-name-${i}`).value,
-                    wish: document.getElementById(`form-child-wish-${i}`).value,
-                    deed: document.getElementById(`form-child-deed-${i}`).value
-                });
-            }
+async function createPaymentIntent() {
+    // Collect Children Data
+    const children = [];
+    for (let i = 1; i <= currentChildCount; i++) {
+        children.push({
+            name: document.getElementById(`form-child-name-${i}`).value,
+            wish: document.getElementById(`form-child-wish-${i}`).value,
+            deed: document.getElementById(`form-child-deed-${i}`).value
+        });
+    }
 
-const parentEmail = document.getElementById('form-parent-email').value;
-            const parentPhone = document.getElementById('form-parent-phone').value;
-            const selectedPackage = document.querySelector('input[name="package_id"]:checked');
-            const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
-            
-            // --- ADD THIS LINE ---
-            const promoCode = document.getElementById('promo-code-input').value.trim().toUpperCase(); 
-            // ---------------------
-            if (!selectedPackage) {
-                modalPaymentMessage.innerText = "Please select a package.";
-                modalPaymentMessage.classList.remove('hidden');
+    const parentEmail = document.getElementById('form-parent-email').value;
+    const parentPhone = document.getElementById('form-parent-phone').value;
+    const selectedPackage = document.querySelector('input[name="package_id"]:checked');
+    const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
+    
+    // --- FIX 1: Define promoCode ---
+    const promoInput = document.getElementById('promo-code-input');
+    const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : ''; 
+    // -------------------------------
+
+    if (!selectedPackage) {
+        modalPaymentMessage.innerText = "Please select a package.";
+        modalPaymentMessage.classList.remove('hidden');
+        return null;
+    }
+
+    let overageOption = 'auto_disconnect';
+    if (selectedPackage.value === 'bundle') {
+        overageOption = 'unlimited';
+    } else if (selectedPackage.value === 'call' && selectedOverage) {
+        overageOption = selectedOverage.value;
+    }
+
+    const personalizationData = {
+        children: children,
+        parent_email: parentEmail,
+        parent_phone: parentPhone,
+        package_id: selectedPackage.value,
+        overage_option: overageOption,
+        promo_code: promoCode // Send the code
+    };
+
+    const urls = [CREATE_PAYMENT_INTENT_URL];
+
+    for (const url of urls) {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(personalizationData),
+            });
+
+            const bodyText = await response.text();
+            let data = null;
+            try { data = bodyText ? JSON.parse(bodyText) : {}; } catch (e) { /* not JSON */ }
+
+            if (response.status === 404) { continue; }
+
+            // --- FIX 2: Allow success if it is a freeOrder OR has clientSecret ---
+            if (!response.ok || data.error || (!data.clientSecret && !data.freeOrder)) {
+                const errMsg = (data && data.error) ? data.error : bodyText || `HTTP ${response.status}`;
+                console.error(`Payment Intent failed on ${url}:`, errMsg);
+                modalPaymentMessage.innerText = `Error: Could not start payment. Check backend configuration (Status ${response.status}).`;
                 return null;
             }
 
-            let overageOption = 'auto_disconnect';
-            if (selectedPackage.value === 'bundle') {
-                overageOption = 'unlimited';
-            } else if (selectedPackage.value === 'call' && selectedOverage) {
-                overageOption = selectedOverage.value;
-            }
+            return data;
 
-            const personalizationData = {
-                children: children,
-                parent_email: parentEmail,
-                parent_phone: parentPhone,
-                package_id: selectedPackage.value,
-                overage_option: overageOption,
-                promo_code: promoCode
-            };
-
-            // Try multiple endpoints if needed, or just the main one
-            const urls = [CREATE_PAYMENT_INTENT_URL];
-
-            for (const url of urls) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(personalizationData),
-                    });
-
-                    const bodyText = await response.text();
-                    let data = null;
-                    try { data = bodyText ? JSON.parse(bodyText) : {}; } catch (e) { /* not JSON */ }
-
-                    if (response.status === 404) { continue; }
-
-                   // MODIFIED: Allow success if we have a clientSecret OR if it is a freeOrder
-if (!response.ok || data.error || (!data.clientSecret && !data.freeOrder)) {
-    const errMsg = (data && data.error) ? data.error : bodyText || `HTTP ${response.status}`;
-    console.error(`Payment Intent failed on ${url}:`, errMsg);
-    modalPaymentMessage.innerText = `Error: Could not start payment. Check backend configuration (Status ${response.status}).`;
-    return null;
-}
-
-                    return data;
-
-                } catch (err) {
-                    console.error(`Network failed on ${url}:`, err);
-                    modalPaymentMessage.innerText = "Network Error: Could not connect to payment processor. Please check your connection.";
-                    return null;
-                }
-            }
-
-            modalPaymentMessage.innerText = "Fatal Error: Payment initialization failed across all routes. Check server logs.";
+        } catch (err) {
+            console.error(`Network failed on ${url}:`, err);
+            modalPaymentMessage.innerText = "Network Error: Could not connect to payment processor. Please check your connection.";
             return null;
         }
+    }
 
+    modalPaymentMessage.innerText = "Fatal Error: Payment initialization failed across all routes. Check server logs.";
+    return null;
+}
         function initializeStripe(secret) {
             if (stripe && elements) {
                 return;
