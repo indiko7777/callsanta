@@ -56,7 +56,35 @@ exports.handler = async (event, context) => {
         const extraChildPrice = 750; // $7.50 in cents
         const extraChildrenCount = Math.max(0, numChildren - 1);
         amount += extraChildrenCount * extraChildPrice;
+if (promo_code === 'TEST100') { // CHANGE 'TEST100' TO YOUR DESIRED CODE
+            amount = 0;
+        }
 
+        // 3. CHECK FOR FREE ORDER
+        if (amount === 0) {
+            // Create DB Record immediately as PAID
+            const newOrder = await Order.create({
+                stripeCustomerId: 'promo_user', // Placeholder
+                stripePaymentIntentId: 'promo_free', // Placeholder
+                accessCode: generateAccessCode(),
+                fulfillmentStatus: 'PAID', // Mark as paid immediately
+                children: children,
+                parentEmail: parent_email,
+                parentPhone: parent_phone,
+                packageId: package_id,
+                amountPaid: 0,
+                overageOption: overage_option || 'auto_disconnect'
+            });
+
+            // Return special flag to frontend
+            return {
+                statusCode: 200,
+                body: JSON.stringify({
+                    freeOrder: true,
+                    order_id: newOrder._id,
+                }),
+            };
+        }
         // 3. Overage option (legacy check, keeping just in case)
         if (overage_option === 'unlimited' && package_id !== 'bundle') {
             amount += 500;

@@ -115,7 +115,7 @@ app.get('/', (req, res) => {
 
         let modifiedData = data.replace(
             /pk_live_YOUR_STRIPE_PUBLISHABLE_KEY/g,
-            process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_51SVKGLLLG2IkIMjNRGtLSTgFOKHA262pTUQZxtrDko025pTqT3eqQ5o3IVThdo1Em18mtHn8OB4vbZYPgW1sgsA200melmouPY'
+            process.env.STRIPE_PUBLISHABLE_KEY || 'pk_live_51SVKGCLwMfnHBzDIBQAvfIutm54kvi38yzdLqdPjgrjp1m1bXRrgJyxQyis4ISYB59ah3ZKtbnhFvxHmsWdI8Mii00GxR6hAu2'
         );
 
         // In local dev, we don't need the .netlify/functions prefix if we route directly,

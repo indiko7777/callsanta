@@ -1607,7 +1607,17 @@
                         </label>
                     </div>
                 </div>
-
+<div class="space-y-2">
+    <label class="text-sm font-semibold text-gray-400 ml-1">Promo Code</label>
+    <div class="flex gap-2">
+        <input id="promo-code-input" type="text" 
+            class="flex-1 glass-input p-3 text-sm rounded-lg uppercase tracking-wider placeholder-gray-600" 
+            placeholder="ENTER CODE" oninput="updateModalUIState()">
+    </div>
+    <div id="promo-message" class="text-xs text-green-400 hidden font-medium flex items-center gap-1">
+        <i data-lucide="check" class="w-3 h-3"></i> Code Applied!
+    </div>
+</div>
                 <div id="pre-stripe-commit-section" class="space-y-4">
                     <div
                         class="flex justify-between items-center p-4 rounded-xl bg-slate-900/90 border border-white/10">
@@ -1665,7 +1675,7 @@
         // Initialize Lucide icons
         lucide.createIcons();
 
-        const STRIPE_PUBLISHABLE_KEY = 'pk_test_51SVKGLLLG2IkIMjNRGtLSTgFOKHA262pTUQZxtrDko025pTqT3eqQ5o3IVThdo1Em18mtHn8OB4vbZYPgW1sgsA200melmouPY'; // Replaced by dev-server.js
+        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SVKGCLwMfnHBzDIBQAvfIutm54kvi38yzdLqdPjgrjp1m1bXRrgJyxQyis4ISYB59ah3ZKtbnhFvxHmsWdI8Mii00GxR6hAu2'; // Replaced by dev-server.js
         const CREATE_PAYMENT_INTENT_URL = '/.netlify/functions/create-payment-intent';
 
         const packages = {
@@ -1838,57 +1848,70 @@
             modal.classList.remove('active');
         }
 
-        function updateModalUIState() {
-            const selectedPackage = document.querySelector('input[name="package_id"]:checked');
-            const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
-            const overageSection = document.getElementById('modal-overage-options');
-            const finalPriceDisplay = document.getElementById('modal-final-price');
-            const finalPriceStripe = document.getElementById('modal-final-price-stripe');
-            const modalButtonText = document.getElementById('modal-button-text');
-            const finalPayButtonText = document.getElementById('final-pay-button-text');
+function updateModalUIState() {
+    const selectedPackage = document.querySelector('input[name="package_id"]:checked');
+    const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
+    const overageSection = document.getElementById('modal-overage-options');
+    const finalPriceDisplay = document.getElementById('modal-final-price');
+    const finalPriceStripe = document.getElementById('modal-final-price-stripe');
+    const modalButtonText = document.getElementById('modal-button-text');
+    const finalPayButtonText = document.getElementById('final-pay-button-text');
+    const promoInput = document.getElementById('promo-code-input'); // GET INPUT
+    const promoMessage = document.getElementById('promo-message'); // GET MESSAGE DIV
 
-            if (!selectedPackage) return;
+    if (!selectedPackage) return;
 
-            const packageId = selectedPackage.value;
-            let price = parseInt(selectedPackage.dataset.price);
+    const packageId = selectedPackage.value;
+    let price = parseInt(selectedPackage.dataset.price);
 
-            // Logic:
-            // Bundle ($20): Includes unlimited. Hide overage options.
-            // Video ($35): No calls. Hide overage options.
-            // Call ($10): Show overage options.
-            //   - Auto-disconnect: +$0
-            //   - Unlimited: +$5
+    // Existing Extra Children Logic
+    const extraChildren = Math.max(0, currentChildCount - 1);
+    const extraChildCost = extraChildren * 750;
+    price += extraChildCost;
 
-            // Extra Children: +$7.50 (750 cents) per extra child
-            const extraChildren = Math.max(0, currentChildCount - 1);
-            const extraChildCost = extraChildren * 750;
-            price += extraChildCost;
+    // Existing Overage Visibility Logic
+    if (packageId === 'bundle' || packageId === 'video') {
+        overageSection.classList.add('hidden');
+    } else {
+        overageSection.classList.remove('hidden');
+    }
 
-            if (packageId === 'bundle' || packageId === 'video') {
-                overageSection.classList.add('hidden');
-            } else {
-                overageSection.classList.remove('hidden');
-            }
+    // Existing Overage Price Logic
+    if (packageId === 'call' && selectedOverage && selectedOverage.value === 'unlimited') {
+        price += 500; 
+    }
 
-            if (packageId === 'call' && selectedOverage && selectedOverage.value === 'unlimited') {
-                price += 500; // Add $5
-            }
+    // --- NEW PROMO CODE LOGIC ---
+    // Change 'TEST100' to whatever code you want to use
+    if (promoInput && promoInput.value.trim().toUpperCase() === 'TEST100') {
+        price = 0; 
+        promoMessage.classList.remove('hidden');
+    } else if (promoMessage) {
+        promoMessage.classList.add('hidden');
+    }
+    // ----------------------------
 
-            const extraLabel = document.getElementById('modal-extra-charge-label');
-            if (extraChildren > 0) {
-                extraLabel.innerText = `(Includes +$${(extraChildCost / 100).toFixed(2)} for ${extraChildren} extra child${extraChildren > 1 ? 'ren' : ''})`;
-                extraLabel.classList.remove('hidden');
-            } else {
-                extraLabel.classList.add('hidden');
-            }
+    const extraLabel = document.getElementById('modal-extra-charge-label');
+    if (extraChildren > 0) {
+        extraLabel.innerText = `(Includes +$${(extraChildCost / 100).toFixed(2)} for ${extraChildren} extra child${extraChildren > 1 ? 'ren' : ''})`;
+        extraLabel.classList.remove('hidden');
+    } else {
+        extraLabel.classList.add('hidden');
+    }
 
-            const formattedPrice = '$' + (price / 100).toFixed(2);
-            finalPriceDisplay.innerText = formattedPrice;
-            finalPriceStripe.innerText = formattedPrice;
-            modalButtonText.innerText = `Secure Your Magic (${formattedPrice})`;
-            finalPayButtonText.innerText = `Pay Now (${formattedPrice})`;
-        }
-
+    const formattedPrice = '$' + (price / 100).toFixed(2);
+    finalPriceDisplay.innerText = formattedPrice;
+    finalPriceStripe.innerText = formattedPrice;
+    
+    // Update button text based on whether it's free or not
+    if (price === 0) {
+        modalButtonText.innerText = `Complete Free Order`;
+        finalPayButtonText.innerText = `Complete Order`;
+    } else {
+        modalButtonText.innerText = `Secure Your Magic (${formattedPrice})`;
+        finalPayButtonText.innerText = `Pay Now (${formattedPrice})`;
+    }
+}
         // Add event listeners for real-time updates
         document.querySelectorAll('input[name="package_id"]').forEach(input => {
             input.addEventListener('change', updateModalUIState);
@@ -1950,7 +1973,8 @@
                 parent_email: parentEmail,
                 parent_phone: parentPhone,
                 package_id: selectedPackage.value,
-                overage_option: overageOption
+                overage_option: overageOption,
+                promo_code: promoCode
             };
 
             // Try multiple endpoints if needed, or just the main one
@@ -1977,7 +2001,7 @@
                         return null;
                     }
 
-                    return data.clientSecret;
+                    return data;
 
                 } catch (err) {
                     console.error(`Network failed on ${url}:`, err);
@@ -2065,41 +2089,38 @@
             modalPaymentMessage.classList.add('hidden');
         }
 
-        async function handleModalPayment() {
-            if (!document.getElementById('modal-legal-consent').checked) {
-                modalPaymentMessage.innerText = "You must agree to the Terms of Service and Privacy Policy to proceed.";
-                modalPaymentMessage.classList.remove('hidden');
-                return;
-            }
+async function handleModalPayment() {
+    if (!document.getElementById('modal-legal-consent').checked) {
+        modalPaymentMessage.innerText = "You must agree to the Terms of Service and Privacy Policy to proceed.";
+        modalPaymentMessage.classList.remove('hidden');
+        return;
+    }
 
-            // 1. Temporarily disable button and show loading text
-            modalSubmitBtn.disabled = true;
+    modalSubmitBtn.disabled = true;
 
-            // 2. Create Payment Intent
-            const secret = await createPaymentIntent();
+    // 1. Call Backend
+    const responseData = await createPaymentIntent();
 
-            if (!secret) {
-                // If failed, re-enable button and remain on selection view (error message set by createPaymentIntent)
-                modalSubmitBtn.disabled = false;
-                return;
-            }
+    if (!responseData) {
+        modalSubmitBtn.disabled = false;
+        return;
+    }
 
-            // 3. Initialize Stripe (if successful)
-            initializeStripe(secret);
+    // 2. CHECK IF FREE ORDER (Bypass Stripe)
+    if (responseData.freeOrder && responseData.order_id) {
+        window.location.href = `/success.html?order_id=${responseData.order_id}`;
+        return;
+    }
 
-            // 4. UX improvement: Hide selection view, show payment view
-            modalSelectionView.classList.add('hidden');
-            modalPaymentView.classList.remove('hidden');
-
-            // Hide the loading message that createPaymentIntent started
-            modalPaymentMessage.classList.add('hidden');
-            // Focus on payment element container as a fallback or try to find an input inside
-            // document.getElementById('modal-payment-element').focus();
-
-            // 5. Re-enable the final pay button
-            document.getElementById('final-pay-button').disabled = false;
-        }
-
+    // 3. Normal Stripe Flow
+    if (responseData.clientSecret) {
+        initializeStripe(responseData.clientSecret);
+        modalSelectionView.classList.add('hidden');
+        modalPaymentView.classList.remove('hidden');
+        modalPaymentMessage.classList.add('hidden');
+        document.getElementById('final-pay-button').disabled = false;
+    }
+}
     </script>
 </body>
 
