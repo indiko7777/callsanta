@@ -814,8 +814,9 @@
 
             // Track Purchase Event
             if (typeof fbq === 'function') {
+                const valueInDollars = (data.amountPaid || 0) / 100;
                 fbq('track', 'Purchase', {
-                    value: data.amountPaid || 0,
+                    value: valueInDollars,
                     currency: data.currency || 'USD',
                     content_name: data.packageId,
                     content_ids: [data.packageId],
