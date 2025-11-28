@@ -56,7 +56,7 @@ exports.handler = async (event, context) => {
                 parentName: parentName,
                 parentEmail: order.parentEmail,
                 accessCode: order.accessCode,
-                twilioNumber: process.env.TWILIO_PHONE_NUMBER || '+1 (438) 795-1562',
+                twilioNumber: process.env.TWILIO_PHONE_NUMBER || '+33 9 39 03 63 23',
                 videoUrl: order.videoUrl,
                 audioUrl: order.audioUrl,
                 callDuration: order.callDuration,
