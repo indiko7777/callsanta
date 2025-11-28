@@ -21,19 +21,26 @@ const connectToDatabase = async (uri) => {
 exports.handler = async (event, context) => {
     context.callbackWaitsForEmptyEventLoop = false;
 
-    const { payment_intent_id } = event.queryStringParameters || {};
+    // MODIFIED: Accept both parameter types
+    const { payment_intent_id, order_id } = event.queryStringParameters || {};
 
-    if (!payment_intent_id) {
+    if (!payment_intent_id && !order_id) {
         return {
             statusCode: 400,
-            body: JSON.stringify({ error: 'Missing payment_intent_id parameter' }),
+            body: JSON.stringify({ error: 'Missing payment_intent_id or order_id parameter' }),
         };
     }
 
     try {
         await connectToDatabase(process.env.MONGODB_URI);
 
-        const order = await Order.findOne({ stripePaymentIntentId: payment_intent_id });
+        let order;
+        // MODIFIED: Search logic
+        if (order_id) {
+            order = await Order.findById(order_id);
+        } else {
+            order = await Order.findOne({ stripePaymentIntentId: payment_intent_id });
+        }
 
         if (!order) {
             return {
@@ -50,7 +57,7 @@ exports.handler = async (event, context) => {
                 'Access-Control-Allow-Origin': '*', // Allow CORS for frontend
             },
             body: JSON.stringify({
-                childName: order.childName,
+                childName: order.children && order.children[0] ? order.children[0].name : 'Child', // Fallback for childName
                 parentEmail: order.parentEmail,
                 packageId: order.packageId,
                 accessCode: order.accessCode,
@@ -66,7 +73,7 @@ exports.handler = async (event, context) => {
         console.error('GET ORDER DETAILS ERROR:', error);
         return {
             statusCode: 500,
-            body: JSON.stringify({ error: 'Internal Server Error' }),
+            body: JSON.stringify({ error: 'Internal Server Error: ' + error.message }),
         };
     }
 };

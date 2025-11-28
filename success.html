@@ -648,31 +648,42 @@
         const GET_UPGRADE_SUCCESS_URL = '/.netlify/functions/get-upgrade-success';
         const TWILIO_PHONE_NUMBER = "+1 (438) 795-1562";
 
-        async function fetchOrderDetails() {
+async function fetchOrderDetails() {
             const urlParams = new URLSearchParams(window.location.search);
             const paymentIntentId = urlParams.get('payment_intent');
+            const orderId = urlParams.get('order_id'); // NEW: Get order_id
 
-            if (!paymentIntentId) {
-                console.error('No payment intent ID found');
+            // MODIFIED: Check for either ID
+            if (!paymentIntentId && !orderId) {
+                console.error('No payment intent ID or Order ID found');
                 showFallbackMessage();
                 return;
             }
 
             try {
-                // First check if this is an upgrade order
-                const upgradeResponse = await fetch(`${GET_UPGRADE_SUCCESS_URL}?payment_intent_id=${paymentIntentId}`);
+                // Only check upgrades if we have a payment_intent (upgrades are usually Stripe-based)
+                if (paymentIntentId) {
+                    const upgradeResponse = await fetch(`${GET_UPGRADE_SUCCESS_URL}?payment_intent_id=${paymentIntentId}`);
 
-                if (upgradeResponse.ok) {
-                    const upgradeData = await upgradeResponse.json();
+                    if (upgradeResponse.ok) {
+                        const upgradeData = await upgradeResponse.json();
 
-                    if (upgradeData.isUpgrade) {
-                        displayUpgradeSuccess(upgradeData);
-                        return;
+                        if (upgradeData.isUpgrade) {
+                            displayUpgradeSuccess(upgradeData);
+                            return;
+                        }
                     }
                 }
 
-                // Not an upgrade, treat as regular order
-                const response = await fetch(`${GET_ORDER_DETAILS_URL}?payment_intent_id=${paymentIntentId}`);
+                // MODIFIED: Construct URL based on available ID
+                let fetchUrl = `${GET_ORDER_DETAILS_URL}?`;
+                if (orderId) {
+                    fetchUrl += `order_id=${orderId}`;
+                } else {
+                    fetchUrl += `payment_intent_id=${paymentIntentId}`;
+                }
+
+                const response = await fetch(fetchUrl);
 
                 if (!response.ok) {
                     console.log('Backend function not available, using localStorage fallback');
@@ -707,7 +718,6 @@
                 }
             }
         }
-
         function displayUpgradeSuccess(data) {
             const { upgradeType, originalCall, newAccessCode, twilioNumber } = data;
 
