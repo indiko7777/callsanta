@@ -1997,12 +1997,13 @@ const parentEmail = document.getElementById('form-parent-email').value;
 
                     if (response.status === 404) { continue; }
 
-                    if (!response.ok || data.error || !data.clientSecret) {
-                        const errMsg = (data && data.error) ? data.error : bodyText || `HTTP ${response.status}`;
-                        console.error(`Payment Intent failed on ${url}:`, errMsg);
-                        modalPaymentMessage.innerText = `Error: Could not start payment. Check backend configuration (Status ${response.status}).`;
-                        return null;
-                    }
+                   // MODIFIED: Allow success if we have a clientSecret OR if it is a freeOrder
+if (!response.ok || data.error || (!data.clientSecret && !data.freeOrder)) {
+    const errMsg = (data && data.error) ? data.error : bodyText || `HTTP ${response.status}`;
+    console.error(`Payment Intent failed on ${url}:`, errMsg);
+    modalPaymentMessage.innerText = `Error: Could not start payment. Check backend configuration (Status ${response.status}).`;
+    return null;
+}
 
                     return data;
 
