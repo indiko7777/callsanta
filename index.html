@@ -175,6 +175,34 @@
         .feature-list li {
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
         }
+        /* Gold Recommended Sticker Badge - matches Best Value style */
+        .recommended-badge {
+            display: inline-block;
+            background-color: #C5A059;
+            /* Santa Gold */
+            color: #15432E;
+            /* Christmas Green text for contrast */
+            font-family: 'serif', sans-serif;
+            /* Use a festive font if loaded, or fallback */
+            font-size: 0.7rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 0.25rem 0.65rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+            /* Stronger shadow to make it pop */
+            margin-left: 0.5rem;
+            vertical-align: middle;
+        }
+
+        /* Responsive adjustment for recommended badge */
+        @media (max-width: 640px) {
+            .recommended-badge {
+                font-size: 0.6rem;
+                padding: 0.2rem 0.5rem;
+                margin-left: 0.35rem;
+            }
+        }
 
         /* NEW: Chic, exclusive Christmas-themed "Best Value" Badge */
         .best-value-badge {
@@ -592,8 +620,7 @@
             <i data-lucide="phone" class="text-santa-red w-6 h-6"></i>
             <span class="text-2xl font-serif font-bold tracking-wide text-white">CallSanta.us</span>
         </div>
-        <a href="#login" class="text-sm text-gray-300 hover:text-white transition-colors font-medium tracking-wide">Log
-            In</a>
+   
     </nav>
 
     <main class="relative z-10 flex flex-col items-center justify-center min-h-[65vh] px-4 text-center py-12 md:py-4">
@@ -1406,13 +1433,12 @@
                 class="faq-item bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
                 <button
                     class="faq-toggle w-full flex justify-between items-center py-4 px-6 text-left text-white text-lg font-medium">
-                    <span>How personalized are the Santa calls?</span>
+                    <span>How is this different from other Santa call services?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
                 <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
                     <div class="py-4">
-                        Each call includes your child's name, wish list, age, special achievements, and more.
-                        Santa speaks as if he's known them all year!
+                        CallSanta.us is the <strong class="text-santa-goldlight">first-of-its-kind</strong> AI-powered Santa experience. Unlike pre-recorded messages, our Santa has real, dynamic conversations with your child—responding naturally to their questions, remembering their wishes, and creating genuine magical moments. It's the closest thing to calling the North Pole directly!
                     </div>
                 </div>
             </div>
@@ -1421,14 +1447,12 @@
                 class="faq-item bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
                 <button
                     class="faq-toggle w-full flex justify-between items-center py-4 px-6 text-left text-white text-lg font-medium">
-                    <span>Is the call live or a recording?</span>
+                    <span>What exactly does my child receive?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
                 <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
                     <div class="py-4">
-                        Your child receives both: a fully personalized pre-made video AND a live AI phone call from
-                        Santa.
-                        It feels shockingly real.
+                        It depends on your package! The <strong class="text-santa-goldlight">Winter Warmth</strong> includes a live AI phone call where Santa has a real conversation with your child. The <strong class="text-santa-goldlight">Joyful Jingle</strong> includes a personalized HD video message. The <strong class="text-santa-goldlight">Starry Night Bundle</strong> (our most popular!) includes the live call PLUS personalized SMS messages from Santa leading up to Christmas, plus an audio recording keepsake of the call. Each package is fully personalized with their name, wishes, and good deeds!
                     </div>
                 </div>
             </div>
@@ -1437,7 +1461,7 @@
                 class="faq-item bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
                 <button
                     class="faq-toggle w-full flex justify-between items-center py-4 px-6 text-left text-white text-lg font-medium">
-                    <span>How quickly will we receive the experience?</span>
+                    <span>How quickly will we receive everything after ordering?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
                 <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
@@ -1452,12 +1476,12 @@
                 class="faq-item bg-white/5 backdrop-blur-lg border border-white/10 rounded-2xl overflow-hidden transition-all duration-300">
                 <button
                     class="faq-toggle w-full flex justify-between items-center py-4 px-6 text-left text-white text-lg font-medium">
-                    <span>Can multiple children be included?</span>
+                    <span>Can I use this if I'm outside the United States?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
                 <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
                     <div class="py-4">
-                        Yes! You can add multiple children and Santa will mention each one individually.
+                        The live phone call feature <strong class="text-santa-goldlight">requires the ability to call a US phone number (\+1)</strong>. If you can make calls to US numbers (does not work via WhatsApp, Skype, etc.), you're all set! The video message package works anywhere in the world. International families love using this service—magic knows no borders!
                     </div>
                 </div>
             </div>
@@ -1618,7 +1642,7 @@
                                     <div class="w-2.5 h-2.5 rounded-full bg-santa-red hidden radio-indicator"></div>
                                 </div>
                                 <div class="flex-1">
-                                    <span class="text-white font-semibold block text-sm">Unlimited Talk Time ($5)</span>
+                                    <span class="text-white font-semibold block text-sm">Unlimited Talk Time ($5)</span><span class="recommended-badge">Recommended</span>
                                     <span class="text-xs text-gray-400">No time limits. Let the magic unfold without
                                         watching the clock.</span>
                                 </div>
