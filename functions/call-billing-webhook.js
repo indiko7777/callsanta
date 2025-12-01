@@ -35,9 +35,8 @@ exports.handler = async (event, context) => {
     // We retrieve the Order ID from the query parameter passed in the action URL
     const orderId = body.get('orderId') || event.queryStringParameters?.orderId;
 
-    if (callStatus !== 'completed' || callDurationSeconds <= 300) {
-        // Only proceed if call completed AND exceeded 5 minutes
-        return { statusCode: 200, body: `No overage charge required (Duration: ${callDurationSeconds}s)` };
+    if (callStatus !== 'completed') {
+        return { statusCode: 200, body: `Call not completed (Status: ${callStatus})` };
     }
 
     try {
@@ -48,50 +47,26 @@ exports.handler = async (event, context) => {
             return { statusCode: 400, body: "Missing orderId" };
         }
 
-        // 1. Retrieve the order directly by ID
+        // Retrieve the order directly by ID
         const order = await Order.findById(orderId);
 
-        if (!order || order.overageOption !== 'overage_accepted') {
-            return { statusCode: 200, body: 'Overage not authorized or order not found.' };
+        if (!order) {
+            return { statusCode: 200, body: 'Order not found.' };
         }
 
-        // 2. Calculate Overage (in USD cents)
-        const overageMinutes = Math.ceil((callDurationSeconds - 300) / 60); // 300s = 5 min
-        const overageAmountCents = overageMinutes * 100; // $1.00 per minute
+        // IMPORTANT: overage_accepted is now a ONE-TIME $5 fee for UNLIMITED time
+        // No per-minute billing should occur. The $5 was already charged upfront.
+        // This webhook now only logs the call duration for record-keeping.
 
-        // 3. Find the Customer's saved payment method (from the initial purchase)
-        const paymentMethods = await stripe.paymentMethods.list({
-            customer: order.stripeCustomerId,
-            type: 'card',
-        });
+        console.log(`Call completed - Duration: ${callDurationSeconds}s (${Math.floor(callDurationSeconds / 60)} min), Overage Option: ${order.overageOption}`);
 
-        if (paymentMethods.data.length === 0) {
-            console.warn(`Customer ${order.stripeCustomerId} has no saved card for overage.`);
-            return { statusCode: 200, body: 'No payment method on file.' };
-        }
-
-        const savedPaymentMethodId = paymentMethods.data[0].id;
-
-        // 4. Create the final Off-Session Charge
-        const chargeIntent = await stripe.paymentIntents.create({
-            amount: overageAmountCents,
-            currency: 'usd',
-            customer: order.stripeCustomerId,
-            payment_method: savedPaymentMethodId,
-            off_session: true, // This is mandatory for charging without user present
-            confirm: true,
-            description: `Santa Call Overage Charge (${overageMinutes} mins)`,
-            metadata: { order_id: order._id.toString(), duration: callDurationSeconds }
-        });
-
-        // 5. Update Order Status
+        // Update Order Status with final duration (no additional charges)
         await Order.updateOne({ _id: order._id }, {
-            fulfillmentStatus: 'CALL_COMPLETED_CHARGED',
-            finalDuration: callDurationSeconds,
-            overageCharged: overageAmountCents
+            fulfillmentStatus: 'CALL_COMPLETED',
+            finalDuration: callDurationSeconds
         });
 
-        return { statusCode: 200, body: `Charged $${overageAmountCents / 100} for ${overageMinutes} min overage.` };
+        return { statusCode: 200, body: `Call completed. Duration: ${callDurationSeconds}s. No additional charges (overage was prepaid if selected).` };
 
     } catch (error) {
         console.error('BILLING WEBHOOK FAILED:', error.message);

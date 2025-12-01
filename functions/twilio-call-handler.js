@@ -168,9 +168,22 @@ exports.handler = async (event, context) => {
     // Also format the Twilio number in case it has spaces or other formatting (e.g., "+1 438 795 1562")
     const formattedTwilioNumber = formatPhoneE164(process.env.TWILIO_PHONE_NUMBER);
 
-    const dial = twiml.dial({
+    // Set time limit based on overage option
+    // - auto_disconnect: 5 minutes (300 seconds) - disconnect after 5 min
+    // - overage_accepted: No time limit - user pays for extra time
+    // - unlimited: No time limit (bundle packages, return calls)
+    const dialOptions = {
         callerId: formattedTwilioNumber || formattedCallerPhone
-    });
+    };
+
+    if (order.overageOption === 'auto_disconnect') {
+        dialOptions.timeLimit = 300; // 5 minutes in seconds
+        console.log('Setting 5-minute time limit - auto_disconnect option');
+    } else {
+        console.log(`No time limit - overageOption: ${order.overageOption}`);
+    }
+
+    const dial = twiml.dial(dialOptions);
 
     dial.sip({
         username: 'santa',
