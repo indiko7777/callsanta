@@ -145,17 +145,18 @@ exports.handler = async (event, context) => {
     // SIP URI: sip:santa@sip.rtc.elevenlabs.io:5060;transport=tcp
     const sipUri = `sip:santa@sip.rtc.elevenlabs.io:5060;transport=tcp`;
 
-    // We set the callerId to the Twilio number to ensure the call is verified.
-    // If TWILIO_PHONE_NUMBER is not set, we fallback to the caller's number (which might be unverified for SIP).
     const callerPhone = body.get('From');
 
-    // Helper function to ensure phone number is in E.164 format
+    // Helper function to ensure phone number is in E.164 format (strips spaces, dashes, etc.)
     const formatPhoneE164 = (phone) => {
         if (!phone) return null;
-        // Remove all non-digit characters
+        // Remove all non-digit characters except leading +
+        const hasPlus = phone.startsWith('+');
         const cleaned = phone.replace(/\D/g, '');
-        // If it doesn't start with +, add +1 for US/Canada numbers
-        if (phone.startsWith('+')) return phone;
+
+        // If it already had a +, preserve it
+        if (hasPlus) return `+${cleaned}`;
+
         // Assume US/Canada if 10 or 11 digits
         if (cleaned.length === 10) return `+1${cleaned}`;
         if (cleaned.length === 11 && cleaned.startsWith('1')) return `+${cleaned}`;
@@ -164,8 +165,11 @@ exports.handler = async (event, context) => {
     };
 
     const formattedCallerPhone = formatPhoneE164(callerPhone);
+    // Also format the Twilio number in case it has spaces or other formatting (e.g., "+1 438 795 1562")
+    const formattedTwilioNumber = formatPhoneE164(process.env.TWILIO_PHONE_NUMBER);
+
     const dial = twiml.dial({
-        callerId: process.env.TWILIO_PHONE_NUMBER || formattedCallerPhone
+        callerId: formattedTwilioNumber || formattedCallerPhone
     });
 
     dial.sip({
