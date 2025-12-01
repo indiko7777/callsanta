@@ -38,7 +38,7 @@ exports.handler = async (event, context) => {
             parentName: test_data?.parentName || 'Test Parent',
             parentEmail: recipient_email,
             accessCode: test_data?.accessCode || '1234',
-            twilioNumber: test_data?.twilioNumber || '+33 9 39 03 63 23',
+            twilioNumber: test_data?.twilioNumber || '+1 438 795 1562',
             videoUrl: test_data?.videoUrl || 'https://example.com/test-video.mp4',
             audioUrl: test_data?.audioUrl || 'https://example.com/test-audio.mp3',
             callDuration: test_data?.callDuration || 325, // 5 minutes 25 seconds
