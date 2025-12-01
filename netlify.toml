@@ -21,6 +21,12 @@
   to = "/.netlify/functions/get-order-details"
   status = 200
 
+# Redirect /stripe-webhook to the serverless function
+[[redirects]]
+  from = "/stripe-webhook"
+  to = "/.netlify/functions/stripe-webhook"
+  status = 200
+
 # Security headers
 [[headers]]
   for = "/*"
