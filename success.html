@@ -819,7 +819,9 @@
             const callContainer = document.getElementById('call-success-container');
             const videoContainer = document.getElementById('video-success-container');
             const bundleContainer = document.getElementById('bundle-success-container');
+            const valueInDollars = (data.amountPaid || 0) / 100; // Calculates the real price
 
+           
             if (greetingMessage && data.childName) {
                 greetingMessage.innerHTML = `Thank you, ${data.childName}'s parent!`;
             }
@@ -837,8 +839,8 @@
             }
 
             // Track Purchase Event
+ // 1. Fire Facebook Pixel (Keep this, it was already there)
             if (typeof fbq === 'function') {
-                const valueInDollars = (data.amountPaid || 0) / 100;
                 fbq('track', 'Purchase', {
                     value: valueInDollars,
                     currency: data.currency || 'USD',
@@ -848,6 +850,15 @@
                 });
             }
 
+            // 2. Fire TikTok Pixel (ADD THIS EXACT PART)
+            if (typeof ttq === 'object') {
+                ttq.track('CompletePayment', {
+                    content_id: data.packageId, // Tracks what they bought (e.g., 'bundle')
+                    content_type: 'product',
+                    currency: data.currency || 'USD',
+                    value: valueInDollars // Tracks the EXACT amount (0, 20, or 35)
+                });
+            }
             // Display Amount Paid
             const amountPaidDisplay = document.getElementById('amount-paid-display');
             if (amountPaidDisplay && data.amountPaid !== undefined) {
