@@ -41,7 +41,7 @@
             };
 
 
-            ttq.load('D4ODVRBC77UA1JCQ5U7G');
+            ttq.load('D4OCSQ3C77U1VUV90POG');
             ttq.page();
         }(window, document, 'ttq');
     </script>
@@ -2097,81 +2097,112 @@
             modalPaymentMessage.innerText = "Fatal Error: Payment initialization failed across all routes. Check server logs.";
             return null;
         }
-        function initializeStripe(secret) {
-            if (stripe && elements) {
-                return;
-            }
+function initializeStripe(secret) {
+    if (stripe && elements) {
+        return;
+    }
 
-            stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-            const returnUrl = `${window.location.origin}/success.html`;
+    stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+    const returnUrl = `${window.location.origin}/success.html`;
 
-            const appearance = {
-                theme: 'night',
-                variables: {
-                    colorPrimary: '#D42426',
-                    colorText: '#F3F4F6',
-                    colorBackground: '#101827',
-                    colorDanger: '#EF4444',
-                    fontFamily: 'Inter, sans-serif',
-                },
-                rules: {
-                    '.Label': { color: '#C5A059' },
-                    '.Input': {
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)', borderColor: 'rgba(255, 255, 255, 0.1)',
-                        boxShadow: 'none'
-                    },
-                    '.Input--invalid': { boxShadow: '0 0 0 1px #EF4444' },
-                }
-            };
-
-            elements = stripe.elements({ appearance, clientSecret: secret });
-
-            const paymentElement = elements.create('payment', {
-                wallets: {
-                    applePay: 'auto',
-                    googlePay: 'auto'
-                },
-                paymentMethodPreference: 'automatic',
-            });
-
-            // Clear the mounting container before mounting
-            document.getElementById('modal-payment-element').innerHTML = '';
-            paymentElement.mount('#modal-payment-element');
-
-            // Use a simple, one-time submit handler for the form
-            const modalPaymentViewForm = document.getElementById('modal-payment-view');
-            modalPaymentViewForm.onsubmit = async (e) => {
-                e.preventDefault();
-
-                const finalPayButton = document.getElementById('final-pay-button');
-                const finalPayButtonText = document.getElementById('final-pay-button-text');
-
-                // Disable button during processing
-                finalPayButton.disabled = true;
-                finalPayButtonText.innerText = "Processing...";
-                modalPaymentMessage.innerText = 'Processing payment...';
-                modalPaymentMessage.classList.remove('hidden');
-
-                const { error } = await stripe.confirmPayment({
-                    elements,
-                    confirmParams: {
-                        return_url: returnUrl,
-                    },
-                });
-
-                // If an error occurs, re-enable the button
-                if (error) {
-                    finalPayButton.disabled = false;
-                    finalPayButtonText.innerText = "Error, Retry Payment";
-                    modalPaymentMessage.innerText = error.message;
-                    modalPaymentMessage.classList.remove('hidden');
-                }
-                // On success, Stripe handles the redirect via return_url
-            };
-
-            modalPaymentMessage.classList.add('hidden');
+    const appearance = {
+        theme: 'night',
+        variables: {
+            colorPrimary: '#D42426',
+            colorText: '#F3F4F6',
+            colorBackground: '#101827',
+            colorDanger: '#EF4444',
+            fontFamily: 'Inter, sans-serif',
+        },
+        rules: {
+            '.Label': { color: '#C5A059' },
+            '.Input': {
+                backgroundColor: 'rgba(15, 23, 42, 0.9)', 
+                borderColor: 'rgba(255, 255, 255, 0.1)',
+                boxShadow: 'none'
+            },
+            '.Input--invalid': { boxShadow: '0 0 0 1px #EF4444' },
         }
+    };
 
+    elements = stripe.elements({ appearance, clientSecret: secret });
+
+    // --- NEW: Express Checkout Element (Apple Pay / Google Pay) ---
+    const expressCheckoutElement = elements.create('expressCheckout', {
+        buttonTheme: {
+            applePay: 'white-outline', // Makes it pop against your dark background
+            googlePay: 'white-outline'
+        }
+    });
+    
+    // Mount it to the new div we created
+    expressCheckoutElement.mount('#express-checkout-element');
+
+    // Handle the Express Checkout click event
+    expressCheckoutElement.on('confirm', async (event) => {
+        const { error } = await stripe.confirmPayment({
+            elements,
+            clientSecret: secret,
+            confirmParams: {
+                return_url: returnUrl,
+            },
+        });
+
+        if (error) {
+            // This usually happens if the user cancels the Apple Pay sheet
+            modalPaymentMessage.innerText = error.message;
+            modalPaymentMessage.classList.remove('hidden');
+        }
+    });
+    // -------------------------------------------------------------
+
+    // Standard Payment Element (Credit Cards)
+    const paymentElement = elements.create('payment', {
+        // Disable wallets here so we don't show Apple Pay twice
+        wallets: {
+            applePay: 'never',
+            googlePay: 'never'
+        },
+        paymentMethodPreference: 'automatic',
+    });
+
+    // Clear the mounting container before mounting
+    document.getElementById('modal-payment-element').innerHTML = '';
+    paymentElement.mount('#modal-payment-element');
+
+    // Use a simple, one-time submit handler for the form
+    const modalPaymentViewForm = document.getElementById('modal-payment-view');
+    modalPaymentViewForm.onsubmit = async (e) => {
+        e.preventDefault();
+
+        const finalPayButton = document.getElementById('final-pay-button');
+        const finalPayButtonText = document.getElementById('final-pay-button-text');
+
+        // Disable button during processing
+        finalPayButton.disabled = true;
+        finalPayButtonText.innerText = "Processing...";
+        modalPaymentMessage.innerText = 'Processing payment...';
+        modalPaymentMessage.classList.remove('hidden');
+
+        const { error } = await stripe.confirmPayment({
+            elements,
+            confirmParams: {
+                return_url: returnUrl,
+            },
+        });
+
+        // If an error occurs, re-enable the button
+        if (error) {
+            finalPayButton.disabled = false;
+            finalPayButtonText.innerText = "Error, Retry Payment";
+            modalPaymentMessage.innerText = error.message;
+            modalPaymentMessage.classList.remove('hidden');
+        }
+        // On success, Stripe handles the redirect via return_url
+    };
+
+    modalPaymentMessage.classList.add('hidden');
+}
         async function handleModalPayment() {
             if (!document.getElementById('modal-legal-consent').checked) {
                 modalPaymentMessage.innerText = "You must agree to the Terms of Service and Privacy Policy to proceed.";
