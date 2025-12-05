@@ -1821,7 +1821,7 @@
                 step2Container.innerHTML += `
                     <div>
                         <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Child${suffix} Wish</label>
-                        <input id="form-child-wish-${i}" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
+                        <input id="form-child-wish-${i}" name="custom_santa_wish_text" autocomplete="off" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
                             placeholder="e.g. A red bike" required minlength="4"
                             title="Please provide a specific wish (4+ characters).">
                     </div>
@@ -1831,7 +1831,7 @@
                 step3Container.innerHTML += `
                     <div>
                         <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Child${suffix} Good Deed</label>
-                        <input id="form-child-deed-${i}" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
+                        <input id="form-child-deed-${i}" name="custom_santa_deed_text" autocomplete="off" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
                             placeholder="e.g. Helped with dishes" required minlength="5"
                             title="Please describe a deed/hobby (5+ characters).">
                     </div>
