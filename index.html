@@ -356,17 +356,28 @@
 
         /* Glass Inputs */
         .glass-input {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.75);
+            /* Darker background for better contrast */
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             transition: all 0.3s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+            /* Text shadow for input text */
         }
 
         .glass-input:focus {
-            background: rgba(15, 23, 42, 0.8);
+            background: rgba(15, 23, 42, 0.9);
             border-color: #D42426;
             box-shadow: 0 0 0 1px #D42426, 0 0 15px rgba(212, 36, 38, 0.3);
             outline: none;
+        }
+
+        /* Enhanced Text Readability for Questions */
+        .step-form h2,
+        .step-form h3,
+        .step-form label,
+        .step-form .block {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
         }
 
         /* Marquee Animation for Testimonials */
@@ -627,10 +638,9 @@
 <body class="text-white antialiased overflow-x-hidden font-sans selection:bg-santa-red selection:text-white">
 
     <div class="fixed inset-0 z-0">
-        <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?q=80&w=2069&auto=format&fit=crop"
-            alt="Cozy Christmas Living Room" class="w-full h-full object-cover opacity-60">
-        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/70 to-slate-950/80"></div>
-        <div class="absolute inset-0 bg-black/40"></div>
+        <img src="images/santa_bg.png" alt="Cozy Christmas Living Room" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-900/60 to-slate-950/70"></div>
+        <div class="absolute inset-0 bg-black/50"></div>
     </div>
 
     <nav class="relative z-50 w-full px-6 py-6 flex justify-between items-center max-w-7xl mx-auto">
@@ -2105,35 +2115,35 @@
             modalPaymentMessage.innerText = "Fatal Error: Payment initialization failed across all routes. Check server logs.";
             return null;
         }
-function initializeStripe(secret) {
-    if (stripe && elements) {
-        return;
-    }
+        function initializeStripe(secret) {
+            if (stripe && elements) {
+                return;
+            }
 
-    stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-    const returnUrl = `${window.location.origin}/success.html`;
+            stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
+            const returnUrl = `${window.location.origin}/success.html`;
 
-    const appearance = {
-        theme: 'night',
-        variables: {
-            colorPrimary: '#D42426',
-            colorText: '#F3F4F6',
-            colorBackground: '#101827',
-            colorDanger: '#EF4444',
-            fontFamily: 'Inter, sans-serif',
-        },
-        rules: {
-            '.Label': { color: '#C5A059' },
-            '.Input': {
-                backgroundColor: 'rgba(15, 23, 42, 0.9)', 
-                borderColor: 'rgba(255, 255, 255, 0.1)',
-                boxShadow: 'none'
-            },
-            '.Input--invalid': { boxShadow: '0 0 0 1px #EF4444' },
-        }
-    };
+            const appearance = {
+                theme: 'night',
+                variables: {
+                    colorPrimary: '#D42426',
+                    colorText: '#F3F4F6',
+                    colorBackground: '#101827',
+                    colorDanger: '#EF4444',
+                    fontFamily: 'Inter, sans-serif',
+                },
+                rules: {
+                    '.Label': { color: '#C5A059' },
+                    '.Input': {
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                        borderColor: 'rgba(255, 255, 255, 0.1)',
+                        boxShadow: 'none'
+                    },
+                    '.Input--invalid': { boxShadow: '0 0 0 1px #EF4444' },
+                }
+            };
 
-    elements = stripe.elements({ appearance, clientSecret: secret });
+            elements = stripe.elements({ appearance, clientSecret: secret });
 
     // --- NEW: Express Checkout Element (Apple Pay / Google Pay) ---
     const expressCheckoutElement = elements.create('expressCheckout', {
