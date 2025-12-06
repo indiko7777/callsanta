@@ -1936,13 +1936,6 @@
                     value: currentTotal,
                     num_items: selectedChildCount
                 });
-
-                // Also fire AddPaymentInfo as requested to map to this button
-                fbq('track', 'AddPaymentInfo', {
-                    content_name: selectedPackageId,
-                    currency: 'USD',
-                    value: currentTotal
-                });
             }
 
             // Show loading overlay
