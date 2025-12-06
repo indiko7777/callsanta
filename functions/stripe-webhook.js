@@ -173,12 +173,35 @@ exports.handler = async (event, context) => {
                 });
 
                 console.log('Order created from Checkout Session:', newOrder._id);
-                // Email sending logic is reused below if structured properly, 
-                // OR we can rely on save-personalization to send the "magic is ready" email since 
-                // we don't have child names yet.
-                // WE SHOULD WAIT to send "Call Confirmation" until personalization is done?
-                // Actually, maybe send "Payment Receipt / Action Required" email here?
-                // For now, let's just create the order.
+
+                // Send confirmation email immediately
+                const sessionEmailFunction = require('./send-confirmation-email');
+                let sessionEmailType;
+
+                // Determine email type based on packageId (same logic as above)
+                if (packageId === 'call') {
+                    sessionEmailType = 'live_call_confirmation';
+                } else if (packageId === 'video') {
+                    sessionEmailType = 'video_order_confirmation';
+                } else if (packageId === 'bundle') {
+                    // Bundle initial confirmation
+                    sessionEmailType = 'bundle_call_confirmation';
+                }
+
+                if (sessionEmailType) {
+                    try {
+                        const emailRes = await sessionEmailFunction.handler({
+                            httpMethod: 'POST',
+                            body: JSON.stringify({
+                                order_id: newOrder._id.toString(),
+                                email_type: sessionEmailType
+                            })
+                        }, context);
+                        console.log('Confirmation email result:', emailRes.statusCode);
+                    } catch (e) {
+                        console.error('Failed to trigger email from session:', e);
+                    }
+                }
                 break;
 
             case 'payment_intent.payment_failed':
