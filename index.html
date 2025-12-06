@@ -670,7 +670,7 @@
                         <i data-lucide="sparkles" class="inline w-3 h-3 mr-1"></i> 2024 Christmas Season
                     </div>
                     <h1
-                        class="hero-title text-5xl md:text-7xl font-serif font-black text-white leading-tight drop-shadow-2xl">
+                        class="hero-title text-4xl sm:text-5xl md:text-7xl font-serif font-black text-white leading-tight drop-shadow-2xl whitespace-nowrap">
                         Make it <span
                             class="text-transparent bg-clip-text bg-gradient-to-r from-santa-red to-red-500">Magical.</span>
                     </h1>
@@ -681,9 +681,8 @@
                 </div>
 
                 <!-- Video Placeholder -->
-                <!-- Video Player -->
                 <div
-                    class="relative w-full max-w-xl mx-auto lg:mx-0 aspect-video rounded-2xl overflow-hidden border border-white/10 bg-black shadow-2xl transition-transform hover:scale-[1.01]">
+                    class="relative w-full max-w-xl mx-auto lg:mx-0 aspect-video rounded-2xl overflow-hidden border border-white/10 bg-slate-900/50 shadow-2xl group cursor-pointer transition-transform hover:scale-[1.01]">
                     <video class="w-full h-full object-cover rounded-2xl"
                         src="images/copy_B234DEE7-9F80-4639-B1B8-5BCC8D579AE5.MOV" poster="images/santa_bg.png" autoplay
                         muted loop playsinline controls>
@@ -692,7 +691,7 @@
                 </div>
 
                 <div
-                    class="flex items-center justify-center lg:justify-start gap-6 text-xs font-medium text-gray-400 uppercase tracking-widest">
+                    class="flex items-center justify-center lg:justify-start gap-6 text-xs font-medium text-white uppercase tracking-widest">
                     <span class="flex items-center gap-2"><i data-lucide="shield-check"
                             class="w-4 h-4 text-green-400"></i> Parent Approved</span>
                     <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 text-santa-gold"></i>
@@ -1732,6 +1731,35 @@
 
 
 
+    <!-- Audio Preview Widget -->
+    <!-- Audio Preview Widget -->
+    <div id="audio-widget" class="fixed bottom-6 right-6 z-50 cursor-pointer animate-bounce-subtle"
+        onclick="handleWidgetClick(event)">
+        <div
+            class="relative overflow-hidden bg-black/80 backdrop-blur-md border border-santa-gold/50 rounded-full pl-3 pr-5 py-3 flex items-center gap-3 hover:bg-black transition-all shadow-2xl shadow-santa-gold/20 select-none">
+            <!-- Progress Bar -->
+            <div id="audio-progress" class="absolute left-0 top-0 bottom-0 bg-white/20 w-0 transition-none z-0"></div>
+
+            <!-- Content -->
+            <div class="relative z-10 flex items-center gap-3">
+                <div id="audio-play-btn"
+                    class="w-10 h-10 rounded-full bg-santa-red flex items-center justify-center animate-pulse relative hover:scale-105 active:scale-95 transition-transform">
+                    <div class="absolute inset-0 rounded-full bg-santa-red animate-ping opacity-20 pointer-events-none">
+                    </div>
+                    <i id="audio-icon" data-lucide="headphones"
+                        class="w-5 h-5 text-white relative z-10 pointer-events-none"></i>
+                </div>
+                <div class="flex flex-col text-left">
+                    <span class="text-[9px] text-santa-gold font-bold uppercase tracking-widest leading-none mb-1">Real
+                        Audio Example</span>
+                    <span id="audio-text" class="text-sm text-white font-bold leading-none">Hear Santa's Voice</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <audio id="santa-preview-audio" src="audio/1207.mp3" ontimeupdate="updateAudioProgress()"
+        onended="resetAudioPreview()"></audio>
+
     <!-- Stripe Loading Overlay -->
     <div id="stripe-loading-overlay"
         class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm hidden items-center justify-center flex-col">
@@ -1975,6 +2003,79 @@
                 alert('Connection to Santa failed: ' + error.message);
                 loadingOverlay.classList.add('hidden');
                 loadingOverlay.classList.remove('flex');
+            }
+        }
+
+        // Audio Preview Logic
+        // Audio Preview Logic
+        function handleWidgetClick(event) {
+            const btn = document.getElementById('audio-play-btn');
+            // Check if click was on or inside the play button
+            if (btn.contains(event.target)) {
+                toggleAudioPreview();
+            } else {
+                const audio = document.getElementById('santa-preview-audio');
+
+                // UX FIX: If paused, first click just plays (does NOT seek/scrub)
+                if (audio.paused) {
+                    toggleAudioPreview();
+                    return;
+                }
+
+                // Click was on the bar area & audio is playing -> Seek
+                const widget = event.currentTarget.querySelector('div'); // The inner relative div
+                const rect = widget.getBoundingClientRect();
+                const x = event.clientX - rect.left; // Click position within widget
+                const width = rect.width;
+                const percentage = Math.max(0, Math.min(1, x / width)); // Clamp 0-1
+
+                if (audio.duration) {
+                    audio.currentTime = percentage * audio.duration;
+                    updateAudioProgress();
+                }
+            }
+        }
+
+        function toggleAudioPreview() {
+            const audio = document.getElementById('santa-preview-audio');
+            const icon = document.getElementById('audio-icon');
+            const text = document.getElementById('audio-text');
+
+            if (audio.paused) {
+                audio.play();
+                // Update UI to Playing State
+                text.innerText = "Playing...";
+                text.classList.add('text-santa-gold');
+                icon.setAttribute('data-lucide', 'pause');
+                lucide.createIcons(); // Refresh icon
+            } else {
+                audio.pause();
+                text.innerText = "Paused";
+            }
+        }
+
+        function updateAudioProgress() {
+            const audio = document.getElementById('santa-preview-audio');
+            const bar = document.getElementById('audio-progress');
+            if (audio.duration && bar) {
+                const percent = (audio.currentTime / audio.duration) * 100;
+                bar.style.width = percent + '%';
+            }
+        }
+
+        function resetAudioPreview() {
+            const text = document.getElementById('audio-text');
+            const bar = document.getElementById('audio-progress');
+            const icon = document.getElementById('audio-icon');
+
+            if (text) {
+                text.innerText = "Hear Santa's Voice";
+                text.classList.remove('text-santa-gold');
+            }
+            if (bar) bar.style.width = '0%';
+            if (icon) {
+                icon.setAttribute('data-lucide', 'headphones');
+                lucide.createIcons();
             }
         }
     </script>
