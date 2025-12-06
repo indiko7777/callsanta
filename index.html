@@ -684,7 +684,7 @@
                 <div
                     class="relative w-full max-w-xl mx-auto lg:mx-0 aspect-video rounded-2xl overflow-hidden border border-white/10 bg-slate-900/50 shadow-2xl group cursor-pointer transition-transform hover:scale-[1.01]">
                     <video class="w-full h-full object-cover rounded-2xl"
-                        src="images/copy_B234DEE7-9F80-4639-B1B8-5BCC8D579AE5.MOV" poster="images/santa_bg.png" autoplay
+                        src="images/copy_B234DEE7-9F80-4639-B1B8-5BCC8D579AE5.mp4" poster="images/santa_bg.png" autoplay
                         muted loop playsinline controls>
                         Your browser does not support the video tag.
                     </video>
@@ -872,12 +872,9 @@
                             <span class="font-serif text-santa-gold font-bold text-xl">I</span>
                         </div>
                         <div class="absolute inset-0 overflow-hidden">
-                            <img src="images/step-1-writing.jpg"
+                            <img src="images/step-1-writing.png" loading="lazy"
                                 class="step-image w-full h-full object-cover opacity-70 transition duration-700 ease-in-out"
                                 alt="Parent and child sharing a Christmas moment">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent">
-                            </div>
                         </div>
                         <div class="step-content absolute bottom-0 left-0 p-8 w-full transition duration-500">
                             <div class="flex items-center gap-3 mb-3">
@@ -903,12 +900,9 @@
                             <span class="font-serif text-santa-gold font-bold text-xl">II</span>
                         </div>
                         <div class="absolute inset-0 overflow-hidden">
-                            <img src="images/step-2-tree.jpg"
+                            <img src="images/step-2-tree.png" loading="lazy"
                                 class="step-image w-full h-full object-cover opacity-70 transition duration-700 ease-in-out"
                                 alt="Christmas tree with gifts underneath">
-                            <div
-                                class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent">
-                            </div>
                         </div>
                         <div class="step-content absolute bottom-0 left-0 p-8 w-full transition duration-500">
                             <div class="flex items-center gap-3 mb-3">
@@ -932,7 +926,7 @@
                             <span class="font-serif text-santa-gold font-bold text-xl">III</span>
                         </div>
                         <div class="absolute inset-0 overflow-hidden">
-                            <img src="images/step-3-reveal.jpg"
+                            <img src="images/step-3-reveal.png" loading="lazy"
                                 class="step-image w-full h-full object-cover opacity-70 transition duration-700 ease-in-out"
                                 alt="Child glowing with joy">
                             <div
@@ -1757,7 +1751,7 @@
             </div>
         </div>
     </div>
-    <audio id="santa-preview-audio" src="audio/1207.mp3" ontimeupdate="updateAudioProgress()"
+    <audio id="santa-preview-audio" src="audio/1207.mp3" preload="none" ontimeupdate="updateAudioProgress()"
         onended="resetAudioPreview()"></audio>
 
     <!-- Stripe Loading Overlay -->
