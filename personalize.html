@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personalize Your Call | CallSanta.us</title>
+    <!-- Use same fonts/styles as index -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Mountains+of+Christmas:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        santa: { red: '#D42426', dark: '#15432E', gold: '#F8B229' }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        christmas: ['"Mountains of Christmas"', 'cursive', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .form-input {
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            border-color: #F8B229;
+            box-shadow: 0 0 0 3px rgba(248, 178, 41, 0.3);
+        }
+    </style>
+</head>
+
+<body class="bg-slate-950 text-white min-h-screen overflow-y-auto">
+
+    <div class="fixed inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-slate-950/50 via-slate-950/70 to-slate-950/90 z-10"></div>
+        <img src="https://images.unsplash.com/photo-1512389142860-9c449e58a543?w=1920&q=80" alt="Christmas background"
+            class="w-full h-full object-cover opacity-40">
+    </div>
+
+    <!-- Navbar -->
+    <nav class="absolute top-0 w-full z-50 py-6">
+        <div class="container mx-auto px-6 flex justify-between items-center">
+            <a href="/" class="text-2xl font-serif font-bold text-white tracking-wide relative z-20">CallSanta.us</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 pt-32 pb-20 max-w-2xl relative z-20">
+
+        <!-- Hero / Status -->
+        <div class="text-center mb-10 animate-fade-in-up">
+            <div
+                class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-500/20 text-green-400 mb-6 border border-green-500/30">
+                <i data-lucide="check" class="w-8 h-8"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl font-serif font-bold mb-4">Payment Successful!</h1>
+            <p class="text-xl text-gray-300">You're almost there! Just one final step to make magic happen.</p>
+        </div>
+
+        <div class="glass-panel rounded-2xl p-8 relative animate-fade-in-up" style="animation-delay: 0.1s;">
+            <div id="loading-state" class="text-center py-12">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+                <p>Loading your order details...</p>
+            </div>
+
+            <form id="personalization-form" class="hidden space-y-8">
+
+                <div class="border-b border-white/10 pb-6 mb-6">
+                    <h2 class="text-2xl font-serif font-bold text-santa-gold mb-2">Tell Santa about your child</h2>
+                    <p class="text-gray-300 text-sm">To make the call truly magical, Santa needs to know a few secret
+                        details.</p>
+                </div>
+
+                <!-- Dynamic Children Fields will be injected here -->
+                <div id="children-container" class="space-y-8"></div>
+
+                <!-- Delivery Info (Email) -->
+                <div id="delivery-info" class="pt-6 border-t border-white/10">
+                    <!-- Dynamic Content -->
+                </div>
+
+                <div class="space-y-4 pt-4">
+                    <button type="submit"
+                        class="w-full bg-gradient-to-r from-santa-red to-red-700 hover:from-red-600 hover:to-red-800 text-white font-bold py-4 px-8 rounded-xl shadow-lg transform transition hover:scale-[1.02] flex items-center justify-center text-lg">
+                        <span>Start the Magic</span>
+                        <i data-lucide="sparkles" class="w-5 h-5 ml-2"></i>
+                    </button>
+
+                    <div class="text-center">
+                        <button type="button" onclick="skipPersonalization()"
+                            class="text-sm text-gray-400 hover:text-white underline transition-colors">
+                            I'll fill this in later
+                        </button>
+                    </div>
+                </div>
+                <p id="error-message" class="text-red-400 text-sm text-center hidden"></p>
+            </form>
+        </div>
+
+    </main>
+
+    <!-- Email Modal for Magic Link -->
+    <div id="email-modal"
+        class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="glass-panel p-8 max-w-md w-full rounded-2xl relative">
+            <button onclick="closeEmailModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white"
+                type="button">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <h3 class="text-2xl font-bold font-serif mb-4 flex items-center gap-2">
+                <i data-lucide="mail" class="w-6 h-6 text-santa-gold"></i>
+                Save for Later
+            </h3>
+            <p class="text-gray-300 mb-6">Enter your email and we'll send you a secure link to finish this later.</p>
+            <form id="magic-link-form" class="space-y-4">
+                <input type="email" name="magic_email" required
+                    class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-santa-gold form-input"
+                    placeholder="parent@example.com">
+                <button type="submit"
+                    class="w-full bg-santa-red hover:bg-red-700 text-white font-bold py-3 rounded-xl transition-colors">
+                    Send Link
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        // Logic to fetch order & render form
+        const urlParams = new URLSearchParams(window.location.search);
+        const sessionId = urlParams.get('session_id');
+        let currentOrderData = null;
+
+        async function init() {
+            if (!sessionId) {
+                document.getElementById('loading-state').innerHTML = '<p class="text-red-400">Error: No session ID found.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`/.netlify/functions/get-order-context?session_id=${sessionId}`);
+                if (!response.ok) throw new Error('Failed to load order');
+                const data = await response.json();
+                currentOrderData = data;
+
+                // Hide loading, show form
+                document.getElementById('loading-state').classList.add('hidden');
+                document.getElementById('personalization-form').classList.remove('hidden');
+
+                renderForm(data);
+
+            } catch (err) {
+                console.error(err);
+                document.getElementById('loading-state').innerHTML = '<p class="text-red-400">Failed to load order details. Please refresh.</p>';
+            }
+        }
+
+        function renderForm(data) {
+            const container = document.getElementById('children-container');
+            container.innerHTML = ''; // Fix duplicate issue
+
+            const count = data.childCount || 1;
+
+            // 1. Dynamic Children Fields
+            for (let i = 0; i < count; i++) {
+                const num = i + 1;
+                const html = `
+                    <div class="bg-white/5 rounded-xl p-6 border border-white/10">
+                        <h3 class="font-christmas text-2xl text-santa-gold mb-4">Child ${num}</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm text-gray-300 mb-1">What is your child's name?</label>
+                                <input type="text" name="child_${i}_name" required
+                                    class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 focus:ring-1 focus:ring-santa-gold outline-none text-white placeholder-gray-600"
+                                    placeholder="e.g. Leo">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-300 mb-1">What are they wishing for?</label>
+                                <input type="text" name="child_${i}_wish" required
+                                    class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 focus:ring-1 focus:ring-santa-gold outline-none text-white placeholder-gray-600"
+                                    placeholder="e.g. A red bike">
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-300 mb-1">What is something naughty or nice they did recently?</label>
+                                <textarea name="child_${i}_deed" required rows="2"
+                                    class="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-2 focus:ring-1 focus:ring-santa-gold outline-none text-white placeholder-gray-600"
+                                    placeholder="e.g. Shared toys with sister / Refused to eat veggies"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            }
+
+            // 2. Contact / Delivery Logic
+            const deliveryContainer = document.getElementById('delivery-info');
+            if (deliveryContainer) {
+                let html = '';
+
+                // Determine text based on package
+                const isVideo = data.packageId && (data.packageId.includes('video') || data.packageId.includes('bundle'));
+                const deliveryText = isVideo
+                    ? "We will send your Personalized Video link here."
+                    : "We will send your Access Code and Instructions here.";
+                const labelText = isVideo
+                    ? "Where should we send the video?"
+                    : "Where should we send instructions?";
+
+                if (data.customerEmail) {
+                    html = `
+                        <h4 class="font-bold text-lg mb-4 flex items-center">
+                            <i data-lucide="mail" class="w-5 h-5 mr-2 text-santa-gold"></i>
+                            Delivery Information
+                        </h4>
+                        <div class="bg-green-900/30 border border-green-500/30 rounded-xl p-4">
+                            <p class="text-sm text-gray-300 mb-1">We have your email:</p>
+                            <p class="font-bold text-white text-lg">${data.customerEmail}</p>
+                            <p class="text-xs text-green-300 mt-2">
+                                ${deliveryText}
+                            </p>
+                            <input type="hidden" name="parentEmail" value="${data.customerEmail}">
+                        </div>
+                    `;
+                } else {
+                    html = `
+                         <h4 class="font-bold text-lg mb-4 flex items-center">
+                            <i data-lucide="mail" class="w-5 h-5 mr-2 text-santa-gold"></i>
+                            ${labelText}
+                        </h4>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-300 mb-2">Your Email Address</label>
+                            <input type="email" name="parentEmail" required
+                                class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-santa-gold focus:border-transparent form-input"
+                                placeholder="parent@example.com">
+                            <p class="text-xs text-gray-400 mt-2">${deliveryText}</p>
+                        </div>
+                    `;
+                }
+                deliveryContainer.innerHTML = html;
+                lucide.createIcons();
+            }
+        }
+
+        // Form Submission Handler
+        document.getElementById('personalization-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type="submit"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Submitting...';
+            btn.disabled = true;
+
+            const formData = new FormData(e.target);
+            const data = {
+                sessionId: sessionId,
+                parentEmail: formData.get('parentEmail'),
+                children: []
+            };
+
+            // Extract children data dynamically
+            const childDivs = document.querySelectorAll('#children-container > div');
+            childDivs.forEach((div, index) => {
+                data.children.push({
+                    name: formData.get(`child_${index}_name`),
+                    wish: formData.get(`child_${index}_wish`),
+                    deed: formData.get(`child_${index}_deed`)
+                });
+            });
+
+            try {
+                const res = await fetch('/.netlify/functions/save-personalization', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    window.location.href = '/success.html?order_id=' + (await res.json()).orderId;
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (err) {
+                console.error(err);
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+                document.getElementById('error-message').innerText = 'Something went wrong. Please try again.';
+                document.getElementById('error-message').classList.remove('hidden');
+            }
+        });
+
+        // Skip/Fill Later Logic
+        function skipPersonalization() {
+            if (currentOrderData && currentOrderData.customerEmail) {
+                sendMagicLink(currentOrderData.customerEmail);
+            } else {
+                document.getElementById('email-modal').classList.remove('hidden');
+                document.getElementById('email-modal').classList.add('flex');
+            }
+        }
+
+        function closeEmailModal() {
+            document.getElementById('email-modal').classList.add('hidden');
+            document.getElementById('email-modal').classList.remove('flex');
+        }
+
+        document.getElementById('magic-link-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = e.target.elements['magic_email'].value;
+            await sendMagicLink(email);
+        });
+
+        async function sendMagicLink(email) {
+            const btn = document.querySelector('#magic-link-form button') || document.querySelector('button[onclick="skipPersonalization()"]');
+            if (btn) btn.innerHTML = 'Sending...';
+
+            try {
+                const res = await fetch('/.netlify/functions/send-magic-link', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        sessionId: sessionId
+                    })
+                });
+
+                if (res.ok) {
+                    alert('Magic link sent! Check your email.');
+                    window.location.href = '/';
+                } else {
+                    alert('Failed to send link. Please try again.');
+                }
+            } catch (e) {
+                alert('Error sending link.');
+            }
+            if (btn) btn.innerHTML = 'Send Link';
+            closeEmailModal();
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

@@ -2,21 +2,21 @@
 const mongoose = require('mongoose');
 
 const OrderSchema = new mongoose.Schema({
-    stripeCustomerId: { type: String, required: true },
+    stripeCustomerId: { type: String, required: false },
     stripePaymentIntentId: { type: String, required: true, unique: true },
     accessCode: { type: String, unique: true, sparse: true }, // Unique code, sparse allows nulls/missing
     fulfillmentStatus: { type: String, default: 'PENDING_PAYMENT' }, // Tracks state
 
     // Personalization Data
     children: [{
-        name: { type: String, required: true },
-        wish: { type: String, required: true },
-        deed: { type: String, required: true }
+        name: { type: String, required: false },
+        wish: { type: String, required: false },
+        deed: { type: String, required: false }
     }],
 
     // Parent/Contact Data
     parentEmail: { type: String, required: true },
-    parentPhone: { type: String, required: true },
+    parentPhone: { type: String, required: false }, // Collected after payment or via Stripe
 
     // Financial Data
     packageId: { type: String, required: true },

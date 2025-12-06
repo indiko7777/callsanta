@@ -2,7 +2,6 @@
 <html lang="en" class="scroll-smooth">
 
 <head>
-    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-E2XNQGLFBX"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -10,7 +9,6 @@
         gtag('js', new Date());
         gtag('config', 'G-E2XNQGLFBX');
     </script>
-    <!-- Facebook Pixel Code -->
     <script>
         !function (f, b, e, v, n, t, s) {
             if (f.fbq) return; n = f.fbq = function () {
@@ -28,8 +26,6 @@
     </script>
     <noscript><img height="1" width="1" style="display:none"
             src="https://www.facebook.com/tr?id=3889032858055282&ev=PageView&noscript=1" /></noscript>
-    <!-- End Facebook Pixel Code -->
-    <!-- TikTok Pixel Code Start -->
     <script>
         !function (w, d, t) {
             w.TiktokAnalyticsObject = t; var ttq = w[t] = w[t] || []; ttq.methods = ["page", "track", "identify", "instances", "debug", "on", "off", "once", "ready", "alias", "group", "enableCookie", "disableCookie", "holdConsent", "revokeConsent", "grantConsent"], ttq.setAndDefer = function (t, e) { t[e] = function () { t.push([e].concat(Array.prototype.slice.call(arguments, 0))) } }; for (var i = 0; i < ttq.methods.length; i++)ttq.setAndDefer(ttq, ttq.methods[i]); ttq.instance = function (t) {
@@ -45,7 +41,6 @@
             ttq.page();
         }(window, document, 'ttq');
     </script>
-    <!-- TikTok Pixel Code End -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -75,53 +70,55 @@
     <meta property="twitter:image" content="https://callsanta.us/images/social-share-preview.png">
 
     <script type="application/ld+json">
-    {
-        "@context": "https://schema.org/",
-        "@graph": [
-            {
-                "@type": "Organization",
-                "@id": "https://callsanta.us/#organization",
-                "name": "CallSanta.us",
-                "url": "https://callsanta.us/",
-                "logo": {
-                    "@type": "ImageObject",
-                    "url": "https://callsanta.us/images/social-share-preview.png"
-                }
-            },
-            {
-                "@type": "Product",
-                "name": "Call Santa Personalized Experience",
-                "image": "https://callsanta.us/images/social-share-preview.png",
-                "description": "A personalized video and live phone call from Santa based on your child's favorite gifts and good deeds.",
-                "brand": {
-                    "@type": "Brand",
-                    "name": "CallSanta.us"
-                },
-                "aggregateRating": {
-                    "@type": "AggregateRating",
-                    "ratingValue": "4.9",
-                    "ratingCount": "12400",
-                    "bestRating": "5",
-                    "worstRating": "4"
-                },
-                "offers": {
-                    "@type": "AggregateOffer",
+        {
+            "@context": "https://schema.org/",
+            "@graph": [
+                {
+                    "@type": "Organization",
+                    "@id": "https://callsanta.us/#organization",
+                    "name": "CallSanta.us",
                     "url": "https://callsanta.us/",
-                    "priceCurrency": "USD",
-                    "lowPrice": "10.00",
-                    "highPrice": "35.00",
-                    "offerCount": "3",
-                    "availability": "https://schema.org/InStock"
+                    "logo": {
+                        "@type": "ImageObject",
+                        "url": "https://callsanta.us/images/social-share-preview.png"
+                    }
+                },
+                {
+                    "@type": "Product",
+                    "name": "Call Santa Personalized Experience",
+                    "image": "https://callsanta.us/images/social-share-preview.png",
+                    "description": "A personalized video and live phone call from Santa based on your child's favorite gifts and good deeds.",
+                    "brand": {
+                        "@type": "Brand",
+                        "name": "CallSanta.us"
+                    },
+                    "aggregateRating": {
+                        "@type": "AggregateRating",
+                        "ratingValue": "4.9",
+                        "ratingCount": "12400",
+                        "bestRating": "5",
+                        "worstRating": "4"
+                    },
+                    "offers": {
+                        "@type": "AggregateOffer",
+                        "url": "https://callsanta.us/",
+                        "priceCurrency": "USD",
+                        "lowPrice": "10.00",
+                        "highPrice": "35.00",
+                        "offerCount": "3",
+                        "availability": "https://schema.org/InStock"
+                    }
                 }
-            }
-        ]
-    }
+            ]
+        }
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mountains+of+Christmas:wght@400;700&display=swap"
         rel="stylesheet">
 
     <script src="https://js.stripe.com/v3/"></script>
@@ -137,16 +134,20 @@
                     fontFamily: {
                         sans: ['Inter', 'sans-serif'],
                         serif: ['Playfair Display', 'serif'],
+                        // New festive font declaration
+                        'christmas': ['"Mountains of Christmas"', 'cursive', 'serif'],
                     },
                     colors: {
                         santa: {
                             red: '#D42426',
                             dark: '#990000',
-                            gold: '#C5A059',
-                            goldlight: '#E5C585'
+                            // Upgraded Gold colors for better pop against dark background
+                            gold: '#FFD700', // Rich Gold
+                            goldlight: '#FFE566' // Brightest highlight gold
                         },
                         'christmas-green': '#15432E',
-                        'bright-gold': '#FFD700',
+                        'bright-gold': '#FFD700', // Matches new santa-gold
+                        'rich-white': '#E5E7EB' // New high-contrast light text color
                     },
                     animation: {
                         'fade-in-up': 'fadeInUp 1s ease-out forwards',
@@ -174,9 +175,8 @@
         }
 
         .product-card-styled {
-            /* Fallback colors for safety if image fails */
-            background-color: #f7f7f7;
-            /* Corrected path for image in /images folder */
+            /* Use a consistent background image (assuming it is festive) */
+            background-color: #0c121e;
             background-image: url('images/Gemini_Generated_Image_3kk6l63kk6l63kk6.png');
             background-size: cover;
             background-position: center;
@@ -185,32 +185,72 @@
         /* Override for text inside the cards to ensure readability against the stripes */
         .product-card-styled h3 {
             /* Apply a stronger shadow for readability */
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.7);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.9), 1px 1px 3px rgba(0, 0, 0, 0.7);
         }
 
         /* Ensure feature list text is visible on the busy background */
         .feature-list li {
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            color: #E5E7EB;
+            /* Use the defined rich-white for contrast */
         }
 
-        /* Gold Recommended Sticker Badge - matches Best Value style */
+        .feature-list li strong {
+            color: #FFE566;
+            /* Brightest gold for highlighted words */
+        }
+
+        /* Redesign FAQ item colors for better pop */
+        .faq-item {
+            background: rgba(15, 23, 42, 0.85);
+            /* Dark slate with opacity */
+            border: 1px solid #D4242630;
+            /* Faint red border */
+        }
+
+        .faq-item:hover {
+            border-color: #D42426;
+            /* Solid red border on hover */
+        }
+
+        /* Style for the FAQ toggle button text */
+        .faq-toggle {
+            color: #FFD700;
+            /* Gold text for the question */
+        }
+
+        /* Style for the FAQ answer text */
+        .faq-content {
+            color: #E5E7EB;
+            /* Rich white text for readability */
+        }
+
+        /* EXISTING STYLES BELOW... (Ensure they are retained) */
+
+        /* 1. Gold Recommended Sticker Badge - Premium sticker design */
         .recommended-badge {
             display: inline-block;
-            background-color: #C5A059;
-            /* Santa Gold */
-            color: #15432E;
-            /* Christmas Green text for contrast */
-            font-family: 'serif', sans-serif;
-            /* Use a festive font if loaded, or fallback */
-            font-size: 0.7rem;
-            font-weight: bold;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #8B0000;
+            font-family: 'Mountains of Christmas', cursive, serif;
+            font-size: 0.65rem;
+            font-weight: 700;
             text-transform: uppercase;
-            padding: 0.25rem 0.65rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            /* Stronger shadow to make it pop */
+            letter-spacing: 0.5px;
+            padding: 0.3rem 0.7rem;
+            border-radius: 12px;
+            border: 2px solid #8B0000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 2px 4px rgba(255, 215, 0, 0.4);
             margin-left: 0.5rem;
             vertical-align: middle;
+            transform: rotate(-3deg);
+            position: relative;
+            top: -1px;
+        }
+
+        .recommended-badge::before {
+            content: '⭐ ';
+            margin-right: 2px;
         }
 
         /* Responsive adjustment for recommended badge */
@@ -222,43 +262,35 @@
             }
         }
 
-        /* NEW: Chic, exclusive Christmas-themed "Best Value" Badge */
+        /* 3. Pricing Card Best Value Badge (Animated one in the middle column) */
         .best-value-badge {
             position: absolute;
             top: 0;
-            /* Positioned at the very top */
             right: 15px;
-            /* Slightly in from the right edge */
-            z-index: 20;
-            /* Ensure it's always on top */
-            background-color: #C5A059;
-            /* Santa Gold */
-            color: #15432E;
-            /* Christmas Green text for contrast */
-            font-family: 'serif', sans-serif;
-            /* Use a festive font if loaded, or fallback */
-            font-size: 0.8rem;
-            font-weight: bold;
+            z-index: 10;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+            color: #8B0000;
+            font-family: 'Mountains of Christmas', cursive, serif;
+            font-size: 0.9rem;
+            font-weight: 700;
             text-transform: uppercase;
-            padding: 0.25rem 0.75rem;
-            border-bottom-left-radius: 10px;
-            /* Rounded bottom-left corner */
-            border-bottom-right-radius: 10px;
-            /* Rounded bottom-right corner */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            /* Stronger shadow to make it pop */
-            transform: translateY(-100%) rotateZ(0deg);
-            /* Start off-screen */
+            letter-spacing: 0.5px;
+            padding: 0.35rem 0.85rem;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+            border: 2px solid #8B0000;
+            border-top: none;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(255, 215, 0, 0.4);
+            transform: translateY(-100%) rotateZ(-2deg);
             animation: slideInBadge 0.8s forwards ease-out 0.5s;
-            /* Animation for a chic entrance */
         }
+
 
         /* Optional: Add a small decorative element to the badge */
         .best-value-badge::before {
             content: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2315432E" stroke="%2315432E" stroke-width="0.5" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-star"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>');
             display: inline-block;
             width: 12px;
-            /* Adjust size of the star */
             height: 12px;
             margin-right: 5px;
             vertical-align: middle;
@@ -273,7 +305,6 @@
 
             70% {
                 transform: translateY(10%) rotateZ(-5deg);
-                /* Slight overshoot */
                 opacity: 1;
             }
 
@@ -283,7 +314,7 @@
             }
         }
 
-        /* Snow Effect */
+        /* Snow Effect - unchanged */
         .snowflake {
             position: fixed;
             top: -10px;
@@ -300,69 +331,13 @@
             opacity: 0.6;
         }
 
-        .snowflake:nth-child(1) {
-            left: 10%;
-            animation-duration: 10s;
-            animation-delay: 0s;
-        }
-
-        .snowflake:nth-child(2) {
-            left: 20%;
-            animation-duration: 6s;
-            animation-delay: 1s;
-        }
-
-        .snowflake:nth-child(3) {
-            left: 30%;
-            animation-duration: 8s;
-            animation-delay: 2s;
-        }
-
-        .snowflake:nth-child(4) {
-            left: 40%;
-            animation-duration: 7s;
-            animation-delay: 0s;
-        }
-
-        .snowflake:nth-child(5) {
-            left: 50%;
-            animation-duration: 11s;
-            animation-delay: 3s;
-        }
-
-        .snowflake:nth-child(6) {
-            left: 60%;
-            animation-duration: 9s;
-            animation-delay: 1s;
-        }
-
-        .snowflake:nth-child(7) {
-            left: 70%;
-            animation-duration: 7s;
-            animation-delay: 2s;
-        }
-
-        .snowflake:nth-child(8) {
-            left: 80%;
-            animation-duration: 8s;
-            animation-delay: 0s;
-        }
-
-        .snowflake:nth-child(9) {
-            left: 90%;
-            animation-duration: 10s;
-            animation-delay: 3s;
-        }
-
-        /* Glass Inputs */
+        /* Glass Inputs - unchanged */
         .glass-input {
             background: rgba(15, 23, 42, 0.75);
-            /* Darker background for better contrast */
             border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             transition: all 0.3s ease;
             text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
-            /* Text shadow for input text */
         }
 
         .glass-input:focus {
@@ -372,7 +347,7 @@
             outline: none;
         }
 
-        /* Enhanced Text Readability for Questions */
+        /* Enhanced Text Readability for Questions - unchanged */
         .step-form h2,
         .step-form h3,
         .step-form label,
@@ -380,73 +355,74 @@
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
         }
 
-        /* Marquee Animation for Testimonials */
-        .marquee-container {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            white-space: nowrap;
-            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-        }
-
-        .marquee-content {
-            display: inline-flex;
-            gap: 1rem;
-            animation: scroll 80s linear infinite;
-        }
-
-        .marquee-content.reverse {
-            animation-direction: reverse;
-        }
-
-        .marquee-content.slow {
-            animation-duration: 95s;
-        }
-
-        @keyframes scroll {
-            0% {
-                transform: translateX(0);
-            }
-
-            100% {
-                transform: translateX(-50%);
-            }
-        }
-
-        .marquee-container:hover .marquee-content {
-            animation-play-state: paused;
-        }
-
-        /* Step Card Hover Effect */
-        .step-card:hover .step-image {
-            transform: scale(1.05);
-        }
-
-        .step-card:hover .step-content {
-            transform: translateY(-5px);
-        }
-
-        /* Step Form Specific Styles */
+        /* FIX 1: Step Form Step Display Logic */
+        /* All inactive steps are absolutely positioned to hide them and prevent them from taking up space */
         .step-form {
             opacity: 0;
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+            transition: opacity 0.4s ease-out;
             pointer-events: none;
         }
 
+        /* Only the active step is visible and takes up space in the flow */
         .step-form.active {
             opacity: 1;
-            transform: translateY(0);
             position: relative;
             pointer-events: auto;
         }
 
-        /* Stripe Element Styling for Modern Look */
+        /* CRITICAL MODAL VISIBILITY CSS START */
+        /* Overlay for the whole screen to dim background */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            /* Dark semi-transparent background */
+            z-index: 9999;
+            /* High Z-index */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* Modal container to center content */
+        .modal-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            /* Highest Z-index */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+            transform: scale(0.95);
+        }
+
+        .modal-container.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+        }
+
+        /* CRITICAL MODAL VISIBILITY CSS END */
+
+        /* Stripe Element Styling for Modern Look - unchanged */
         #modal-payment-element {
             min-height: 100px;
             padding: 1rem;
@@ -455,92 +431,13 @@
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        /* Ensure form container has height to hold content */
-        #dynamic-form-container {
-            min-height: 300px;
-            position: relative;
-        }
-
-        /* Custom Radio Button Styling (Overage Options) */
-        .overage-option input[type="radio"]:checked~div .radio-indicator {
-            display: block !important;
-        }
-
-        .overage-option:has(input[type="radio"]:checked) {
-            /* Minimal border highlight */
-            border-color: #D42426;
-            background: rgba(212, 36, 38, 0.08);
-        }
-
-        /* Package Option Styling */
-        .package-option input[type="radio"]:checked~div {
-            /* Minimal border highlight on selection */
-            border-color: #D42426 !important;
-            box-shadow: 0 0 10px rgba(212, 36, 38, 0.2);
-            /* Reduced shadow intensity */
-        }
-
-        /* Gold Ribbon for Best Value Package */
-        .ribbon-best-value {
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            transform: rotate(10deg);
-            z-index: 10;
-            padding: 0.25rem 1.5rem;
-            font-size: 0.75rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            color: #1f2937;
-            /* Dark text for contrast */
-            /* Gold Gradient/Foil Look */
-            background: linear-gradient(145deg, #e5c585 0%, #c5a059 100%);
-            border: 1px solid #C5A059;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.5);
-            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 80%, 0% 100%);
-        }
-
-
-        /* Popup Modal Styles */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
-            backdrop-filter: blur(10px);
-            z-index: 9998;
-            opacity: 0;
-            transition: opacity 0.4s ease;
-            pointer-events: none;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-container {
-            position: fixed;
-            inset: 0;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            opacity: 0;
-            transform: translateY(20px) scale(0.98);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            pointer-events: none;
-        }
-
-        .modal-container.active {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
+        /* Popup Modal Styles (Visual styles) */
         .modal-content {
-            /* Darker, richer background for exclusivity */
-            background: linear-gradient(145deg, #101827 0%, #1f2d3f 100%);
+            /* FIX: Set the requested image background */
+            background-image: url('images/social-share-preview.png');
+            background-size: cover;
+            background-position: center;
+            position: relative;
             border-radius: 1.5rem;
             border: 1px solid rgba(255, 255, 255, 0.1);
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.05);
@@ -548,68 +445,133 @@
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
+        }
+
+        /* FIX: Inner wrapper for dark contrast overlay over the background image (Prevents "weird squares") */
+        .modal-content-inner {
             position: relative;
+            z-index: 10;
+            /* Semi-transparent dark overlay for readability */
+            background: rgba(16, 24, 39, 0.85);
+            border-radius: 1.5rem;
+            /* min-height removed, relying on content to define height */
         }
 
-        .modal-content::-webkit-scrollbar {
-            width: 8px;
+        /* Ensure inner sections have transparent backgrounds to show the image/overlay */
+        #modal-header,
+        #modal-selection-view,
+        #modal-payment-view {
+            background: transparent !important;
         }
 
-        .modal-content::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 1rem;
+        /* Package Option Styling - Base Style for dynamic border */
+        .package-option div {
+            transition: all 0.2s ease-in-out;
+            /* Default subtle border when not selected */
+            border-color: rgba(255, 255, 255, 0.1) !important;
+            border-width: 2px;
         }
 
-        .modal-content::-webkit-scrollbar-thumb {
-            background: rgba(197, 160, 89, 0.5);
-            border-radius: 1rem;
+        /* FIX 3: Best Value Border - GOLD (Thickness applied on checked) */
+        .package-option input[value="bundle"]:checked~div {
+            border-color: #FFD700 !important;
+            /* Bright Gold! */
+            border-width: 4px;
+            /* Thicker border when selected */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.6);
+            /* Stronger gold glow */
+            transform: scale(1.01);
         }
 
-        .modal-content::-webkit-scrollbar-thumb:hover {
-            background: rgba(197, 160, 89, 0.7);
+        /* FIX 3: Other Selected Options (Red border for other selected packages) */
+        /* Note: These rules are placed *after* the generic rules to ensure specificity */
+        .package-option input[value="call"]:checked~div,
+        .package-option input[value="video"]:checked~div {
+            border-color: #D42426 !important;
+            /* Festive red border */
+            border-width: 4px;
+            box-shadow: 0 0 10px rgba(212, 36, 38, 0.4);
+            transform: scale(1.01);
         }
 
-        /* FAQ Transitions */
-        .faq-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.4s ease-in-out, opacity 0.4s ease-in-out, padding 0.4s ease-in-out;
-            opacity: 0;
-            padding-top: 0;
-            padding-bottom: 0;
+        /* 2. Best Value Sticker for Modal - Fun & Exclusive */
+        .ribbon-best-value {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%) rotate(-2deg);
+            z-index: 20;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+            color: #8B0000;
+            font-family: 'Mountains of Christmas', cursive, serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding: 0.35rem 1.2rem;
+            border-radius: 8px;
+            border: 2px solid #8B0000;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7), 0 2px 6px rgba(255, 215, 0, 0.5);
         }
 
-        .faq-content.active {
-            max-height: 500px;
-            opacity: 1;
-            padding-top: 1rem;
-            padding-bottom: 1rem;
+        .ribbon-best-value::before {
+            content: '⭐ ';
+            margin-right: 3px;
         }
 
-        .faq-item button i {
-            transition: transform 0.3s ease;
+        .ribbon-best-value::after {
+            content: ' ⭐';
+            margin-left: 3px;
         }
 
-        .faq-item button.active i {
-            transform: rotate(180deg);
+        /* 4. Overage Option Styling - Fix checkbox/radio button appearance */
+        .overage-option {
+            transition: all 0.2s ease-in-out;
         }
 
-        /* Mobile Adjustments for Hero */
+        .overage-option .radio-indicator {
+            background-color: #D42426;
+        }
+
+        .overage-option.selected {
+            background-color: rgba(212, 36, 38, 0.1) !important;
+            border-color: rgba(212, 36, 38, 0.4) !important;
+        }
+
+        .overage-option input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .overage-option input[type="radio"]~div>div:first-child {
+            background-color: transparent;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .overage-option input[type="radio"]:checked~div .radio-indicator {
+            display: block !important;
+        }
+
+        .overage-option:hover {
+            background-color: rgba(255, 255, 255, 0.05) !important;
+            border-color: rgba(255, 255, 255, 0.3) !important;
+        }
+
+
+        /* Mobile Adjustments for Hero - unchanged */
         @media (max-width: 768px) {
             .hero-title {
                 font-size: 2.5rem;
-                /* Reduced size on mobile */
                 line-height: 1.1;
             }
 
             .hero-subtitle {
                 font-size: 1rem;
-                /* Reduced size on mobile */
             }
 
             .min-h-\[65vh\] {
                 min-height: unset;
-                /* Allow height to collapse to fit content */
                 padding-top: 2rem;
                 padding-bottom: 2rem;
             }
@@ -632,8 +594,47 @@
                 max-width: 95%;
             }
         }
+
+        /* Testimonials Marquee */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden;
+            mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+        }
+
+        .marquee-content {
+            display: flex;
+            gap: 1.5rem;
+            width: max-content;
+            animation: marquee 40s linear infinite;
+        }
+
+        /* Slow down on hover */
+        .marquee-container:hover .marquee-content {
+            animation-play-state: paused;
+        }
+
+        .marquee-content.reverse {
+            animation-direction: reverse;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0);
+            }
+
+            100% {
+                transform: translateX(-50%);
+            }
+        }
+
+        .product-card-styled,
+        .package-option div,
+        .faq-item,
+        .modal-content-inner>div {
+            border: none !important;
+        }
     </style>
-</head>
 
 <body class="text-white antialiased overflow-x-hidden font-sans selection:bg-santa-red selection:text-white">
 
@@ -643,165 +644,213 @@
         <div class="absolute inset-0 bg-black/25"></div>
     </div>
 
-<nav class="relative z-50 w-full px-6 py-6 flex justify-between items-center max-w-7xl mx-auto">
-    <div class="flex items-center gap-2">
-        <i data-lucide="phone" class="text-santa-red w-6 h-6"></i>
-        <span class="text-2xl font-serif font-bold tracking-wide text-white">CallSanta.us</span>
-    </div>
+    <nav class="relative z-50 w-full px-6 py-6 flex justify-between items-center max-w-7xl mx-auto">
+        <div class="flex items-center gap-2">
+            <i data-lucide="phone" class="text-santa-red w-6 h-6"></i>
+            <span class="text-2xl font-serif font-bold tracking-wide text-white">CallSanta.us</span>
+        </div>
 
-    <div class="flex items-center gap-4 md:gap-8">
-        
-        <a href="#testimonials" class="text-white/80 hover:text-white text-xs md:text-base font-medium transition-colors duration-200 cursor-pointer">Testimonials</a>
-        <a href="#pricing" class="text-white/80 hover:text-white text-xs md:text-base font-medium transition-colors duration-200 cursor-pointer">Pricing</a>
-        <a href="#faq" class="text-white/80 hover:text-white text-xs md:text-base font-medium transition-colors duration-200 cursor-pointer">FAQ</a>
-    </div>
-</nav>
+        <div class="flex items-center gap-4 md:gap-8">
 
-    <main class="relative z-10 flex flex-col items-center justify-center min-h-[65vh] px-4 text-center py-12 md:py-4">
-        <div class="max-w-4xl mx-auto space-y-4 opacity-0 animate-fade-in-up" style="animation-delay: 0.1s;">
+            <a href="#testimonials"
+                class="text-white/80 hover:text-white text-xs md:text-base font-medium transition-colors duration-200 cursor-pointer">Testimonials</a>
+            <a href="#faq"
+                class="text-white/80 hover:text-white text-xs md:text-base font-medium transition-colors duration-200 cursor-pointer">FAQ</a>
+        </div>
+    </nav>
+    <main class="relative z-10 flex items-center justify-center min-h-[85vh] px-4 py-8 md:py-6">
+        <div class="max-w-6xl mx-auto w-full flex flex-col lg:flex-row items-center lg:items-start gap-12 lg:gap-16 transform scale-[0.9] origin-top">
 
-            <div
-                class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 backdrop-blur-md border border-white/10 text-red-400 text-xs font-semibold uppercase tracking-wider shadow-lg">
-                <i data-lucide="sparkles" class="w-3 h-3"></i>
-                <span>Experience The Magic</span>
+            <!-- LEFT COLUMN: Hero Copy & Video -->
+            <div class="flex-1 text-center lg:text-left space-y-8 pt-4">
+                <div class="space-y-4">
+                    <div
+                        class="inline-block px-3 py-1 rounded-full bg-santa-red/20 border border-santa-red/30 text-santa-red font-bold text-xs uppercase tracking-widest mb-2 backdrop-blur-md">
+                        <i data-lucide="sparkles" class="inline w-3 h-3 mr-1"></i> 2024 Christmas Season
+                    </div>
+                    <h1
+                        class="hero-title text-5xl md:text-7xl font-serif font-black text-white leading-tight drop-shadow-2xl">
+                        Make it <span
+                            class="text-transparent bg-clip-text bg-gradient-to-r from-santa-red to-red-500">Magical.</span>
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-300 font-light max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        Watch their eyes light up as Santa knows their <strong>name, wish, and praises their good
+                            deeds.</strong>
+                    </p>
+                </div>
+
+                <!-- Video Placeholder -->
+                <div
+                    class="relative w-full max-w-xl mx-auto lg:mx-0 aspect-video rounded-2xl overflow-hidden border border-white/10 bg-slate-900/50 shadow-2xl group cursor-pointer transition-transform hover:scale-[1.01]">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent z-10">
+                    </div>
+                    <!-- Placeholder Visual -->
+                    <div class="absolute inset-0 flex items-center justify-center z-20">
+                        <div
+                            class="w-16 h-16 rounded-full bg-santa-red/90 text-white flex items-center justify-center shadow-lg group-hover:bg-santa-red transition-colors pl-1">
+                            <i data-lucide="play" class="w-8 h-8 fill-current"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-4 left-6 z-20 text-left">
+                        <div class="text-white font-serif font-bold text-lg">See the Magic in Action</div>
+                        <div class="text-santa-gold text-xs font-bold uppercase tracking-wider">Watch 30s Preview</div>
+                    </div>
+                    <!-- Placeholder Image (using CSS gradient for now if no image) -->
+                    <img src="images/santa_bg.png" class="w-full h-full object-cover opacity-50" alt="Video Preview">
+                </div>
+
+                <div
+                    class="flex items-center justify-center lg:justify-start gap-6 text-xs font-medium text-gray-400 uppercase tracking-widest">
+                    <span class="flex items-center gap-2"><i data-lucide="shield-check"
+                            class="w-4 h-4 text-green-400"></i> Parent Approved</span>
+                    <span class="flex items-center gap-2"><i data-lucide="lock" class="w-4 h-4 text-santa-gold"></i>
+                        Safe & Secure</span>
+                </div>
             </div>
 
-            <h1
-                class="hero-title text-4xl md:text-6xl lg:text-7xl font-serif font-bold leading-tight text-white drop-shadow-2xl">
-                The Most Magical, <br />
-                <span
-                    class="text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-santa-red inline-block pb-2">Personalized
-                    Call</span><br />
-                from Santa.
-            </h1>
+            <!-- RIGHT COLUMN: Compact Configurator -->
+            <div class="w-full lg:w-[480px] flex-shrink-0 animate-fade-in-up" style="animation-delay: 0.2s;">
+                <div
+                    class="bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                    <!-- Glow effect -->
+                    <div
+                        class="absolute -top-24 -right-24 w-48 h-48 bg-santa-gold/10 rounded-full blur-3xl pointer-events-none">
+                    </div>
 
-            <p class="hero-subtitle text-base md:text-xl text-gray-200 font-light max-w-2xl mx-auto leading-relaxed drop-shadow-md"
-                id="main-subtitle">
-                Watch their eyes light up as Santa knows their name, their wish, and praises their good deeds.
-            </p>
+                    <h2 class="text-2xl font-serif font-bold text-white mb-6 relative z-10">Create Your <span
+                            class="text-santa-gold">Experience</span></h2>
 
-            <div class="mt-6 w-full max-w-md mx-auto">
+                    <!-- Step 1: Child Count -->
+                    <div class="mb-6 relative z-10">
+                        <label class="text-[10px] font-bold text-santa-gold uppercase tracking-widest mb-3 block">1. How
+                            many children?</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <button onclick="selectChildCount(1)" id="btn-count-1"
+                                class="child-count-btn py-3 rounded-xl bg-white/5 text-gray-400 font-bold text-lg border border-white/10 hover:bg-white/10 transition-all hover:scale-105">1</button>
+                            <button onclick="selectChildCount(2)" id="btn-count-2"
+                                class="child-count-btn py-3 rounded-xl bg-white/5 text-gray-400 font-bold text-lg border border-white/10 hover:bg-white/10 transition-all hover:scale-105">2</button>
+                            <button onclick="selectChildCount(3)" id="btn-count-3"
+                                class="child-count-btn py-3 rounded-xl bg-white/5 text-gray-400 font-bold text-lg border border-white/10 hover:bg-white/10 transition-all hover:scale-105">3</button>
+                        </div>
+                    </div>
 
-                <form id="personalization-form" class="space-y-6">
-                    <div id="dynamic-form-container" class="w-full">
+                    <!-- Step 2: Package -->
+                    <div class="mb-6 relative z-10">
+                        <label class="text-[10px] font-bold text-santa-gold uppercase tracking-widest mb-3 block">2.
+                            Select Package</label>
+                        <div class="space-y-3">
 
-                        <div id="step-1" class="step-form active">
-                            <h2 class="text-2xl font-serif font-bold text-santa-gold mb-6 text-center">Step 1:
-                                What is your Child's name?</h2>
-
-                            <!-- Small Child Count Selector -->
-                            <div class="flex justify-center mb-6">
-                                <div class="inline-flex bg-slate-900/80 rounded-lg p-1 border border-white/10">
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="child-count" value="1" class="peer sr-only" checked
-                                            onchange="updateChildCount(1)">
-                                        <div
-                                            class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 peer-checked:bg-santa-red peer-checked:text-white transition-all hover:text-white">
-                                            1 Child</div>
-                                    </label>
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="child-count" value="2" class="peer sr-only"
-                                            onchange="updateChildCount(2)">
-                                        <div
-                                            class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 peer-checked:bg-santa-red peer-checked:text-white transition-all hover:text-white">
-                                            2 Children</div>
-                                    </label>
-                                    <label class="cursor-pointer">
-                                        <input type="radio" name="child-count" value="3" class="peer sr-only"
-                                            onchange="updateChildCount(3)">
-                                        <div
-                                            class="px-4 py-2 rounded-md text-sm font-medium text-gray-400 peer-checked:bg-santa-red peer-checked:text-white transition-all hover:text-white">
-                                            3 Children</div>
-                                    </label>
+                            <!-- Bundle ($20) -->
+                            <div onclick="selectPackage('bundle')" id="pkg-card-bundle"
+                                class="pkg-card active cursor-pointer rounded-xl border-2 border-santa-gold bg-gradient-to-r from-slate-800 to-slate-900 p-4 shadow-lg transform scale-[1.02] flex items-center justify-between relative overflow-hidden group">
+                                <div
+                                    class="absolute top-0 right-0 bg-santa-gold text-black text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">
+                                    POPULAR</div>
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="pkg-radio w-4 h-4 rounded-full border border-santa-gold bg-white/10 flex items-center justify-center">
+                                        <div class="w-2 h-2 bg-santa-gold rounded-full"></div>
+                                    </div>
+                                    <div>
+                                        <div class="font-bold text-white text-sm">The Bundle</div>
+                                        <div class="text-[10px] text-gray-300">Unlimited Call + Recording</div>
+                                    </div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="font-serif font-bold text-santa-gold text-lg">$20</div>
+                                    <div class="text-[10px] text-gray-500 line-through">$35</div>
                                 </div>
                             </div>
 
-                            <div id="step-1-inputs" class="space-y-4">
-                                <!-- Dynamic inputs will be injected here -->
+                            <!-- Call ($10) -->
+                            <div onclick="selectPackage('call')" id="pkg-card-call"
+                                class="pkg-card cursor-pointer rounded-xl border border-white/10 bg-white/5 p-4 hover:border-white/30 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="pkg-radio w-4 h-4 rounded-full border border-white/30 flex items-center justify-center">
+                                        <div class="w-2 h-2 bg-santa-gold rounded-full hidden"></div>
+                                    </div>
+                                    <div>
+                                        <div
+                                            class="font-bold text-white text-sm group-hover:text-santa-gold transition-colors">
+                                            Live Call</div>
+                                        <div class="text-[10px] text-gray-400">5 Mins • Real-time</div>
+                                    </div>
+                                </div>
+                                <div class="font-serif font-bold text-white">$10</div>
                             </div>
 
-                            <button type="button"
-                                onclick="gtag('event', 'click_next_wishes', { 'button_location': 'step_1' }); validateStep(1);"
-                                class="group relative w-full mt-6 py-4 px-6 bg-santa-red hover:bg-red-700 text-white rounded-xl font-semibold text-lg transition-all duration-300 shadow-[0_0_25px_rgba(212,36,38,0.4)] hover:shadow-[0_0_40px_rgba(212,36,38,0.6)] flex items-center justify-center gap-3 transform hover:-translate-y-0.5">
-                                <span>Next: Wishes</span>
-                                <i data-lucide="arrow-right"
-                                    class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
-                            </button>
-                            <div class="text-gray-400 text-sm mt-3 text-center">Santa will greet them by these exact
-                                names!</div>
+                            <!-- Video ($35) -->
+                            <div onclick="selectPackage('video')" id="pkg-card-video"
+                                class="pkg-card cursor-pointer rounded-xl border border-white/10 bg-white/5 p-4 hover:border-white/30 transition-all flex items-center justify-between group">
+                                <div class="flex items-center gap-3">
+                                    <div
+                                        class="pkg-radio w-4 h-4 rounded-full border border-white/30 flex items-center justify-center">
+                                        <div class="w-2 h-2 bg-santa-gold rounded-full hidden"></div>
+                                    </div>
+                                    <div>
+                                        <div
+                                            class="font-bold text-white text-sm group-hover:text-santa-gold transition-colors">
+                                            Video Message</div>
+                                        <div class="text-[10px] text-gray-400">Personalized HD Video</div>
+                                    </div>
+                                </div>
+                                <div class="font-serif font-bold text-white">$35</div>
+                            </div>
+
                         </div>
-
-                        <div id="step-2" class="step-form">
-                            <h3 class="text-2xl font-serif font-bold text-santa-gold mb-6 text-center">Step 2: Their
-                                Biggest Wish</h3>
-                            <div
-                                class="block text-xl font-semibold mb-4 text-santa-goldlight flex items-center gap-2 justify-center">
-                                <i data-lucide="gift" class="w-5 h-5"></i> What are they hoping for?
-                            </div>
-
-                            <div id="step-2-inputs" class="space-y-6">
-                                <!-- Dynamic inputs will be injected here -->
-                            </div>
-
-                            <div class="text-gray-400 text-sm mt-4 mb-6 text-center">Santa will mention these exact
-                                items!</div>
-                            <button type="button" onclick="validateStep(2)"
-                                class="mt-6 w-full py-3 bg-santa-red hover:bg-red-700 text-white rounded-xl font-semibold text-lg transition-colors">
-                                Next: Good Deeds <i data-lucide="chevron-right" class="w-4 h-4 inline-block ml-2"></i>
-                            </button>
-                        </div>
-
-                        <div id="step-3" class="step-form">
-                            <h3 class="text-2xl font-serif font-bold text-santa-gold mb-6 text-center">Step 3: Recent
-                                Good Deeds</h3>
-                            <div
-                                class="block text-xl font-semibold mb-4 text-santa-goldlight flex items-center gap-2 justify-center">
-                                <i data-lucide="thumbs-up" class="w-5 h-5"></i> Recent accomplishments?
-                            </div>
-
-                            <div id="step-3-inputs" class="space-y-6">
-                                <!-- Dynamic inputs will be injected here -->
-                            </div>
-
-                            <div class="text-gray-400 text-sm mt-4 mb-6 text-center">Santa will praise them for these
-                                specific things!</div>
-                            <button type="button" onclick="validateStep(3)"
-                                class="mt-6 w-full py-3 bg-santa-red hover:bg-red-700 text-white rounded-xl font-semibold text-lg transition-colors">
-                                Next: Parent Details <i data-lucide="chevron-right"
-                                    class="w-4 h-4 inline-block ml-2"></i>
-                            </button>
-                        </div>
-
-                        <div id="step-4" class="step-form">
-                            <h3 class="text-2xl font-serif font-bold text-santa-gold mb-6 text-center">Step 4: Parent
-                                Details</h3>
-                            <label for="form-parent-email"
-                                class="block text-xl font-semibold mb-2 text-santa-goldlight flex items-center gap-2">
-                                <i data-lucide="mail" class="w-5 h-5"></i> Parent Email (For Fulfillment)
-                            </label>
-                            <input id="form-parent-email" type="email"
-                                class="w-full glass-input p-4 text-xl rounded-xl mb-4"
-                                placeholder="your.email@example.com" required pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
-                                title="Please enter a valid email address.">
-
-                            <label for="form-parent-phone"
-                                class="block text-xl font-semibold mb-2 text-santa-goldlight flex items-center gap-2">
-                                <i data-lucide="smartphone" class="w-5 h-5"></i> Parent Phone (For Call Code SMS)
-                            </label>
-                            <input id="form-parent-phone" type="tel" class="w-full glass-input p-4 text-xl rounded-xl"
-                                placeholder="555-555-5555" required
-                                title="Please enter a valid phone number (min 7 digits).">
-                            <div class="text-gray-400 text-sm mt-2 mb-6">We only use this for instant delivery of the
-                                code and video link.</div>
-                            <button type="button" onclick="openPaymentModal()"
-                                class="mt-6 w-full py-3 bg-santa-red hover:bg-red-700 text-white rounded-xl font-semibold text-lg transition-colors">
-                                Complete Your Order <i data-lucide="sparkles" class="w-4 h-4 inline-block ml-2"></i>
-                            </button>
-                        </div>
-
-
                     </div>
-                </form>
+
+                    <!-- Step 3 : Overage (Dynamic) -->
+                    <div id="config-overage" class="mb-6 pt-4 border-t border-white/10 hidden animate-fade-in-up">
+                        <label class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 block">Add
+                            Extra Time?</label>
+                        <div class="flex gap-3">
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="inline_overage" value="auto_disconnect" class="peer hidden"
+                                    checked onchange="updateInlinePrice()">
+                                <div
+                                    class="h-full p-3 rounded-lg border border-white/10 bg-white/5 peer-checked:bg-santa-red/10 peer-checked:border-santa-red transition-all text-center">
+                                    <div class="text-xs font-bold text-white">Standard</div>
+                                    <div class="text-[9px] text-gray-400">5 Mins</div>
+                                </div>
+                            </label>
+                            <label class="flex-1 cursor-pointer">
+                                <input type="radio" name="inline_overage" value="unlimited" class="peer hidden"
+                                    onchange="updateInlinePrice()">
+                                <div
+                                    class="h-full p-3 rounded-lg border border-white/10 bg-white/5 peer-checked:bg-santa-gold/10 peer-checked:border-santa-gold transition-all text-center">
+                                    <div class="text-xs font-bold text-white">Unlimited</div>
+                                    <div class="text-[9px] text-gray-400">+$5.00</div>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Total & CTA -->
+                    <div class="border-t border-white/10 pt-6 mt-2 relative z-10">
+                        <div class="flex justify-between items-end mb-4">
+                            <div class="flex flex-col">
+                                <span class="text-gray-400 text-sm font-medium">Total Investment</span>
+                                <span id="price-detail-text"
+                                    class="text-[10px] text-gray-400 font-normal mt-0.5 hidden"></span>
+                            </div>
+                            <span id="inline-total-price"
+                                class="text-4xl font-serif font-bold text-santa-gold">$20</span>
+                        </div>
+                        <button onclick="initiateInlineCheckout()"
+                            class="w-full py-4 bg-gradient-to-r from-santa-red to-red-600 hover:from-red-500 hover:to-red-700 text-white rounded-xl font-bold text-lg shadow-xl shadow-red-900/20 transform transition hover:scale-[1.02] flex items-center justify-center gap-2 group">
+                            <span>Get Started</span>
+                            <i data-lucide="arrow-right"
+                                class="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                        <div class="text-center mt-3">
+                            <a href="#testimonials"
+                                class="text-[10px] text-white/40 hover:text-white transition-colors border-b border-transparent hover:border-white/40 pb-0.5">See
+                                what other parents are saying</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
@@ -953,499 +1002,198 @@
                         <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone
                             after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
                     </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=12"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Mark D.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be
-                            there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=5"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Sarah L.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa
-                            knew about his missing tooth! That wonder is worth more than any toy."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=32"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Rebecca S.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone
-                            after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=12"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Mark D.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be
-                            there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=5"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Sarah L.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa
-                            knew about his missing tooth! That wonder is worth more than any toy."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=32"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Rebecca S.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone
-                            after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="marquee-container">
-                <div class="marquee-content reverse">
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=9"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Emily R.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3
-                            years ago, but we still talk about the night Santa called. It's our tradition now."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=44"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">James T.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at
-                            age 9. This call pulled her right back into the magic for one more precious year."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=20"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Maria G.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It
-                            wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=9"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Emily R.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3
-                            years ago, but we still talk about the night Santa called. It's our tradition now."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=44"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">James T.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at
-                            age 9. This call pulled her right back into the magic for one more precious year."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=20"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Maria G.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It
-                            wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="marquee-container">
-                <div class="marquee-content slow">
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=11"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Grandma Sue</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three
-                            generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=60"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">David K.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his
-                            blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=24"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Sophie W.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving
-                            houses. Santa telling her he knows where she lives now gave her so much peace."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=11"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Grandma Sue</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three
-                            generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=60"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">David K.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his
-                            blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p>
-                    </div>
-                    <div
-                        class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
-                        <div class="flex items-center gap-3 mb-2">
-                            <img src="https://i.pravatar.cc/150?img=24"
-                                class="w-10 h-10 rounded-full border-2 border-white/30">
-                            <div>
-                                <div class="text-white font-bold text-sm">Sophie W.</div>
-                                <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
-                                        class="w-2.5 h-2.5 fill-current"></i></div>
-                            </div>
-                        </div>
-                        <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving
-                            houses. Santa telling her he knows where she lives now gave her so much peace."</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <section class="py-16 px-6 text-white relative z-10" id="pricing">
-        <div class="max-w-7xl mx-auto text-center mb-12">
-            <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-3 drop-shadow-lg">
-                Choose Their <span class="text-santa-red">Christmas Miracle</span>
-            </h2>
-            <p class="text-gray-300 text-lg max-w-2xl mx-auto font-light leading-relaxed">
-                Every package is a personalized journey. Select the one that will create the biggest smile.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-
-            <div
-                class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02]">
-
-                <div class="p-8 relative z-10 bg-black/30 backdrop-blur-[1px] h-full rounded-xl">
-                    <div class="absolute top-0 right-0 p-3 text-santa-gold">
-                        <i data-lucide="bell" class="w-6 h-6"></i>
-                    </div>
-
-                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Joyful Jingle
-                    </h3>
-                    <p class="text-white font-semibold mb-4 text-sm tracking-wider">A Cherished Visual Keepsake</p>
-
-                    <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="video" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Personalized HD Video Message</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="heart" class="w-5 h-5 text-santa-red fill-santa-red/20 flex-shrink-0"></i>
-                            <span class="text-base"><strong class="text-santa-goldlight">A Moment of Pure Awe</strong> —
-                                Fully Personalized</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="cloud-download"
-                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Downloadable & Shareable File</span>
-                        </li>
-                        <li class="flex items-center gap-3 text-sm text-gray-300 italic">
-                            <i data-lucide="star" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
-                            <span class="text-sm"><strong class="text-white">Rated 4.9/5</strong> by 12,400+
-                                Families!</span>
-                        </li>
-                    </ul>
-
-                    <div class="mt-8">
-                        <div
-                            class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
-                            $35
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div
-                class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02] md:-mt-8">
-
                 <div
-                    class="p-8 relative z-10 bg-gradient-to-br from-black/40 to-santa-red/10 backdrop-blur-[1px] h-full rounded-xl">
-
-                    <div class="best-value-badge">
-                        Best Value
-                    </div>
-                    <div class="absolute top-0 right-0 p-3 text-santa-gold">
-                        <i data-lucide="star" class="w-6 h-6 fill-santa-gold"></i>
-                    </div>
-
-                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Starry Night
-                        Bundle</h3>
-                    <p class="text-white font-semibold mb-4 text-sm tracking-wider">The Complete, Unforgettable Magic
-                    </p>
-
-                    <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="mic" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base"><strong class="text-santa-goldlight">Personal Call with
-                                    Santa</strong> Where He Knows Everything!</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="message-square-more"
-                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base"><strong class="text-santa-goldlight">Personalized SMS's</strong>
-                                from Santa Until Christmas</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="infinity"
-                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Unlimited Call Time & <strong class="text-santa-goldlight">Audio
-                                    Keepsake</strong></span>
-                        </li>
-                        <li class="flex items-center gap-3 text-sm text-gray-300 italic">
-                            <i data-lucide="trending-up" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
-                            <span class="text-sm"><strong class="text-white">Voted #1</strong> Best Value
-                                Experience!</span>
-                        </li>
-                    </ul>
-
-                    <div class="mt-8">
-                        <div
-                            class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
-                            $20
+                    class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=12"
+                            class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Mark D.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i></div>
                         </div>
                     </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be
+                        there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
                 </div>
-            </div>
-
-            <div
-                class="relative product-card-styled overflow-hidden rounded-2xl border-4 border-santa-gold/50 shadow-2xl transition-all duration-300 hover:scale-[1.02]">
-
-                <div class="p-8 relative z-10 bg-black/30 backdrop-blur-[1px] h-full rounded-xl">
-                    <div class="absolute top-0 right-0 p-3 text-santa-gold">
-                        <i data-lucide="phone-call" class="w-6 h-6"></i>
-                    </div>
-
-                    <h3 class="text-3xl font-serif font-bold text-christmas-green mb-1 drop-shadow-sm">Winter Warmth
-                    </h3>
-                    <p class="text-white font-semibold mb-4 text-sm tracking-wider">The Authentic Live Connection</p>
-
-                    <ul class="space-y-3 mb-6 text-left feature-list text-white font-medium">
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="phone" class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base"><strong class="text-santa-goldlight">Up to 5 Minutes</strong>
-                                Heart-to-Heart Voice Call</span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="map-pin"
-                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Santa Knows Their <strong class="text-santa-goldlight">Specific
-                                    Wish</strong></span>
-                        </li>
-                        <li class="flex items-center gap-3">
-                            <i data-lucide="thumbs-up"
-                                class="w-5 h-5 text-santa-gold fill-santa-gold/20 flex-shrink-0"></i>
-                            <span class="text-base">Specific Praise for <strong class="text-santa-goldlight">Good
-                                    Deeds/Hobby</strong></span>
-                        </li>
-                        <li class="flex items-center gap-3 text-sm text-gray-300 italic">
-                            <i data-lucide="activity" class="w-4 h-4 text-white fill-white/10 flex-shrink-0"></i>
-                            <span class="text-sm">98% of Parents Report <strong class="text-white">Pure
-                                    Astonishment!</strong></span>
-                        </li>
-                    </ul>
-
-                    <div class="mt-8">
-                        <div
-                            class="text-5xl font-serif font-bold text-white drop-shadow-xl inline-block px-3 py-1 rounded-lg">
-                            $10
+                <div
+                    class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=5"
+                            class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Sarah L.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i></div>
                         </div>
                     </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa
+                        knew about his missing tooth! That wonder is worth more than any toy."</p>
+                </div>
+                <div
+                    class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=32"
+                            class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Rebecca S.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone
+                        after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
+                </div>
+                <div
+                    class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=12"
+                            class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Mark D.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be
+                        there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
+                </div>
+                <div
+                    class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=5"
+                            class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Sarah L.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star"
+                                    class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa
+                        knew about his missing tooth! That wonder is worth more than any toy."</p>
+                </div>
+                <!-- Duplicates -->
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=32" class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Rebecca S.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
+                </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=12" class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Mark D.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
+                </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=5" class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Sarah L.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa knew about his missing tooth! That wonder is worth more than any toy."</p>
+                </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=32" class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Rebecca S.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"I caught my son whispering to the phone after the call ended, 'I promise I'll be good, Santa.' Pure innocence restored."</p>
+                </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=12" class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Mark D.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"Living in the military, I couldn't be there. Seeing her face when Santa said 'Daddy loves you'... I was there in spirit."</p>
+                </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors">
+                    <div class="flex items-center gap-3 mb-2">
+                        <img src="https://i.pravatar.cc/150?img=5" class="w-10 h-10 rounded-full border-2 border-white/30">
+                        <div>
+                            <div class="text-white font-bold text-sm">Sarah L.</div>
+                            <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div>
+                        </div>
+                    </div>
+                    <p class="text-gray-200 italic text-xs leading-relaxed">"The way his eyes went wide when Santa knew about his missing tooth! That wonder is worth more than any toy."</p>
                 </div>
             </div>
+        </div>
 
+        <div class="marquee-container">
+                <div class="marquee-content reverse">
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=9" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Emily R.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3 years ago, but we still talk about the night Santa called. It's our tradition now."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=44" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">James T.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at age 9. This call pulled her right back into the magic for one more precious year."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=20" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Maria G.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=9" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Emily R.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3 years ago, but we still talk about the night Santa called. It's our tradition now."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=44" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">James T.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at age 9. This call pulled her right back into the magic for one more precious year."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=20" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Maria G.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p> </div>
+                <!-- Duplicates -->
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=9" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Emily R.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3 years ago, but we still talk about the night Santa called. It's our tradition now."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=44" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">James T.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at age 9. This call pulled her right back into the magic for one more precious year."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=20" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Maria G.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=9" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Emily R.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"We don't remember the gifts from 3 years ago, but we still talk about the night Santa called. It's our tradition now."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=44" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">James T.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"She was starting to grow out of it at age 9. This call pulled her right back into the magic for one more precious year."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=20" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Maria G.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"The giggles didn't stop for an hour! It wasn't a video game or toy, it was genuine, bubbling happiness. Best money spent."</p> </div>
+                </div>
+        </div>
+
+        <div class="marquee-container">
+            <div class="marquee-content slow">
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=11" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Grandma Sue</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=60" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">David K.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=24" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Sophie W.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving houses. Santa telling her he knows where she lives now gave her so much peace."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=11" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Grandma Sue</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=60" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">David K.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=24" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Sophie W.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving houses. Santa telling her he knows where she lives now gave her so much peace."</p> </div>
+                <!-- Duplicates -->
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=11" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Grandma Sue</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=60" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">David K.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=24" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Sophie W.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving houses. Santa telling her he knows where she lives now gave her so much peace."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=11" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Grandma Sue</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"We huddled around the phone, three generations. It felt like the world slowed down for 5 minutes just for us. Magical."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=60" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">David K.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"He asked 'How did he know?!' about his blue blanket. That look of absolute astonishment? Priceless. Just priceless."</p> </div>
+                <div class="w-80 p-4 rounded-xl border border-white/20 bg-transparent backdrop-blur-md flex-shrink-0 whitespace-normal hover:border-santa-gold/50 transition-colors"> <div class="flex items-center gap-3 mb-2"> <img src="https://i.pravatar.cc/150?img=24" class="w-10 h-10 rounded-full border-2 border-white/30"> <div> <div class="text-white font-bold text-sm">Sophie W.</div> <div class="flex text-santa-gold text-[10px] gap-0.5"><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i><i data-lucide="star" class="w-2.5 h-2.5 fill-current"></i></div> </div> </div> <p class="text-gray-200 italic text-xs leading-relaxed">"My daughter was nervous about moving houses. Santa telling her he knows where she lives now gave her so much peace."</p> </div>
+            </div>
+        </div>
         </div>
     </section>
+    <!-- Pricing Section REMOVED (Replaced by Inline Checkout above) -->
     <section id="faq" class="relative z-10 py-24 px-6 border-t border-white/5 ">
         <div class="max-w-4xl mx-auto text-center mb-16">
             <div
@@ -1470,7 +1218,8 @@
                     <span>How is this different from other Santa call services?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
-                <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
+                <div
+                    class="faq-content px-6 text-gray-300 text-sm leading-relaxed max-h-0 overflow-hidden transition-all duration-500 opacity-0">
                     <div class="py-4">
                         CallSanta.us is the <strong class="text-santa-goldlight">first-of-its-kind</strong> AI-powered
                         Santa experience. Unlike pre-recorded messages, our Santa has real, dynamic conversations with
@@ -1487,12 +1236,13 @@
                     <span>What exactly does my child receive?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
-                <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
+                <div
+                    class="faq-content px-6 text-gray-300 text-sm leading-relaxed max-h-0 overflow-hidden transition-all duration-500 opacity-0">
                     <div class="py-4">
-                        It depends on your package! The <strong class="text-santa-goldlight">Winter Warmth</strong>
+                        It depends on your package! The <strong class="text-santa-goldlight">Live Call</strong>
                         includes a live AI phone call where Santa has a real conversation with your child. The <strong
-                            class="text-santa-goldlight">Joyful Jingle</strong> includes a personalized HD video
-                        message. The <strong class="text-santa-goldlight">Starry Night Bundle</strong> (our most
+                            class="text-santa-goldlight">Video Message</strong> includes a personalized HD video
+                        message. <strong class="text-santa-goldlight">The Bundle</strong> (our most
                         popular!) includes the live call PLUS personalized SMS messages from Santa leading up to
                         Christmas, plus an audio recording keepsake of the call. Each package is fully personalized with
                         their name, wishes, and good deeds!
@@ -1507,7 +1257,8 @@
                     <span>How quickly will we receive everything after ordering?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
-                <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
+                <div
+                    class="faq-content px-6 text-gray-300 text-sm leading-relaxed max-h-0 overflow-hidden transition-all duration-500 opacity-0">
                     <div class="py-4">
                         Instantly. Once you complete your details and checkout, the magic begins immediately.
                         You’ll receive everything within seconds.
@@ -1522,7 +1273,8 @@
                     <span>Can I use this if I'm outside the United States?</span>
                     <i data-lucide="chevron-down" class="w-5 h-5 transition-transform"></i>
                 </button>
-                <div class="faq-content px-6 text-gray-300 text-sm leading-relaxed">
+                <div
+                    class="faq-content px-6 text-gray-300 text-sm leading-relaxed max-h-0 overflow-hidden transition-all duration-500 opacity-0">
                     <div class="py-4">
                         The live phone call feature <strong class="text-santa-goldlight">requires the ability to call a
                             US phone number (\+1)</strong>. If you can make calls to US numbers (does not work via
@@ -1554,709 +1306,217 @@
         </div>
     </footer>
 
-    <div id="payment-modal-overlay" class="modal-overlay"></div>
-    <div id="payment-modal" class="modal-container">
-        <div class="modal-content">
 
-            <div id="modal-header" class="p-6 border-b border-white/10">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-3">
-                        <div
-                            class="w-10 h-10 rounded-full bg-gradient-to-br from-santa-red to-red-700 flex items-center justify-center shadow-lg">
-                            <i data-lucide="heart" class="w-5 h-5 text-white fill-white"></i>
-                        </div>
-                        <h2 id="modal-main-title" class="text-2xl font-serif font-bold text-white">Secure This Priceless
-                            Memory</h2>
-                    </div>
-                    <button onclick="closePaymentModal()"
-                        class="text-gray-400 hover:text-white transition-colors p-2 hover:bg-white/10 rounded-lg">
-                        <i data-lucide="x" class="w-6 h-6"></i>
-                    </button>
-                </div>
-                <p id="modal-main-description" class="text-gray-300 text-sm leading-relaxed">
-                    <span class="text-santa-gold font-semibold">Memories over toys.</span> This Christmas moment is
-                    irreplaceable. Choose the experience that will remind your child they are seen, loved, and truly on
-                    the Nice List.
-                </p>
-                <div class="text-xs text-gray-400 mt-2">
-                    Personalizing for: <span id="modal-child-summary" class="font-semibold text-white"></span>
-                </div>
-            </div>
 
-            <div id="modal-selection-view" class="p-6 space-y-6">
-                <div class="space-y-4">
-                    <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                        <i data-lucide="gift" class="w-5 h-5 text-santa-gold"></i>
-                        Select Your Keepsake Experience
-                    </h3>
-
-                    <label class="package-option block cursor-pointer relative group">
-                        <input type="radio" name="package_id" value="bundle" data-price="2000" class="hidden" checked>
-                        <div class="ribbon-best-value">Best Value</div>
-                        <div
-                            class="p-5 rounded-xl border-2 border-white/20 bg-gradient-to-br from-slate-800/90 to-slate-900/90 shadow-2xl transition-all duration-300 hover:shadow-santa-red/30 hover:scale-[1.01]">
-                            <div class="flex items-start justify-between mb-3">
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <i data-lucide="sparkles" class="w-5 h-5 text-santa-gold"></i>
-                                        <span class="text-xl font-bold text-white">Starry Night Bundle</span>
-                                    </div>
-                                    <p class="text-sm text-gray-300 leading-relaxed mb-2">
-                                        The Complete, Unforgettable Magic. Personal Call + SMS + Audio Keepsake.
-                                    </p>
-                                    <div class="flex items-center gap-2 text-xs text-santa-goldlight">
-                                        <i data-lucide="check-circle" class="w-4 h-4"></i>
-                                        <span>Most Popular Choice</span>
-                                    </div>
-                                </div>
-                                <div class="text-right ml-4">
-                                    <div class="text-3xl font-serif font-bold text-santa-gold">$20</div>
-                                    <div class="text-xs text-gray-400 line-through">$35</div>
-                                </div>
-                            </div>
-                            <div class="pt-3 border-t border-white/10">
-                                <p class="text-xs text-gray-400 italic">
-                                    "The ultimate Santa experience—unlimited talk time and magical messages."
-                                </p>
-                            </div>
-                        </div>
-                    </label>
-
-                    <label class="package-option block cursor-pointer group">
-                        <input type="radio" name="package_id" value="call" data-price="1000" class="hidden">
-                        <div
-                            class="p-5 rounded-xl border-2 border-white/20 bg-slate-900/70 transition-all duration-300 hover:border-white/40 hover:bg-slate-900/90">
-                            <div class="flex items-start justify-between">
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <i data-lucide="phone" class="w-5 h-5 text-white"></i>
-                                        <span class="text-lg font-bold text-white">Winter Warmth</span>
-                                    </div>
-                                    <p class="text-sm text-gray-400">
-                                        The Authentic Live Connection. Up to 5 Minutes Heart-to-Heart Voice Call.
-                                    </p>
-                                </div>
-                                <div class="text-2xl font-serif font-bold text-white ml-4">$10</div>
-                            </div>
-                        </div>
-                    </label>
-
-                    <label class="package-option block cursor-pointer group">
-                        <input type="radio" name="package_id" value="video" data-price="3500" class="hidden">
-                        <div
-                            class="p-5 rounded-xl border-2 border-white/20 bg-slate-900/70 transition-all duration-300 hover:border-white/40 hover:bg-slate-900/90">
-                            <div class="flex items-start justify-between">
-                                <div class="flex-1">
-                                    <div class="flex items-center gap-2 mb-2">
-                                        <i data-lucide="video" class="w-5 h-5 text-white"></i>
-                                        <span class="text-lg font-bold text-white">Joyful Jingle</span>
-                                    </div>
-                                    <p class="text-sm text-gray-400">
-                                        A Cherished Visual Keepsake. Personalized HD Video Message.
-                                    </p>
-                                </div>
-                                <div class="text-2xl font-serif font-bold text-white ml-4">$35</div>
-                            </div>
-                        </div>
-                    </label>
-                </div>
-
-                <div id="modal-overage-options" class="p-4 rounded-xl bg-slate-900/70 border border-white/10">
-                    <h4 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                        <i data-lucide="clock" class="w-4 h-4 text-santa-gold"></i>
-                        Live Call Duration Policy (5 minutes included)
-                    </h4>
-                    <div class="space-y-2">
-                        <label
-                            class="overage-option block cursor-pointer p-3 rounded-lg border-2 border-white/20 bg-slate-800/50 transition-all duration-300 hover:border-white/40">
-                            <input type="radio" name="overage_option" value="auto_disconnect" class="hidden" checked>
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-5 h-5 rounded-full border-2 border-white/40 flex items-center justify-center mt-0.5 flex-shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-santa-red hidden radio-indicator"></div>
-                                </div>
-                                <div class="flex-1">
-                                    <span class="text-white font-semibold block text-sm">Auto-end after 5 minutes</span>
-                                    <span class="text-xs text-gray-400">The call will automatically disconnect after 5
-                                        minutes, guaranteeing no extra charge.</span>
-                                </div>
-                            </div>
-                        </label>
-
-                        <label
-                            class="overage-option block cursor-pointer p-3 rounded-lg border-2 border-white/20 bg-slate-800/50 transition-all duration-300 hover:border-white/40">
-                            <input type="radio" name="overage_option" value="unlimited" class="hidden">
-                            <div class="flex items-start gap-3">
-                                <div
-                                    class="w-5 h-5 rounded-full border-2 border-white/40 flex items-center justify-center mt-0.5 flex-shrink-0">
-                                    <div class="w-2.5 h-2.5 rounded-full bg-santa-red hidden radio-indicator"></div>
-                                </div>
-                                <div class="flex-1">
-                                    <span class="text-white font-semibold block text-sm">Unlimited Talk Time
-                                        ($5)</span><span class="recommended-badge">Recommended</span>
-                                    <span class="text-xs text-gray-400">No time limits. Let the magic unfold without
-                                        watching the clock.</span>
-                                </div>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-                <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-400 ml-1">Promo Code</label>
-                    <div class="flex gap-2">
-                        <input id="promo-code-input" type="text"
-                            class="flex-1 glass-input p-3 text-sm rounded-lg uppercase tracking-wider placeholder-gray-600"
-                            placeholder="ENTER CODE" oninput="updateModalUIState()">
-                    </div>
-                    <div id="promo-message" class="text-xs text-green-400 hidden font-medium flex items-center gap-1">
-                        <i data-lucide="check" class="w-3 h-3"></i> Code Applied!
-                    </div>
-                </div>
-                <div id="pre-stripe-commit-section" class="space-y-4">
-                    <div
-                        class="flex justify-between items-center p-4 rounded-xl bg-slate-900/90 border border-white/10">
-                        <div>
-                            <span class="text-lg font-bold text-white block">Total Investment in Magic:</span>
-                            <span id="modal-extra-charge-label" class="text-xs text-santa-goldlight hidden"></span>
-                        </div>
-                        <span id="modal-final-price" class="text-3xl font-serif font-bold text-santa-red">$20</span>
-                    </div>
-
-                    <div class="flex items-start gap-2 text-sm text-gray-400">
-                        <input type="checkbox" id="modal-legal-consent" required class="mt-1 accent-santa-red">
-                        <label for="modal-legal-consent" id="modal-legal-label">
-                            I confirm I am 18+ and the parent/guardian, and I agree to the <a href="policy.html"
-                                target="_blank" class="text-santa-gold hover:underline">Terms of Service</a> and <a
-                                href="policy.html" target="_blank" class="text-santa-gold hover:underline">Privacy
-                                Policy</a>, including the no-refund policy.
-                        </label>
-                    </div>
-
-                    <button type="button" onclick="handleModalPayment()" id="modal-submit-btn"
-                        class="w-full py-4 bg-gradient-to-r from-santa-red to-red-700 hover:from-red-700 hover:to-santa-dark text-white rounded-xl font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-3 group">
-                        <span id="modal-button-text">Secure Your Magic ($20)</span>
-                        <i data-lucide="lock" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                    </button>
-                </div>
-            </div>
-
-            <form id="modal-payment-view" class="p-6 space-y-4 hidden" onsubmit="return false;">
-
-                <div class="flex justify-between items-center p-4 rounded-xl bg-slate-900/90 border border-white/10">
-                    <span class="text-lg font-bold text-white">Total:</span>
-                    <span id="modal-final-price-stripe" class="text-3xl font-serif font-bold text-santa-red">$20</span>
-                </div>
-                <div id="express-checkout-element" class="mb-2"></div>
-                <div id="modal-payment-element" class="min-h-[100px]">
-                    <div class="text-center text-gray-500 py-6">Loading secure payment form...</div>
-                </div>
-
-                <div id="modal-payment-message" class="hidden text-center text-sm text-red-400 font-medium"></div>
-
-                <button type="submit" id="final-pay-button"
-                    class="w-full py-4 bg-gradient-to-r from-santa-red to-red-700 hover:from-red-700 hover:to-santa-dark text-white rounded-xl font-semibold text-lg transition-all duration-300 shadow-xl hover:shadow-2xl flex items-center justify-center gap-3 group">
-                    <span id="final-pay-button-text">Pay Now ($20)</span>
-                    <i data-lucide="check-circle" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                </button>
-                <div class="text-center text-xs text-gray-500 flex items-center justify-center gap-2 pt-4">
-                    <i data-lucide="shield" class="w-3 h-3"></i>
-                    <span class="tracking-wider">SECURE PAYMENT • POWERED BY STRIPE</span>
-                </div>
-            </form>
-        </div>
+    <!-- Stripe Loading Overlay -->
+    <div id="stripe-loading-overlay"
+        class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm hidden items-center justify-center flex-col">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-santa-gold mb-4"></div>
+        <div class="text-white text-xl font-serif">Connecting to North Pole Payments...</div>
     </div>
 
+    <!-- MAIN SCRIPT FOR NEW FLOW -->
     <script>
-        // Initialize Lucide icons
-        lucide.createIcons();
+        // Global State
+        let selectedChildCount = 1;
+        let selectedPackageId = 'bundle'; // Default
+        let selectedOverageOption = 'auto_disconnect'; // Default
 
-        const STRIPE_PUBLISHABLE_KEY = 'pk_live_51SVKGCLwMfnHBzDIBQAvfIutm54kvi38yzdLqdPjgrjp1m1bXRrgJyxQyis4ISYB59ah3ZKtbnhFvxHmsWdI8Mii00GxR6hAu2'; // Replaced by dev-server.js
-        const CREATE_PAYMENT_INTENT_URL = '/.netlify/functions/create-payment-intent';
-
-        const packages = {
-            bundle: { price: 2000, name: "Starry Night Bundle" },
-            call: { price: 1000, name: "Winter Warmth" },
-            video: { price: 3500, name: "Joyful Jingle" }
+        // Prices
+        const PRICES = {
+            call: 10,
+            bundle: 20,
+            video: 35,
+            child_addon: 7.50,
+            overage_addon: 5
         };
 
-        let stripe;
-        let elements;
-        let modalSelectionView = document.getElementById('modal-selection-view');
-        let modalPaymentView = document.getElementById('modal-payment-view');
-        let modalPaymentMessage = document.getElementById('modal-payment-message');
-        let modalSubmitBtn = document.getElementById('modal-submit-btn');
-
-        // --- Multi-Child Logic ---
-        let currentChildCount = 1;
-
-        function updateChildCount(count) {
-            currentChildCount = count;
-            renderChildInputs();
-        }
-
-        function renderChildInputs() {
-            const step1Container = document.getElementById('step-1-inputs');
-            const step2Container = document.getElementById('step-2-inputs');
-            const step3Container = document.getElementById('step-3-inputs');
-
-            step1Container.innerHTML = '';
-            step2Container.innerHTML = '';
-            step3Container.innerHTML = '';
-
-            for (let i = 1; i <= currentChildCount; i++) {
-                const suffix = currentChildCount > 1 ? ` ${i}` : '';
-
-                // Step 1: Name
-                step1Container.innerHTML += `
-                    <div class="relative group">
-                        <div class="absolute -inset-0.5 bg-gradient-to-r from-red-500 to-santa-dark rounded-xl blur opacity-30 group-hover:opacity-60 transition duration-500"></div>
-                        <div class="relative flex items-center bg-slate-900/80 backdrop-blur-xl rounded-xl border border-white/10 p-2 shadow-2xl">
-                            <div class="pl-4 text-gray-400">
-                                <i data-lucide="user" class="w-5 h-5"></i>
-                            </div>
-                            <input id="form-child-name-${i}" type="text"
-                                placeholder="Child${suffix} Name"
-                                class="w-full bg-transparent border-none text-white placeholder-gray-500 focus:ring-0 px-4 py-3 text-lg outline-none font-medium"
-                                required pattern="[A-Za-z\\s]{2,}"
-                                title="Please enter a valid name (2+ letters).">
-                        </div>
-                    </div>
-                `;
-
-                // Step 2: Wish
-                step2Container.innerHTML += `
-                    <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Child${suffix} Wish</label>
-                        <input id="form-child-wish-${i}" name="custom_santa_wish_text" autocomplete="off" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
-                            placeholder="e.g. A red bike" required minlength="4"
-                            title="Please provide a specific wish (4+ characters).">
-                    </div>
-                `;
-
-                // Step 3: Deed
-                step3Container.innerHTML += `
-                    <div>
-                        <label class="block text-sm font-medium text-gray-400 mb-1 ml-1">Child${suffix} Good Deed</label>
-                        <input id="form-child-deed-${i}" name="custom_santa_deed_text" autocomplete="off" type="text" class="w-full glass-input p-4 text-xl rounded-xl"
-                            placeholder="e.g. Helped with dishes" required minlength="5"
-                            title="Please describe a deed/hobby (5+ characters).">
-                    </div>
-                `;
-            }
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize icons
             lucide.createIcons();
-        }
+            // Ensure default state matches UI
+            selectPackage('bundle');
+            selectChildCount(selectedChildCount);
+        });
 
-        // Initialize inputs on load
-        renderChildInputs();
+        // Step 1: Child Count Selection
+        function selectChildCount(count) {
+            selectedChildCount = count;
 
-        function validateStep(step) {
-            let isValid = true;
-
-            if (step === 1) {
-                for (let i = 1; i <= currentChildCount; i++) {
-                    const input = document.getElementById(`form-child-name-${i}`);
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isValid = false;
-                        break;
-                    }
-                }
-                if (isValid) updateStepDisplay(2);
-            } else if (step === 2) {
-                for (let i = 1; i <= currentChildCount; i++) {
-                    const input = document.getElementById(`form-child-wish-${i}`);
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isValid = false;
-                        break;
-                    }
-                }
-                if (isValid) updateStepDisplay(3);
-            } else if (step === 3) {
-                for (let i = 1; i <= currentChildCount; i++) {
-                    const input = document.getElementById(`form-child-deed-${i}`);
-                    if (!input.checkValidity()) {
-                        input.reportValidity();
-                        isValid = false;
-                        break;
-                    }
-                }
-                if (isValid) updateStepDisplay(4);
-            }
-            return isValid;
-        }
-
-        function updateStepDisplay(step) {
-            document.querySelectorAll('.step-form').forEach(el => {
-                el.classList.remove('active');
-                el.style.opacity = '0';
-                el.style.pointerEvents = 'none';
+            // Update UI Buttons
+            document.querySelectorAll('.child-count-btn').forEach(btn => {
+                // Reset to unselected state (bg-white/5 text-gray-400 border-white/10)
+                btn.classList.remove('active', 'bg-santa-red', 'text-white', 'shadow-lg', 'border-santa-red');
+                btn.classList.add('bg-white/5', 'text-gray-400', 'border-white/10');
             });
-            const nextStep = document.getElementById(`step-${step}`);
-            if (nextStep) {
-                nextStep.classList.add('active');
-                nextStep.style.opacity = '1';
-                nextStep.style.pointerEvents = 'auto';
+
+            const selectedBtn = document.getElementById(`btn-count-${count}`);
+            if (selectedBtn) {
+                // Set to selected state
+                selectedBtn.classList.remove('bg-white/5', 'text-gray-400', 'border-white/10');
+                selectedBtn.classList.add('active', 'bg-santa-red', 'text-white', 'shadow-lg', 'border-santa-red');
             }
+
+            updateInlinePrice();
         }
 
-        function openPaymentModal() {
-            const emailInput = document.getElementById('form-parent-email');
-            const phoneInput = document.getElementById('form-parent-phone');
+        // Step 2: Package Selection
+        function selectPackage(pkg) {
+            selectedPackageId = pkg;
 
-            if (!emailInput.checkValidity()) {
-                emailInput.reportValidity();
-                return;
+            // Update UI Cards
+            document.querySelectorAll('.pkg-card').forEach(card => {
+                // Reset Styles
+                card.classList.remove('active', 'border-santa-gold', 'bg-gradient-to-r', 'from-slate-800', 'to-slate-900', 'shadow-xl', 'transform', 'scale-[1.02]');
+                card.classList.add('border-white/10', 'bg-white/5');
+
+                // Reset Radio
+                const radioInner = card.querySelector('.pkg-radio > div');
+                if (radioInner) radioInner.classList.add('hidden');
+                const radioOuter = card.querySelector('.pkg-radio');
+                if (radioOuter) {
+                    radioOuter.classList.remove('border-santa-gold', 'bg-white/10');
+                    radioOuter.classList.add('border-white/30');
+                }
+            });
+
+            // Activate Selected Card
+            const activeCard = document.getElementById(`pkg-card-${pkg}`);
+            if (activeCard) {
+                activeCard.classList.remove('border-white/10', 'bg-white/5');
+                activeCard.classList.add('active', 'border-santa-gold', 'bg-gradient-to-r', 'from-slate-800', 'to-slate-900', 'shadow-xl', 'transform', 'scale-[1.02]');
+
+
+                const radioInner = activeCard.querySelector('.pkg-radio > div');
+                if (radioInner) radioInner.classList.remove('hidden');
+                const radioOuter = activeCard.querySelector('.pkg-radio');
+                if (radioOuter) {
+                    radioOuter.classList.add('border-santa-gold', 'bg-white/10');
+                    radioOuter.classList.remove('border-white/30');
+                }
             }
-            if (!phoneInput.checkValidity()) {
-                phoneInput.reportValidity();
-                return;
-            }
 
-            // Summary for modal
-            const names = [];
-            for (let i = 1; i <= currentChildCount; i++) {
-                names.push(document.getElementById(`form-child-name-${i}`).value);
-            }
-            document.getElementById('modal-child-summary').innerText = names.join(', ');
-
-            const modalOverlay = document.getElementById('payment-modal-overlay');
-            const modal = document.getElementById('payment-modal');
-
-            modalOverlay.classList.add('active');
-            modal.classList.add('active');
-
-            // Reset state
-            modalSelectionView.classList.remove('hidden');
-            modalPaymentView.classList.add('hidden');
-            modalPaymentMessage.classList.add('hidden');
-            modalSubmitBtn.disabled = false;
-
-            // Initialize UI state
-            updateModalUIState();
-        }
-
-        function closePaymentModal() {
-            const modalOverlay = document.getElementById('payment-modal-overlay');
-            const modal = document.getElementById('payment-modal');
-            modalOverlay.classList.remove('active');
-            modal.classList.remove('active');
-            if (elements) {
-                // Optional: Destroy the old elements to clean up the DOM
-                const expressEl = elements.getElement('expressCheckout');
-                if (expressEl) expressEl.destroy();
-                const paymentEl = elements.getElement('payment');
-                if (paymentEl) paymentEl.destroy();
-            }
-            elements = null;
-        }
-
-        function updateModalUIState() {
-            const selectedPackage = document.querySelector('input[name="package_id"]:checked');
-            const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
-            const overageSection = document.getElementById('modal-overage-options');
-            const finalPriceDisplay = document.getElementById('modal-final-price');
-            const finalPriceStripe = document.getElementById('modal-final-price-stripe');
-            const modalButtonText = document.getElementById('modal-button-text');
-            const finalPayButtonText = document.getElementById('final-pay-button-text');
-            const promoInput = document.getElementById('promo-code-input'); // GET INPUT
-            const promoMessage = document.getElementById('promo-message'); // GET MESSAGE DIV
-
-            if (!selectedPackage) return;
-
-            const packageId = selectedPackage.value;
-            let price = parseInt(selectedPackage.dataset.price);
-
-            // Existing Extra Children Logic
-            const extraChildren = Math.max(0, currentChildCount - 1);
-            const extraChildCost = extraChildren * 750;
-            price += extraChildCost;
-
-            // Existing Overage Visibility Logic
-            if (packageId === 'bundle' || packageId === 'video') {
-                overageSection.classList.add('hidden');
+            // logic: Overage is ONLY visible for 'call' ($10) package
+            const overageConfig = document.getElementById('config-overage');
+            if (pkg === 'call') {
+                overageConfig.classList.remove('hidden');
+                overageConfig.classList.add('animate-fade-in-up');
             } else {
-                overageSection.classList.remove('hidden');
+                overageConfig.classList.add('hidden');
+                overageConfig.classList.remove('animate-fade-in-up');
             }
 
-            // Existing Overage Price Logic
-            if (packageId === 'call' && selectedOverage && selectedOverage.value === 'unlimited') {
-                price += 500;
-            }
-
-            // --- NEW PROMO CODE LOGIC ---
-            // Change 'TEST100' to whatever code you want to use
-            if (promoInput && promoInput.value.trim().toUpperCase() === 'TEST100') {
-                price = 0;
-                promoMessage.classList.remove('hidden');
-            } else if (promoMessage) {
-                promoMessage.classList.add('hidden');
-            }
-            // ----------------------------
-
-            const extraLabel = document.getElementById('modal-extra-charge-label');
-            if (extraChildren > 0) {
-                extraLabel.innerText = `(Includes +$${(extraChildCost / 100).toFixed(2)} for ${extraChildren} extra child${extraChildren > 1 ? 'ren' : ''})`;
-                extraLabel.classList.remove('hidden');
-            } else {
-                extraLabel.classList.add('hidden');
-            }
-
-            const formattedPrice = '$' + (price / 100).toFixed(2);
-            finalPriceDisplay.innerText = formattedPrice;
-            finalPriceStripe.innerText = formattedPrice;
-
-            // Update button text based on whether it's free or not
-            if (price === 0) {
-                modalButtonText.innerText = `Complete Free Order`;
-                finalPayButtonText.innerText = `Complete Order`;
-            } else {
-                modalButtonText.innerText = `Secure Your Magic (${formattedPrice})`;
-                finalPayButtonText.innerText = `Pay Now (${formattedPrice})`;
-            }
+            updateInlinePrice();
         }
-        // Add event listeners for real-time updates
-        document.querySelectorAll('input[name="package_id"]').forEach(input => {
-            input.addEventListener('change', updateModalUIState);
-        });
-        document.querySelectorAll('input[name="overage_option"]').forEach(input => {
-            input.addEventListener('change', updateModalUIState);
-        });
 
-        // FAQ Toggle Functionality
-        document.querySelectorAll('.faq-toggle').forEach(button => {
-            button.addEventListener('click', function () {
-                const faqItem = this.closest('.faq-item');
-                const faqContent = faqItem.querySelector('.faq-content');
-                const isActive = faqContent.classList.contains('active');
+        // Step 3: Price Calculation
+        function updateInlinePrice() {
+            // Base Price
+            let total = PRICES[selectedPackageId];
 
-                // Toggle the active state
-                if (isActive) {
-                    faqContent.classList.remove('active');
-                    this.classList.remove('active');
+            // Children (First one included, subsequent are +$7.50)
+            if (selectedChildCount > 1) {
+                total += (selectedChildCount - 1) * PRICES.child_addon;
+            }
+
+            // Overage Logic
+            if (selectedPackageId === 'call') {
+                // Check if user selected unlimited in the visible form
+                const overageInput = document.querySelector('input[name="inline_overage"]:checked');
+                if (overageInput && overageInput.value === 'unlimited') {
+                    total += PRICES.overage_addon;
+                    selectedOverageOption = 'unlimited';
                 } else {
-                    faqContent.classList.add('active');
-                    this.classList.add('active');
+                    selectedOverageOption = 'auto_disconnect';
+                }
+            } else if (selectedPackageId === 'bundle') {
+                selectedOverageOption = 'unlimited'; // Bundle includes unlimited
+            } else {
+                selectedOverageOption = 'auto_disconnect'; // Video has no call time
+            }
+
+            // Update Total Display
+            // .replace('.00', '') removes decimals for clean looks if whole dollar
+            const formattedPrice = total % 1 === 0 ? total : total.toFixed(2);
+
+            const priceEl = document.getElementById('inline-total-price');
+            if (priceEl) {
+                priceEl.innerText = '$' + formattedPrice;
+
+                // Handle the extra text
+                const detailEl = document.getElementById('price-detail-text');
+                if (detailEl) {
+                    if (selectedChildCount > 1) {
+                        detailEl.innerText = `+ $${PRICES.child_addon.toFixed(2)} per extra child`;
+                        detailEl.classList.remove('hidden');
+                    } else {
+                        detailEl.classList.add('hidden');
+                    }
+                }
+            }
+        }
+
+        // Initialize FAQ Accordion
+        document.querySelectorAll('.faq-toggle').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('i');
+
+                // Toggle current
+                if (content.classList.contains('max-h-0')) {
+                    // Open
+                    content.classList.remove('max-h-0', 'opacity-0');
+                    content.classList.add('max-h-[500px]', 'opacity-100');
+                    icon.style.transform = 'rotate(180deg)';
+                } else {
+                    // Close
+                    content.classList.add('max-h-0', 'opacity-0');
+                    content.classList.remove('max-h-[500px]', 'opacity-100');
+                    icon.style.transform = 'rotate(0deg)';
                 }
             });
         });
 
+        // Step 4: Checkout
+        async function initiateInlineCheckout() {
+            // Show loading overlay
+            const loadingOverlay = document.getElementById('stripe-loading-overlay');
+            loadingOverlay.classList.remove('hidden');
+            loadingOverlay.classList.add('flex');
 
-        async function createPaymentIntent() {
-            // Collect Children Data
-            const children = [];
-            for (let i = 1; i <= currentChildCount; i++) {
-                children.push({
-                    name: document.getElementById(`form-child-name-${i}`).value,
-                    wish: document.getElementById(`form-child-wish-${i}`).value,
-                    deed: document.getElementById(`form-child-deed-${i}`).value
+            try {
+                const response = await fetch('/.netlify/functions/create-checkout-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        packageId: selectedPackageId,
+                        childCount: selectedChildCount,
+                        overageOption: selectedOverageOption
+                    })
                 });
-            }
 
-            const parentEmail = document.getElementById('form-parent-email').value;
-            const parentPhone = document.getElementById('form-parent-phone').value;
-            const selectedPackage = document.querySelector('input[name="package_id"]:checked');
-            const selectedOverage = document.querySelector('input[name="overage_option"]:checked');
+                const session = await response.json();
 
-            // --- FIX 1: Define promoCode ---
-            const promoInput = document.getElementById('promo-code-input');
-            const promoCode = promoInput ? promoInput.value.trim().toUpperCase() : '';
-            // -------------------------------
-
-            if (!selectedPackage) {
-                modalPaymentMessage.innerText = "Please select a package.";
-                modalPaymentMessage.classList.remove('hidden');
-                return null;
-            }
-
-            let overageOption = 'auto_disconnect';
-            if (selectedPackage.value === 'bundle') {
-                overageOption = 'unlimited';
-            } else if (selectedPackage.value === 'call' && selectedOverage) {
-                overageOption = selectedOverage.value;
-            }
-
-            const personalizationData = {
-                children: children,
-                parent_email: parentEmail,
-                parent_phone: parentPhone,
-                package_id: selectedPackage.value,
-                overage_option: overageOption,
-                promo_code: promoCode // Send the code
-            };
-
-            const urls = [CREATE_PAYMENT_INTENT_URL];
-
-            for (const url of urls) {
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(personalizationData),
-                    });
-
-                    const bodyText = await response.text();
-                    let data = null;
-                    try { data = bodyText ? JSON.parse(bodyText) : {}; } catch (e) { /* not JSON */ }
-
-                    if (response.status === 404) { continue; }
-
-                    // --- FIX 2: Allow success if it is a freeOrder OR has clientSecret ---
-                    if (!response.ok || data.error || (!data.clientSecret && !data.freeOrder)) {
-                        const errMsg = (data && data.error) ? data.error : bodyText || `HTTP ${response.status}`;
-                        console.error(`Payment Intent failed on ${url}:`, errMsg);
-                        modalPaymentMessage.innerText = `Error: Could not start payment. Check backend configuration (Status ${response.status}).`;
-                        return null;
-                    }
-
-                    return data;
-
-                } catch (err) {
-                    console.error(`Network failed on ${url}:`, err);
-                    modalPaymentMessage.innerText = "Network Error: Could not connect to payment processor. Please check your connection.";
-                    return null;
+                if (session.error) {
+                    throw new Error(session.error);
                 }
-            }
 
-            modalPaymentMessage.innerText = "Fatal Error: Payment initialization failed across all routes. Check server logs.";
-            return null;
-        }
-        function initializeStripe(secret) {
-            if (stripe && elements) {
-                return;
-            }
+                // Redirect to Stripe
+                const stripe = Stripe('pk_test_51SVKGLLLG2IkIMjNRGtLSTgFOKHA262pTUQZxtrDko025pTqT3eqQ5o3IVThdo1Em18mtHn8OB4vbZYPgW1sgsA200melmouPY');
+                const result = await stripe.redirectToCheckout({
+                    sessionId: session.id
+                });
 
-            stripe = Stripe(STRIPE_PUBLISHABLE_KEY);
-            const returnUrl = `${window.location.origin}/success.html`;
-
-            const appearance = {
-                theme: 'night',
-                variables: {
-                    colorPrimary: '#D42426',
-                    colorText: '#F3F4F6',
-                    colorBackground: '#101827',
-                    colorDanger: '#EF4444',
-                    fontFamily: 'Inter, sans-serif',
-                },
-                rules: {
-                    '.Label': { color: '#C5A059' },
-                    '.Input': {
-                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
-                        borderColor: 'rgba(255, 255, 255, 0.1)',
-                        boxShadow: 'none'
-                    },
-                    '.Input--invalid': { boxShadow: '0 0 0 1px #EF4444' },
+                if (result.error) {
+                    throw new Error(result.error.message);
                 }
-            };
 
-            elements = stripe.elements({ appearance, clientSecret: secret });
-
-    // --- NEW: Express Checkout Element (Apple Pay / Google Pay) ---
-    const expressCheckoutElement = elements.create('expressCheckout', {
-        buttonTheme: {
-            applePay: 'white', // Makes it pop against your dark background
-            googlePay: 'white'
-        }
-    });
-    
-    // Mount it to the new div we created
-    expressCheckoutElement.mount('#express-checkout-element');
-
-    // Handle the Express Checkout click event
-    expressCheckoutElement.on('confirm', async (event) => {
-        const { error } = await stripe.confirmPayment({
-            elements,
-            clientSecret: secret,
-            confirmParams: {
-                return_url: returnUrl,
-            },
-        });
-
-        if (error) {
-            // This usually happens if the user cancels the Apple Pay sheet
-            modalPaymentMessage.innerText = error.message;
-            modalPaymentMessage.classList.remove('hidden');
-        }
-    });
-    // -------------------------------------------------------------
-
-    // Standard Payment Element (Credit Cards)
-    const paymentElement = elements.create('payment', {
-        // Disable wallets here so we don't show Apple Pay twice
-        wallets: {
-            applePay: 'never',
-            googlePay: 'never'
-        },
-        paymentMethodPreference: 'automatic',
-    });
-
-    // Clear the mounting container before mounting
-    document.getElementById('modal-payment-element').innerHTML = '';
-    paymentElement.mount('#modal-payment-element');
-
-    // Use a simple, one-time submit handler for the form
-    const modalPaymentViewForm = document.getElementById('modal-payment-view');
-    modalPaymentViewForm.onsubmit = async (e) => {
-        e.preventDefault();
-
-        const finalPayButton = document.getElementById('final-pay-button');
-        const finalPayButtonText = document.getElementById('final-pay-button-text');
-
-        // Disable button during processing
-        finalPayButton.disabled = true;
-        finalPayButtonText.innerText = "Processing...";
-        modalPaymentMessage.innerText = 'Processing payment...';
-        modalPaymentMessage.classList.remove('hidden');
-
-        const { error } = await stripe.confirmPayment({
-            elements,
-            confirmParams: {
-                return_url: returnUrl,
-            },
-        });
-
-        // If an error occurs, re-enable the button
-        if (error) {
-            finalPayButton.disabled = false;
-            finalPayButtonText.innerText = "Error, Retry Payment";
-            modalPaymentMessage.innerText = error.message;
-            modalPaymentMessage.classList.remove('hidden');
-        }
-        // On success, Stripe handles the redirect via return_url
-    };
-
-    modalPaymentMessage.classList.add('hidden');
-}
-        async function handleModalPayment() {
-            if (!document.getElementById('modal-legal-consent').checked) {
-                modalPaymentMessage.innerText = "You must agree to the Terms of Service and Privacy Policy to proceed.";
-                modalPaymentMessage.classList.remove('hidden');
-                return;
-            }
-
-            modalSubmitBtn.disabled = true;
-
-            // 1. Call Backend
-            const responseData = await createPaymentIntent();
-
-            if (!responseData) {
-                modalSubmitBtn.disabled = false;
-                return;
-            }
-
-            // 2. CHECK IF FREE ORDER (Bypass Stripe)
-            if (responseData.freeOrder && responseData.order_id) {
-                window.location.href = `/success.html?order_id=${responseData.order_id}`;
-                return;
-            }
-
-            // 3. Normal Stripe Flow
-            if (responseData.clientSecret) {
-                initializeStripe(responseData.clientSecret);
-                modalSelectionView.classList.add('hidden');
-                modalPaymentView.classList.remove('hidden');
-                modalPaymentMessage.classList.add('hidden');
-                document.getElementById('final-pay-button').disabled = false;
+            } catch (error) {
+                console.error('Checkout Error:', error);
+                alert('Connection to Santa failed: ' + error.message);
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.classList.remove('flex');
             }
         }
     </script>

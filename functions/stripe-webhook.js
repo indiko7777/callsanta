@@ -143,6 +143,44 @@ exports.handler = async (event, context) => {
 
                 break;
 
+            case 'checkout.session.completed':
+                const session = stripeEvent.data.object;
+                console.log('Checkout session completed:', session.id);
+
+                // Extract Metadata
+                const { packageId, childCount, overageOption } = session.metadata;
+                const customerEmail = session.customer_details.email;
+                const customerPhone = session.customer_details.phone; // Captured by Stripe Phone Collection
+
+                // Generate Access Code
+                // Helper defined outside exports in original file (copying logic or reusing if scope allows)
+                // Note: generateAccessCode is not in global scope of this file based on previous view_file. 
+                // It was in create-payment-intent.js. We need to duplicate or import.
+                // Simple duplication for safety:
+                const accessCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+                const newOrder = await Order.create({
+                    stripeCustomerId: session.customer,
+                    stripePaymentIntentId: session.payment_intent,
+                    accessCode: accessCode,
+                    fulfillmentStatus: 'PAYMENT_COMPLETED',
+                    children: [], // Empty initially, filled in personalization
+                    parentEmail: customerEmail,
+                    parentPhone: customerPhone, // Might be null if user didn't provide, but we force collection in creating session
+                    packageId: packageId,
+                    amountPaid: session.amount_total,
+                    overageOption: overageOption || 'auto_disconnect'
+                });
+
+                console.log('Order created from Checkout Session:', newOrder._id);
+                // Email sending logic is reused below if structured properly, 
+                // OR we can rely on save-personalization to send the "magic is ready" email since 
+                // we don't have child names yet.
+                // WE SHOULD WAIT to send "Call Confirmation" until personalization is done?
+                // Actually, maybe send "Payment Receipt / Action Required" email here?
+                // For now, let's just create the order.
+                break;
+
             case 'payment_intent.payment_failed':
                 const failedPayment = stripeEvent.data.object;
                 console.log('Payment failed:', failedPayment.id);

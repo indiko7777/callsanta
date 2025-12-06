@@ -115,7 +115,7 @@ app.get('/', (req, res) => {
 
         let modifiedData = data.replace(
             /pk_live_YOUR_STRIPE_PUBLISHABLE_KEY/g,
-            process.env.STRIPE_PUBLISHABLE_KEY || 'pk_live_51SVKGCLwMfnHBzDIBQAvfIutm54kvi38yzdLqdPjgrjp1m1bXRrgJyxQyis4ISYB59ah3ZKtbnhFvxHmsWdI8Mii00GxR6hAu2'
+            process.env.STRIPE_PUBLISHABLE_KEY || 'pk_test_51SVKGLLLG2IkIMjNRGtLSTgFOKHA262pTUQZxtrDko025pTqT3eqQ5o3IVThdo1Em18mtHn8OB4vbZYPgW1sgsA200melmouPY'
         );
 
         // In local dev, we don't need the .netlify/functions prefix if we route directly,
@@ -139,6 +139,12 @@ const routes = [
     { path: '/create-payment-intent', handler: createPaymentIntent, method: 'post' },
     { path: '/.netlify/functions/create-payment-intent', handler: createPaymentIntent, method: 'post' },
 
+    { path: '/create-checkout-session', handler: require('./functions/create-checkout-session').handler, method: 'post' },
+    { path: '/.netlify/functions/create-checkout-session', handler: require('./functions/create-checkout-session').handler, method: 'post' },
+
+    { path: '/save-personalization', handler: require('./functions/save-personalization').handler, method: 'post' },
+    { path: '/.netlify/functions/save-personalization', handler: require('./functions/save-personalization').handler, method: 'post' },
+
     { path: '/twilio-call-handler', handler: twilioCallHandler, method: 'post' },
     { path: '/.netlify/functions/twilio-call-handler', handler: twilioCallHandler, method: 'post' },
 
@@ -147,6 +153,12 @@ const routes = [
 
     { path: '/get-order-details', handler: getOrderDetails, method: 'get' },
     { path: '/.netlify/functions/get-order-details', handler: getOrderDetails, method: 'get' },
+
+    { path: '/get-order-context', handler: require('./functions/get-order-context').handler, method: 'get' },
+    { path: '/.netlify/functions/get-order-context', handler: require('./functions/get-order-context').handler, method: 'get' },
+
+    { path: '/send-magic-link', handler: require('./functions/send-magic-link').handler, method: 'post' },
+    { path: '/.netlify/functions/send-magic-link', handler: require('./functions/send-magic-link').handler, method: 'post' },
 
     { path: '/send-confirmation-email', handler: require('./functions/send-confirmation-email').handler, method: 'post' },
     { path: '/.netlify/functions/send-confirmation-email', handler: require('./functions/send-confirmation-email').handler, method: 'post' },

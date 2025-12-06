@@ -37,6 +37,12 @@ exports.handler = async (event, context) => {
         let order;
         // MODIFIED: Search logic
         if (order_id) {
+            if (!mongoose.Types.ObjectId.isValid(order_id)) {
+                return {
+                    statusCode: 400,
+                    body: JSON.stringify({ error: 'Invalid order_id format' })
+                };
+            }
             order = await Order.findById(order_id);
         } else {
             order = await Order.findOne({ stripePaymentIntentId: payment_intent_id });
